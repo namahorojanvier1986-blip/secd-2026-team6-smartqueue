@@ -5,6 +5,8 @@ This folder contains the Software Requirements Specification (SRS) for Team 6 pr
 ## Files in this folder
 
 - T6-M2-SRS.pdf - Full M2 document (Functional Requirements, Non-Functional Requirements, MoSCoW Prioritisation)
+- T6-M2-UseCase.png - Use Case Diagram (image for viewing)
+- T6-M2-UseCase.drawio - Use Case Diagram (editable source in diagrams.net)
 
 ## Summary
 
