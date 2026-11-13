@@ -31,3 +31,5 @@ A web-based Smart Queue System that lets customers take a ticket online or at a 
 - `docs/research/sources.md` - All cited sources
 - `src/` - Application code
 - `tests/` - Automated tests
+### Miro Board - Discovery (M1)
+[Team 6 SmartQueue - M1 Discovery on Miro](https://miro.com/app/board/uXjVEOOBW0E=/?share_link_id=179417442483)
