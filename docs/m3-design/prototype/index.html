@@ -1,77 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Umwalimu SACCO - Smart Queue</title>
 <style>
-body{font-family:Arial,sans-serif;background:#fff;color:#1a1a1a;margin:0;padding:16px}
-h1{color:#0b5cad;margin-bottom:0} .sub{color:#555;margin-top:4px} button{width:100%;height:48px;background:#0b5cad;color:#fff;border:none;border-radius:8px;font-size:16px;margin:8px 0}
-input,select{width:100%;height:48px;font-size:16px;margin:8px 0;padding:0 8px;box-sizing:border-box}
-.card{border:1px solid #ddd;border-radius:8px;padding:16px;margin:12px 0}
-.ticket{font-size:32px;font-weight:bold;color:#0b5cad;text-align:center}
-.hidden{display:none} .priority{background:#fff3cd;border:1px solid #ffc107;padding:10px;border-radius:8px;text-align:center;font-weight:bold;margin:8px 0}
-.badge{background:#0b5cad;color:#fff;padding:4px 8px;border-radius:12px;font-size:12px}
-a{color:#0b5cad}
+body{font-family:Arial,sans-serif;background:#eef2f7;margin:0;padding:20px}
+.card{max-width:480px;margin:auto;background:#fff;padding:24px;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.1);border-top:8px solid #FFC72C}
+h1{color:#0057A8;margin:0;font-size:28px}
+.sub{color:#666;margin:6px 0 18px}
+label{font-weight:bold;color:#333;display:block;margin:14px 0 6px}
+select{width:100%;padding:12px;border:2px solid #ddd;border-radius:8px;font-size:16px}
+.btn{width:100%;padding:14px;background:#0057A8;color:#fff;border:none;border-radius:8px;font-size:18px;font-weight:bold;margin-top:20px;cursor:pointer}
+.btn:hover{background:#003f7a}
+.teller{display:block;text-align:center;margin-top:16px;color:#0057A8}
+.ticket{margin-top:20px;padding:16px;background:#FFF8DC;border:2px solid #FFC72C;border-radius:8px;text-align:center;display:none}
+.ticket b{font-size:32px;color:#0057A8}
+.priority{color:#B77900;font-weight:bold}
 </style></head>
 <body>
-<div id="home">
+<div class="card">
 <h1>Umwalimu SACCO Bank</h1>
 <p class="sub">Smart Queue Management System - SQMS<br>Karibu, Mwalimu! Welcome, Teacher!</p>
 <p>Choose branch and service to get your ticket.</p>
 <label>Branch - Ishami</label>
-<select id="branch"><option>Umwalimu SACCO - Rwamagana Branch</option><option>Umwalimu SACCO - Kigali HQ</option><option>Umwalimu SACCO - Musanze Branch</option><option>Umwalimu SACCO - Huye Branch</option><option>Umwalimu SACCO - Rubavu Branch</option></select>
+<select><option>Umwalimu SACCO - Musanze Branch</option><option>Umwalimu SACCO - Kigali Branch</option><option>Umwalimu SACCO - Huye Branch</option></select>
 <label>Service - Serivisi</label>
-<select id="service"><option>Deposit - Kubitsa amafaranga</option><option>Withdrawal - Kubikuza Amafaranga</option><option>Loan Application - Gusaba Inguzanyo</option><option>Loan Repayment - Kwishyura Inguzanyo</option><option>School Fees Payment - Kwishyura Amafaranga y'Ishuri</option><option>Account Opening - Gufunguza Konti</option><option>Umwalimu Savings - Kwizigamira</option></select>
+<select><option>Deposit - Kubitsa amafaranga</option><option>Withdrawal - Gukura amafaranga</option><option>Loan - Inguzanyo</option></select>
 <label>Priority - Umwihariko</label>
-<select id="priority"><option value="Normal">Normal - Nta mwihariko</option><option value="Elderly Teacher (65+)">Elderly Teacher (65+) - Priority</option><option value="Pregnant / Nursing Mother">Pregnant / Nursing Mother - Priority</option><option value="Person with Disability">Person with Disability - Priority</option><option value="Teacher from Far - Came Long Distance">Teacher from Far - Priority</option></select>
-<button onclick="getTicket()">Get Ticket - Fata Ticket</button>
-<p style="text-align:center"><a href="#" onclick="show('teller');return false;">I am a Teller - Ndi Umukozi →</a></p>
-</div>
-
-<div id="ticket" class="hidden">
-<h1>Your Ticket - Ticket Yawe</h1>
-<div class="card"><div class="ticket" id="ticketNo">A-12</div>
-<p style="text-align:center"><span class="badge">Umwalimu SACCO</span></p>
-<p style="text-align:center">Branch: <span id="bOut"></span><br>Service: <span id="sOut"></span></p>
-<div id="prioBox" class="priority hidden">⭐ PRIORITY: <span id="pOut"></span><br><small>You will be served next - Uzakirwa vuba</small></div>
-<p style="text-align:center;font-size:20px">You are <b id="posOut">#3</b> in queue<br>Estimated wait: <b id="waitOut">~15 min</b><br><small>Utegereje iminota <span id="waitMin">15</span></small></p>
-<p style="text-align:center">Now serving: A-09 | Counter 1</p>
-<p style="text-align:center;color:#555">Please sit and wait. You will hear your number.<br>Nyamuneka icara utegereze, uzumva numero yawe.</p></div>
-<button onclick="show('home')">Get Another Ticket</button>
-</div>
-
-<div id="teller" class="hidden">
-<h1>Umwalimu SACCO - Teller Dashboard</h1>
-<p>Rwamagana Branch | Counter 1</p>
-<div class="card"><p>Now Serving: <b id="nowServing">A-09</b></p>
-<p>Waiting: 8 (2 Priority) | Served today: 24 | Avg wait: 18 min</p>
-<p>Next Priority: <b>A-13 - Elderly Teacher</b></p></div>
-<button onclick="callNext()">Call Next Customer - Hamagara Ukurikira</button>
-<button onclick="completeService()" style="background:#1a1a1a">Complete Service - Rangiza Serivisi</button>
-<p id="msg"></p>
-<button onclick="show('home')" style="background:#fff;color:#0b5cad;border:1px solid #0b5cad">Back to Customer View</button>
-</div>
-<script>
-let n=12;
-function show(id){['home','ticket','teller'].forEach(x=>document.getElementById(x).classList.add('hidden'));document.getElementById(id).classList.remove('hidden')}
-function getTicket(){
-document.getElementById('bOut').innerText=document.getElementById('branch').value;
-document.getElementById('sOut').innerText=document.getElementById('service').value;
-let p=document.getElementById('priority').value;
-document.getElementById('ticketNo').innerText='A-'+n;n++;
-if(p!=='Normal'){
-document.getElementById('pOut').innerText=p;
-document.getElementById('prioBox').classList.remove('hidden');
-document.getElementById('posOut').innerText='#1 (Priority)';
-document.getElementById('waitOut').innerText='~5 min';
-document.getElementById('waitMin').innerText='5';
-}else{
-document.getElementById('prioBox').classList.add('hidden');
-document.getElementById('posOut').innerText='#3';
-document.getElementById('waitOut').innerText='~15 min';
-document.getElementById('waitMin').innerText='15';
-}
-show('ticket')}
-function callNext(){document.getElementById('nowServing').innerText='A-10 (Priority - Elderly Teacher)';document.getElementById('msg').innerText='Called A-10 - Priority customer, please come to Counter 1'}
-function completeService(){document.getElementById('msg').innerText='Service completed. Ticket marked as DONE. Murakoze!'}
-</script>
-</body></html>
+<select id="pri"><option>Normal - Nta mwihariko</option><option>Elderly / Abageze mu zabukuru</option><option>Disabled / Abafite ubumuga</option><option>Pregnant / Abatwite</option></select>
+<button class="btn" onclick="document.getElementById('t').style.display='block'">Get Ticket - Fata Ticket</button>
+<a class="teller" href="#">I am a Teller - Ndi Umukozi →</a>
+<div id="t" class="ticket"><div class="priority">⭐ PRIORITY TICKET</div><b>A-012</b><br>Branch: Musanze | Service: Deposit<br>People ahead: 3 | Wait: ~15 min</div>
+</div></body></html>
