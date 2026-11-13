@@ -10,7 +10,7 @@ Team 6 - Smart Queue
 | Jeavis | UX & Product Lead | User research, personas, UI/UX, Figma prototype, usability tests |
 | Eraste | Research & Testing Lead | Interviews, sources, SRS, test plan, documentation |
 
-**Rule from Guide (Page 2):** All members must be able to explain and defend the WHOLE project. Roles swap after Session 3 so everyone practises both sides.
+**Rule from Guide (Page 2):** All members must be able to explain and defend the whole project.
 
 ## Problem Statement (One Sentence)
 Bank customers in Kigali who visit financial institution branches struggle to get served quickly because queues are managed manually with paper tickets and no real-time visibility, which causes long waiting times, frustration, and lost working hours.
