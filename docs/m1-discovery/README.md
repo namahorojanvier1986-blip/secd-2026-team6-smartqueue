@@ -10,8 +10,8 @@ E1-E5 published sources + E6: 5 interviews in Rwamagana (5 Nov 2026): 3 clients,
 
 ## Files in this folder
 - `T6-M1-Discovery.pdf` - Full M1 document
-- `T6-M1-Stakeholder_Map.png` - Stakeholder map
-- `T6-M1-Affinity_Map.png` - Affinity map
+- `T6-M1-Stakeholder-Map.png` - Stakeholder map
+- `T6-M1-Affinity-Map.png` - Affinity map
 
 ## Links
 - Miro Board (Affinity Map + Stakeholder Map):(https://miro.com/app/board/uXjVEOOBW0E=/?share_link_id=16431992548)
