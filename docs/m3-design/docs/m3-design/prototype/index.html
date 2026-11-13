@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SQMS - Smart Queue</title>
+<style>
+body{font-family:Arial,sans-serif;background:#fff;color:#1a1a1a;margin:0;padding:16px}
+h1{color:#0b5cad} button{width:100%;height:48px;background:#0b5cad;color:#fff;border:none;border-radius:8px;font-size:16px;margin:8px 0}
+input,select{width:100%;height:48px;font-size:16px;margin:8px 0;padding:0 8px;box-sizing:border-box}
+.card{border:1px solid #ddd;border-radius:8px;padding:16px;margin:12px 0}
+.ticket{font-size:32px;font-weight:bold;color:#0b5cad;text-align:center}
+.hidden{display:none} .error{color:#b00020}
+a{color:#0b5cad}
+</style></head>
+<body>
+<div id="home">
+<h1>Smart Queue - SQMS</h1>
+<p>Choose branch and service to get your ticket.</p>
+<label>Branch</label>
+<select id="branch"><option>Rwamagana Branch</option><option>Kigali Branch</option></select>
+<label>Service</label>
+<select id="service"><option>Deposit</option><option>Withdrawal</option><option>Account Opening</option></select>
+<button onclick="getTicket()">Get Ticket</button>
+<p><a href="#" onclick="show('teller');return false;">I am a Teller →</a></p>
+</div>
+
+<div id="ticket" class="hidden">
+<h1>Your Ticket</h1>
+<div class="card"><div class="ticket" id="ticketNo">A-12</div>
+<p style="text-align:center">Branch: <span id="bOut"></span> | Service: <span id="sOut"></span></p>
+<p style="text-align:center;font-size:20px">You are <b>#3</b> in queue<br>Estimated wait: <b>~15 min</b></p>
+<p style="text-align:center">Now serving: A-09</p></div>
+<button onclick="show('home')">Get Another Ticket</button>
+</div>
+
+<div id="teller" class="hidden">
+<h1>Teller Dashboard</h1>
+<div class="card"><p>Now Serving: <b id="nowServing">A-09</b></p>
+<p>Waiting: 8 | Served today: 24 | Avg wait: 18 min</p></div>
+<button onclick="callNext()">Call Next Customer</button>
+<button onclick="completeService()" style="background:#1a1a1a">Complete Service</button>
+<p id="msg"></p>
+<button onclick="show('home')" style="background:#fff;color:#0b5cad;border:1px solid #0b5cad">Back to Customer View</button>
+</div>
+<script>
+let n=12;
+function show(id){['home','ticket','teller'].forEach(x=>document.getElementById(x).classList.add('hidden'));document.getElementById(id).classList.remove('hidden')}
+function getTicket(){document.getElementById('bOut').innerText=document.getElementById('branch').value;document.getElementById('sOut').innerText=document.getElementById('service').value;document.getElementById('ticketNo').innerText='A-'+n;n++;show('ticket')}
+function callNext(){document.getElementById('nowServing').innerText='A-10';document.getElementById('msg').innerText='Called A-10 - please come to Counter 1'}
+function completeService(){document.getElementById('msg').innerText='Service completed. Ticket marked as DONE.'}
+</script>
+</body></html>
