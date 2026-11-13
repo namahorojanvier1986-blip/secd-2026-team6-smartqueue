@@ -1,4 +1,4 @@
-﻿# Milestone 1 (Session 1): Problem Discovery and User Research
+﻿# M1 - Problem Discovery and User Research
 **Team:** T6 | **Tag:** m1 | **Submission date:** 07/11/2026
 **Full PDF:** `T6-M1-Discovery.pdf` in this folder
 
