@@ -3,48 +3,47 @@
 <title>Umwalimu SACCO - Smart Queue</title>
 <style>
 body{font-family:Arial,sans-serif;background:#eef2f7;margin:0;padding:20px}
-.card{max-width:520px;margin:auto;background:#fff;padding:24px;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.1);border-top:8px solid #FFC72C}
+.card{max-width:520px;margin:auto;background:#fff;padding:22px;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.1);border-top:8px solid #FFC72C}
 h1{color:#0057A8;margin:0;font-size:28px;text-align:center}
-.sub{color:#666;margin:6px 0 18px;text-align:center}
-.tabs{display:flex;gap:10px;margin:18px 0}
-.tab{flex:1;padding:14px;border:none;border-radius:10px;font-size:16px;font-weight:bold;cursor:pointer}
+.sub{color:#666;margin:6px 0 16px;text-align:center}
+.tabs{display:flex;gap:10px;margin:16px 0}
+.tab{flex:1;padding:12px;border:none;border-radius:10px;font-size:16px;font-weight:bold;cursor:pointer}
 .tab.normal-tab{background:#EAF2FF;color:#0057A8;border:2px solid #0057A8}
 .tab.normal-tab.active{background:#0057A8;color:#fff}
 .tab.pri-tab{background:#FFF8DC;color:#8A6500;border:2px solid #FFC72C}
 .tab.pri-tab.active{background:#FFC72C;color:#000}
 .interface{display:none}.interface.active{display:block}
-.normal-box{border-top:4px solid #0057A8;padding-top:10px}
-.pri-box{border-top:4px solid #FFC72C;padding-top:10px;background:#FFFEF5;border-radius:8px;padding:14px}
-label{font-weight:bold;color:#333;display:block;margin:14px 0 6px}
-select,input{width:100%;padding:12px;border:2px solid #ddd;border-radius:8px;font-size:16px;background:#fff;box-sizing:border-box}
+.normal-box{border-top:4px solid #0057A8;padding-top:8px}
+.pri-box{border-top:4px solid #FFC72C;padding-top:8px;background:#FFFEF5;border-radius:8px;padding:12px}
+label{font-weight:bold;color:#333;display:block;margin:12px 0 5px;font-size:14px}
+select,input{width:100%;padding:10px;border:2px solid #ddd;border-radius:8px;font-size:14px;background:#fff;box-sizing:border-box}
 input:focus,select:focus{border-color:#0057A8;outline:none}
-.hint{font-size:13px;color:#888;margin-top:4px}
-.btn{width:100%;padding:14px;background:#0057A8;color:#fff;border:none;border-radius:8px;font-size:18px;font-weight:bold;margin-top:20px;cursor:pointer}
-.btn-pri{width:100%;padding:14px;background:#FFC72C;color:#000;border:none;border-radius:8px;font-size:18px;font-weight:bold;margin-top:20px;cursor:pointer}
-.teller{display:block;text-align:center;margin-top:16px;color:#0057A8}
-.ticket{margin-top:20px;padding:16px;border-radius:8px;text-align:center;display:none}
+.btn{width:100%;padding:13px;background:#0057A8;color:#fff;border:none;border-radius:8px;font-size:17px;font-weight:bold;margin-top:18px;cursor:pointer}
+.btn-pri{width:100%;padding:13px;background:#FFC72C;color:#000;border:none;border-radius:8px;font-size:17px;font-weight:bold;margin-top:18px;cursor:pointer}
+.teller{display:block;text-align:center;margin-top:14px;color:#0057A8}
+.ticket{margin-top:16px;padding:14px;border-radius:8px;text-align:center;display:none}
 .ticket.normal{background:#EAF2FF;border:2px solid #0057A8}
 .ticket.pri{background:#FFF8DC;border:2px solid #FFC72C}
-.ticket b{font-size:32px;color:#0057A8}
+.ticket b{font-size:30px;color:#0057A8}
 .priority{color:#B77900;font-weight:bold}
 .sms{margin-top:12px;padding:12px;background:#E8F5E9;border:1px solid #4CAF50;border-radius:8px;font-size:14px;color:#2E7D32;display:none;text-align:left}
 .error{color:#D32F2F;font-size:13px;display:none;margin-top:4px}
-.contact-box{background:#F5F8FF;border:2px solid #DCE6FF;border-radius:10px;padding:14px;margin-top:14px}
+.contact-box{background:#F5F8FF;border:2px solid #DCE6FF;border-radius:10px;padding:12px;margin-top:12px}
 .radio-row{display:flex;gap:8px;margin-top:8px}
-.radio-row label{flex:1;text-align:center;font-weight:normal;background:#fff;border:2px solid #ddd;border-radius:8px;padding:10px 4px;cursor:pointer;font-size:13px;margin:0}
+.radio-row label{flex:1;text-align:center;font-weight:normal;background:#fff;border:2px solid #ddd;border-radius:8px;padding:9px 4px;cursor:pointer;font-size:13px;margin:0}
 .radio-row input{display:none}
 .radio-row label:has(input:checked){border-color:#0057A8;background:#EAF2FF}
-.pri-note{background:#FFF3CD;border:1px solid #FFC72C;padding:10px;border-radius:8px;font-size:13px;color:#664D03}
-/* SEARCH ENGINE */
+.pri-note{background:#FFF3CD;border:1px solid #FFC72C;padding:9px;border-radius:8px;font-size:13px;color:#664D03}
+/* SEARCH ENGINE - NTOYA */
 .search-wrap{position:relative}
-.search-input{padding-left:38px !important}
-.search-icon{position:absolute;left:12px;top:13px;font-size:18px;pointer-events:none}
-.search-list{position:absolute;top:100%;left:0;right:0;background:#fff;border:2px solid #0057A8;border-top:none;border-radius:0 0 8px 8px;max-height:220px;overflow-y:auto;z-index:99;display:none;box-shadow:0 8px 16px rgba(0,0,0,.15)}
-.search-item{padding:12px;cursor:pointer;border-bottom:1px solid #eee;font-size:15px}
-.search-item:hover,.search-item.active{background:#EAF2FF}
+.search-input{padding:9px 30px 9px 32px !important;font-size:14px !important;height:38px}
+.search-icon{position:absolute;left:10px;top:9px;font-size:15px;pointer-events:none}
+.search-list{position:absolute;top:100%;left:0;right:0;background:#fff;border:2px solid #0057A8;border-top:none;border-radius:0 0 8px 8px;max-height:200px;overflow-y:auto;z-index:99;display:none;box-shadow:0 8px 16px rgba(0,0,0,.15)}
+.search-item{padding:9px 10px;cursor:pointer;border-bottom:1px solid #eee;font-size:14px}
+.search-item:hover{background:#EAF2FF}
 .search-item b{color:#0057A8}
-.no-result{padding:12px;color:#888;text-align:center;font-size:14px}
-.clear-btn{position:absolute;right:10px;top:11px;background:#eee;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;display:none;font-size:14px}
+.no-result{padding:10px;color:#888;text-align:center;font-size:13px}
+.clear-btn{position:absolute;right:8px;top:8px;background:#eee;border:none;border-radius:50%;width:22px;height:22px;cursor:pointer;display:none;font-size:12px}
 </style></head>
 <body>
 <div class="card">
@@ -59,25 +58,23 @@ input:focus,select:focus{border-color:#0057A8;outline:none}
 <!-- ===== INTERFACE 1: NORMAL ===== -->
 <div id="interface-normal" class="interface active">
 <div class="normal-box">
-<p><b>🔵 Normal Queue</b> - People ahead: <b>8</b> | Wait: <b>~35 min</b></p>
+<p style="font-size:14px"><b>🔵 Normal Queue</b> - People ahead: <b>8</b> | Wait: <b>~35 min</b></p>
 
-<label>🔍 Search Branch - Shaka Ishami (30)</label>
+<label>🔍 Branch - Ishami (30)</label>
 <div class="search-wrap">
 <span class="search-icon">🔍</span>
-<input class="search-input" id="branchN" placeholder="Andika ishami... ex: Rubavu, Kigali, Huye" autocomplete="off" onfocus="showList('branchN')" oninput="filterList('branchN')" onclick="showList('branchN')">
+<input class="search-input" id="branchN" placeholder="Shaka ishami..." autocomplete="off" onfocus="showList('branchN')" oninput="filterList('branchN')" onclick="showList('branchN')">
 <button class="clear-btn" id="clear-branchN" onclick="clearSearch('branchN')">✕</button>
 <div class="search-list" id="list-branchN"></div>
 </div>
-<div class="hint">Andika inyuguti 2 gusa - ex: "Ru" → Rubavu, Rulindo, Ruhango, Rutsiro</div>
 
-<label>🔍 Search Service - Shaka Serivisi (20)</label>
+<label>🔍 Service - Serivisi (21)</label>
 <div class="search-wrap">
 <span class="search-icon">🔍</span>
-<input class="search-input" id="serviceN" placeholder="Andika serivisi... ex: Loan, ATM, Deposit" autocomplete="off" onfocus="showList('serviceN')" oninput="filterList('serviceN')" onclick="showList('serviceN')">
+<input class="search-input" id="serviceN" placeholder="Shaka serivisi..." autocomplete="off" onfocus="showList('serviceN')" oninput="filterList('serviceN')" onclick="showList('serviceN')">
 <button class="clear-btn" id="clear-serviceN" onclick="clearSearch('serviceN')">✕</button>
 <div class="search-list" id="list-serviceN"></div>
 </div>
-<div class="hint">Andika ex: "Loan" → Loan Application, Loan Repayment</div>
 
 <div class="contact-box">
 <label style="margin-top:0">Ushaka kwakirira he ticket?</label>
@@ -89,7 +86,7 @@ input:focus,select:focus{border-color:#0057A8;outline:none}
 <div id="phoneDivN"><label>Phone Number *</label><input type="tel" id="phoneN" placeholder="0788 123 456"><div id="phoneErrorN" class="error">⚠️ Shyiramo numero nyayo - 07 + imibare 10</div></div>
 <div id="emailDivN" style="display:none"><label>Email Address *</label><input type="email" id="emailN" placeholder="janvier@gmail.com"><div id="emailErrorN" class="error">⚠️ Shyiramo email nyayo</div></div>
 </div>
-<button class="btn" onclick="getTicket('N')">Get Normal Ticket - Fata Ticket</button>
+<button class="btn" onclick="getTicket('N')">Get Normal Ticket</button>
 <div id="ticketN" class="ticket normal"><div>🎫 NORMAL TICKET</div><b id="ticketNoN">A-012</b><br><span id="ticketInfoN"></span><br><span id="ticketWaitN"></span></div>
 <div id="smsBoxN" class="sms"><b id="smsTitleN"></b><br><span id="smsTextN"></span></div>
 </div>
@@ -98,23 +95,23 @@ input:focus,select:focus{border-color:#0057A8;outline:none}
 <!-- ===== INTERFACE 2: PRIORITY ===== -->
 <div id="interface-priority" class="interface">
 <div class="pri-box">
-<p><b>⭐ Priority Queue</b> - People ahead: <b>1</b> | Wait: <b>~5 min</b></p>
+<p style="font-size:14px"><b>⭐ Priority Queue</b> - People ahead: <b>1</b> | Wait: <b>~5 min</b></p>
 <div class="pri-note">⚠️ Priority ni kubafite ubumuga, abageze mu zabukuru (65+), abatwite, n'abafite abana bato.</div>
 <label>Priority Type - Ubwoko bw'Umwihariko *</label>
 <select id="priorityP"><option value="Elderly">👴 Elderly - Umusaza / Umukecuru (65+)</option><option value="Disabled">♿ Disabled - Ufite Ubumuga</option><option value="Pregnant">🤰 Pregnant - Utwite</option><option value="WithBaby">👶 With Baby - Ufite Umwana Muto (&lt;2 ans)</option><option value="Emergency">🚨 Emergency - Ikibazo Cyihutirwa</option></select>
 
-<label>🔍 Search Branch - Shaka Ishami (30)</label>
+<label>🔍 Branch - Ishami (30)</label>
 <div class="search-wrap">
 <span class="search-icon">🔍</span>
-<input class="search-input" id="branchP" placeholder="Andika ishami... ex: Musanze" autocomplete="off" onfocus="showList('branchP')" oninput="filterList('branchP')" onclick="showList('branchP')">
+<input class="search-input" id="branchP" placeholder="Shaka ishami..." autocomplete="off" onfocus="showList('branchP')" oninput="filterList('branchP')" onclick="showList('branchP')">
 <button class="clear-btn" id="clear-branchP" onclick="clearSearch('branchP')">✕</button>
 <div class="search-list" id="list-branchP"></div>
 </div>
 
-<label>🔍 Search Service - Shaka Serivisi (20)</label>
+<label>🔍 Service - Serivisi (21)</label>
 <div class="search-wrap">
 <span class="search-icon">🔍</span>
-<input class="search-input" id="serviceP" placeholder="Andika serivisi... ex: Loan" autocomplete="off" onfocus="showList('serviceP')" oninput="filterList('serviceP')" onclick="showList('serviceP')">
+<input class="search-input" id="serviceP" placeholder="Shaka serivisi..." autocomplete="off" onfocus="showList('serviceP')" oninput="filterList('serviceP')" onclick="showList('serviceP')">
 <button class="clear-btn" id="clear-serviceP" onclick="clearSearch('serviceP')">✕</button>
 <div class="search-list" id="list-serviceP"></div>
 </div>
@@ -140,26 +137,38 @@ input:focus,select:focus{border-color:#0057A8;outline:none}
 
 <script>
 var BRANCHES=["Umwalimu SACCO - Gasabo Branch","Umwalimu SACCO - Kicukiro Branch","Umwalimu SACCO - Nyarugenge Branch","Umwalimu SACCO - Burera Branch","Umwalimu SACCO - Gicumbi Branch","Umwalimu SACCO - Gakenke Branch","Umwalimu SACCO - Musanze Branch","Umwalimu SACCO - Rulindo Branch","Umwalimu SACCO - Gisagara Branch","Umwalimu SACCO - Huye Branch","Umwalimu SACCO - Kamonyi Branch","Umwalimu SACCO - Muhanga Branch","Umwalimu SACCO - Nyamagabe Branch","Umwalimu SACCO - Nyanza Branch","Umwalimu SACCO - Nyaruguru Branch","Umwalimu SACCO - Ruhango Branch","Umwalimu SACCO - Karongi Branch","Umwalimu SACCO - Ngororero Branch","Umwalimu SACCO - Nyabihu Branch","Umwalimu SACCO - Nyamasheke Branch","Umwalimu SACCO - Rubavu Branch","Umwalimu SACCO - Rusizi Branch","Umwalimu SACCO - Rutsiro Branch","Umwalimu SACCO - Bugesera Branch","Umwalimu SACCO - Gatsibo Branch","Umwalimu SACCO - Kayonza Branch","Umwalimu SACCO - Kirehe Branch","Umwalimu SACCO - Ngoma Branch","Umwalimu SACCO - Nyagatare Branch","Umwalimu SACCO - Rwamagana Branch"];
-var SERVICES=["Deposit - Kubitsa amafaranga","Withdrawal - Kubikuza amafaranga","Loan Application - Gusaba Inguzanyo","Loan Repayment - Kwishyura Inguzanyo","Account Opening - Gufungura Konti","Account Closure - Gufunga Konti","Balance Inquiry - Kureba amafaranga asigaye kuri Konti","Bank Statement - Gusaba raporo ya Konti","ATM Card Request - Gusaba Ikarita ya ATM","ATM Card Replacement - Gusimbuza Ikarita ya ATM","Mobile Banking - Kwiyandikisha kuri Mobile Banking","Internet Banking - Kwiyandikisha kuri Internet Banking","Cheque Book Request - Gusaba Cheque Book","Money Transfer - Kohereza Amafaranga","Western Union / MoneyGram - Kwakira Amafaranga","Currency Exchange - Guhererekanya Amafaranga","Fixed Deposit - Kubitsa ku Gihe Kirekire","Standing Order - Guteganya Kwishyura Buri Kwezi","Update KYC / ID - Kuvugurura Indangamuntu","Complaint / Inquiry - Ikibazo / Kugisha Inama"];
+var SERVICES=["Deposit - Kubitsa amafaranga","Withdrawal - Kubikuza amafaranga","Loan Application - Gusaba Inguzanyo","Loan Repayment - Kwishyura Inguzanyo","Account Opening - Gufungura Konti","Account Closure - Gufunga Konti","Balance Inquiry - Kureba Amafaranga Asigaye","Bank Statement - Raporo ya Konti","ATM Card Request - Gusaba Ikarita ya ATM","ATM Card Replacement - Gusimbuza Ikarita ya ATM","Mobile Banking - Kwiyandikisha kuri Mobile Banking","Internet Banking - Kwiyandikisha kuri Internet Banking","Cheque Book Request - Gusaba Cheque Book","Money Transfer - Kohereza Amafaranga","Western Union / MoneyGram - Kwakira Amafaranga","Currency Exchange - Guhererekanya Amafaranga","Fixed Deposit - Kubitsa ku Gihe Kirekire","Standing Order - Guteganya Kwishyura Buri Kwezi","Update KYC / ID - Kuvugurura Indangamuntu","School Fees Payment - Kwishyura Amafaranga y'Ishuri","Complaint / Inquiry - Ikibazo / Kugisha Inama"];
 
 function getData(id){ return id.includes('branch') ? BRANCHES : SERVICES; }
 function showList(id){
   var input=document.getElementById(id);
   var list=document.getElementById('list-'+id);
   var data=getData(id);
+  // Iyo ukandaho gusa - yerekana BYOSE, iyo wanditse - iragushakira
   var q=input.value.toLowerCase();
-  var filtered=data.filter(function(x){ return x.toLowerCase().includes(q); });
-  renderList(id,filtered,q);
+  // Niba input irimo valeur yafashwe mbere, werekane byose - ntiyihishe
+  var isSelected = data.includes(input.value);
+  var filtered = (q==="" || isSelected) ? data : data.filter(function(x){ return x.toLowerCase().includes(q); });
+  renderList(id,filtered,q,isSelected);
   list.style.display='block';
   document.getElementById('clear-'+id).style.display = input.value ? 'block' : 'none';
 }
-function filterList(id){ showList(id); }
-function renderList(id,items,q){
+function filterList(id){
+  var input=document.getElementById(id);
   var list=document.getElementById('list-'+id);
-  if(items.length===0){ list.innerHTML='<div class="no-result">❌ Nta branch/service iboneka - gerageza ijambo rindi</div>'; return; }
+  var data=getData(id);
+  var q=input.value.toLowerCase();
+  var filtered=data.filter(function(x){ return x.toLowerCase().includes(q); });
+  renderList(id,filtered,q,false);
+  list.style.display='block';
+  document.getElementById('clear-'+id).style.display = input.value ? 'block' : 'none';
+}
+function renderList(id,items,q,isSelected){
+  var list=document.getElementById('list-'+id);
+  if(items.length===0){ list.innerHTML='<div class="no-result">❌ Nta biboneka</div>'; return; }
   list.innerHTML = items.map(function(item){
     var display=item;
-    if(q && q.length>=1){
+    if(q && !isSelected && q.length>=1){
       var idx=item.toLowerCase().indexOf(q);
       if(idx>=0){ display=item.substring(0,idx)+'<b>'+item.substring(idx,idx+q.length)+'</b>'+item.substring(idx+q.length); }
     }
@@ -177,7 +186,6 @@ function clearSearch(id){
   showList(id);
   document.getElementById(id).focus();
 }
-// Funga list iyo ukanze hanze
 document.addEventListener('click',function(e){
   if(!e.target.closest('.search-wrap')){
     document.querySelectorAll('.search-list').forEach(function(l){ l.style.display='none'; });
@@ -198,8 +206,8 @@ function getTicket(suffix){
   var isPri=(suffix==='P');
   var branch=document.getElementById('branch'+suffix).value;
   var service=document.getElementById('service'+suffix).value;
-  if(!branch || !BRANCHES.includes(branch)){ alert('⚠️ Hitamo Branch mu rutonde - andika ex: Rubavu hanyuma ukande kuri yo'); document.getElementById('branch'+suffix).focus(); return; }
-  if(!service || !SERVICES.includes(service)){ alert('⚠️ Hitamo Service mu rutonde - andika ex: Loan hanyuma ukande kuri yo'); document.getElementById('service'+suffix).focus(); return; }
+  if(!branch || !BRANCHES.includes(branch)){ alert('⚠️ Hitamo Branch mu rutonde'); document.getElementById('branch'+suffix).focus(); return; }
+  if(!service || !SERVICES.includes(service)){ alert('⚠️ Hitamo Service mu rutonde'); document.getElementById('service'+suffix).focus(); return; }
   var method=document.querySelector('input[name="contact'+suffix+'"]:checked').value;
   var phone=document.getElementById('phone'+suffix).value.replace(/\s/g,'');
   var email=document.getElementById('email'+suffix).value.trim();
@@ -214,6 +222,7 @@ function getTicket(suffix){
   var prefix=isPri?"P":"A";
   if(!isPri && service.includes("Loan")) prefix="L";
   if(!isPri && service.includes("Withdrawal")) prefix="W";
+  if(!isPri && service.includes("School Fees")) prefix="F";
   var ticketNo=prefix+"-"+num;
   document.getElementById('ticketNo'+suffix).innerText=ticketNo;
   var shortBranch=branch.replace("Umwalimu SACCO - ","").replace(" Branch","");
@@ -232,7 +241,6 @@ function getTicket(suffix){
   document.getElementById('smsText'+suffix).innerHTML=where+"<br><br>\""+msg+"\"";
   document.getElementById('smsBox'+suffix).style.display='block';
 }
-// Shyiramo default values kugira ngo mwarimu abone ako kanya
 document.getElementById('branchN').value="Umwalimu SACCO - Gasabo Branch";
 document.getElementById('serviceN').value="Deposit - Kubitsa amafaranga";
 document.getElementById('branchP').value="Umwalimu SACCO - Gasabo Branch";
