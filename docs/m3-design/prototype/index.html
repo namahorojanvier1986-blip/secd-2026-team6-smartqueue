@@ -1,222 +1,124 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Umwalimu SACCO - Smart Queue</title>
+<html lang="rw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SmartQueue - Team 6</title>
 <style>
-body{font-family:Arial,sans-serif;background:#eef2f7;margin:0;padding:20px}
-.card{max-width:580px;margin:auto;background:#fff;padding:22px;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.1);border-top:8px solid #FFC72C}
+body{font-family:Arial,sans-serif;background:#eef2f7;margin:0;padding:12px}
+.card{max-width:580px;margin:auto;background:#fff;padding:22px;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.1)}
 h1{color:#0057A8;margin:0;font-size:28px;text-align:center}
 .sub{color:#666;margin:6px 0 16px;text-align:center}
-.lang-bar{display:flex;justify-content:space-between;align-items:center;background:#F5F8FF;border:2px solid #DCE6FF;border-radius:10px;padding:8px 10px;margin-bottom:12px}
+.lang-bar{display:flex;justify-content:space-between;align-items:center;background:#F5F8FF;border:2px solid #DCE6FF;border-radius:10px;padding:10px 12px}
 .lang-bar label{font-weight:bold;font-size:13px;color:#0057A8;margin:0}
 .lang-bar select{width:auto;padding:8px;border:2px solid #0057A8;border-radius:8px;font-weight:bold}
 .tabs{display:flex;gap:8px;margin:16px 0;flex-wrap:wrap}
 .tab{flex:1;padding:11px;border:none;border-radius:10px;font-size:14px;font-weight:bold;cursor:pointer;min-width:110px}
 .tab.normal-tab{background:#EAF2FF;color:#0057A8;border:2px solid #0057A8}.tab.normal-tab.active{background:#0057A8;color:#fff}
-.tab.pri-tab{background:#FFF8DC;color:#8A6500;border:2px solid #FFC72C}.tab.pri-tab.active{background:#FFC72C;color:#000}
-.tab.teller-tab{background:#F3E8FF;color:#6A1B9A;border:2px solid #9C27B0}.tab.teller-tab.active{background:#9C27B0;color:#fff}
-.tab.mgr-tab{background:#E8F5E9;color:#2E7D32;border:2px solid #4CAF50}.tab.mgr-tab.active{background:#4CAF50;color:#fff}
-.interface{display:none}.interface.active{display:block}
-label{font-weight:bold;color:#333;display:block;margin:12px 0 5px;font-size:14px}
-select,input{width:100%;padding:10px;border:2px solid #ddd;border-radius:8px;font-size:14px;background:#fff;box-sizing:border-box}
-.btn{width:100%;padding:13px;background:#0057A8;color:#fff;border:none;border-radius:8px;font-size:17px;font-weight:bold;margin-top:18px;cursor:pointer}
-.btn-pri{width:100%;padding:13px;background:#FFC72C;color:#000;border:none;border-radius:8px;font-size:17px;font-weight:bold;margin-top:18px;cursor:pointer}
-.btn-call{width:100%;padding:14px;background:#4CAF50;color:#fff;border:none;border-radius:8px;font-size:18px;font-weight:bold;margin-top:12px;cursor:pointer}
-.btn-teller-call{width:100%;padding:14px;background:#9C27B0;color:#fff;border:none;border-radius:8px;font-size:18px;font-weight:bold;margin-top:12px;cursor:pointer}
-.ticket{margin-top:16px;padding:14px;border-radius:8px;text-align:center;display:none}
-.ticket.normal{background:#EAF2FF;border:2px solid #0057A8}.ticket.pri{background:#FFF8DC;border:2px solid #FFC72C}
-.ticket b{font-size:30px;color:#0057A8}
-.sms{margin-top:12px;padding:12px;background:#E8F5E9;border:1px solid #4CAF50;border-radius:8px;font-size:14px;color:#2E7D32;display:none;text-align:left}
-.error{color:#D32F2F;font-size:13px;display:none;margin-top:4px}
-.auth-box{border-radius:10px;padding:14px;margin:14px 0}
-.auth-logged{background:#E8F5E9;border:2px solid #4CAF50;border-radius:10px;padding:12px;margin:14px 0;text-align:center}
-.btn-small{padding:8px 12px;border:none;border-radius:6px;cursor:pointer;font-weight:bold;font-size:13px}
-.search-wrap{position:relative}.search-input{padding:9px 30px 9px 32px !important;font-size:14px !important;height:38px}
-.search-icon{position:absolute;left:10px;top:9px;font-size:15px;pointer-events:none}
-.search-list{position:absolute;top:100%;left:0;right:0;background:#fff;border:2px solid #0057A8;border-top:none;border-radius:0 0 8px 8px;max-height:220px;overflow-y:auto;z-index:99;display:none;box-shadow:0 8px 16px rgba(0,0,0,.15)}
-.search-item{padding:9px 10px;cursor:pointer;border-bottom:1px solid #eee;font-size:14px}.search-item:hover{background:#EAF2FF}
-.clear-btn{position:absolute;right:8px;top:8px;background:#eee;border:none;border-radius:50%;width:22px;height:22px;cursor:pointer;display:none;font-size:12px}
-.now-serving{background:#E8F5E9;border:3px solid #4CAF50;border-radius:12px;padding:16px;text-align:center;margin:12px 0}.now-serving b{font-size:36px;color:#2E7D32}
-.queue-item{display:flex;justify-content:space-between;padding:10px;border-bottom:1px solid #eee;font-size:14px}.queue-item.pri{background:#FFF8DC}
-.badge{padding:3px 8px;border-radius:12px;font-size:11px;font-weight:bold}.badge-pri{background:#FFC72C;color:#000}.badge-normal{background:#0057A8;color:#fff}
-.info-box{background:#FFF8DC;border:1px solid #FFC72C;padding:10px;border-radius:8px;font-size:13px;color:#664D03;text-align:center}
-.link-btn{width:100%;background:none;border:none;color:#6A1B9A;text-decoration:underline;cursor:pointer;margin-top:8px;font-size:13px}
-.link-btn-mgr{width:100%;background:none;border:none;color:#2E7D32;text-decoration:underline;cursor:pointer;margin-top:8px;font-size:13px}
-.modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:999;padding:20px}
-.modal-inner{max-width:400px;margin:40px auto;background:#fff;padding:20px;border-radius:12px;max-height:90vh;overflow-y:auto}
-</style></head>
+.tab.pri-tab{background:#FFF3DC;color:#8A6500;border:2px solid #FFC72C}.tab.pri-tab.active{background:#FFC72C;color:#000}
+.tab.teller-tab{background:#E8F8EF;color:#0B6B3A;border:2px solid #0B6B3A}.tab.teller-tab.active{background:#0B6B3A;color:#fff}
+.tab.mgr-tab{background:#F0E9FF;color:#5B2EA6;border:2px solid #5B2EA6}.tab.mgr-tab.active{background:#5B2EA6;color:#fff}
+input,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ccc;border-radius:10px;font-size:16px;box-sizing:border-box}
+.btn{width:100%;padding:14px;border:0;border-radius:10px;background:#0057A8;color:#fff;font-weight:bold;font-size:16px;margin-top:8px;cursor:pointer}
+.btn2{background:#198754}.btn3{background:#dc3545}
+.ticket{background:#e7f1ff;border:2px dashed #0057A8;padding:14px;border-radius:12px;text-align:center;margin-top:10px}
+.kig{background:#fff3cd;padding:10px;border-radius:10px;margin-top:10px;font-size:14px}
+.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eee}
+.small{font-size:13px;color:#555}
+</style>
+</head>
 <body>
 <div class="card">
-<h1>Umwalimu SACCO Bank</h1>
-<p class="sub">Smart Queue Management System - SQMS<br>Karibu, Mwalimu! Welcome, Teacher!</p>
+<h1 data-lang="title">SmartQueue - Umwalimu SACCO</h1>
+<p class="sub">Team 6 | M1 Problem: Long Queue | M2 Users | M3 Design</p>
 
-<!-- LANGUAGE -->
 <div class="lang-bar">
-<label>🌐 Language / Ururimi / Lugha / Langue:</label>
-<select id="langSelect" onchange="changeLang()">
-<option value="en">English</option>
-<option value="rw">Kinyarwanda</option>
-<option value="sw">Kiswahili</option>
-<option value="fr">Français</option>
+<label data-lang="languageLabel">Hitamo Ururimi / Select Language:</label>
+<select id="langSelect" onchange="changeLanguage(this.value)">
+<option value="rw">🇷🇼 Ikinyarwanda</option>
+<option value="en">🇬🇧 English</option>
+<option value="fr">🇫🇷 Français</option>
 </select>
 </div>
 
-<div class="info-box" data-i18n="customerInfo">👋 Customers: No login needed - Just take your ticket directly!</div>
-
-<!-- TABS -->
 <div class="tabs">
-<button class="tab normal-tab active" id="tabN" onclick="showTab('normal')" data-i18n="normalTab">Normal Ticket</button>
-<button class="tab pri-tab" id="tabP" onclick="showTab('priority')" data-i18n="priTab">⭐ Priority Ticket</button>
-<button class="tab teller-tab" id="tabT" onclick="showTab('teller')" data-i18n="tellerTab">🏦 Teller</button>
-<button class="tab mgr-tab" id="tabM" onclick="showTab('manager')" data-i18n="mgrTab">👨‍💼 Manager</button>
+<button class="tab normal-tab active" onclick="show('eric',this)" data-lang="tabEric">Eric - Join</button>
+<button class="tab pri-tab" onclick="show('rose',this)" data-lang="tabRose">Mama Rose - USSD</button>
+<button class="tab normal-tab" onclick="show('grace',this)" data-lang="tabGrace">Grace - ETA</button>
+<button class="tab teller-tab" onclick="show('claudine',this)" data-lang="tabClaudine">Claudine - Teller</button>
+<button class="tab mgr-tab" onclick="show('jean',this)" data-lang="tabJean">Jean Paul - Manager</button>
 </div>
 
-<!-- NORMAL - NO LOGIN -->
-<div id="interface-normal" class="interface active">
-<label data-i18n="searchBranch">🔍 Search Branch *</label>
-<div class="search-wrap"><span class="search-icon">🔍</span><input type="text" id="branchNormal" class="search-input" placeholder="Type Kigali, Musanze, Huye..." oninput="filterBranch('normal')" autocomplete="off"><button class="clear-btn" id="clearN" onclick="clearBranch('normal')">✕</button><div class="search-list" id="listNormal"></div></div>
-<label data-i18n="serviceLabel">Service *</label><select id="serviceNormal"></select>
-<label data-i18n="phoneLabel2">Phone for SMS *</label><input type="tel" id="phoneNormal" placeholder="0788 123 456">
-<button class="btn" onclick="getTicket('normal')" data-i18n="getTicketBtn">🎟️ Get Normal Ticket</button>
-<div class="ticket normal" id="ticketNormal"><div data-i18n="yourTicket">Your Ticket</div><b id="ticketNumN">N-001</b><div id="ticketBranchN"></div><div id="ticketServiceN" style="font-size:13px;color:#555"></div></div>
-<div class="sms" id="smsNormal"></div>
-</div>
+<!-- ERIC -->
+<div id="eric"><h2 data-lang="joinTitle">Eric - Kwinjira mu murongo</h2>
+<p class="small">Visitor, wants to join without standing in line</p>
+<label data-lang="serviceLabel">Service</label>
+<select id="service"><option>Deposit</option><option>Withdrawal</option><option>Account Opening</option></select>
+<label data-lang="nameLabel">Your Name</label>
+<input id="name" placeholder="e.g. Eric" value="Eric">
+<button class="btn" onclick="joinQueue()" data-lang="joinBtn">JOINS QUEUE</button>
+<div id="ericTicket"></div></div>
 
-<!-- PRIORITY - NO LOGIN -->
-<div id="interface-priority" class="interface">
-<div style="background:#FFF3CD;border:1px solid #FFC72C;padding:9px;border-radius:8px;font-size:13px;color:#664D03" data-i18n="priNote">⭐ Priority for: Elderly, Pregnant, Disabled, Emergency</div>
-<label data-i18n="searchBranch">🔍 Search Branch *</label>
-<div class="search-wrap"><span class="search-icon">🔍</span><input type="text" id="branchPri" class="search-input" placeholder="Type Kigali, Musanze, Huye..." oninput="filterBranch('priority')" autocomplete="off"><button class="clear-btn" id="clearP" onclick="clearBranch('priority')">✕</button><div class="search-list" id="listPri"></div></div>
-<label data-i18n="serviceLabel">Service *</label><select id="servicePri"></select>
-<label data-i18n="priCategory">Priority Category *</label>
-<select id="priCat"><option>Elderly (65+)</option><option>Pregnant</option><option>Disabled</option><option>Nursing Mother</option><option>Emergency</option><option>Teacher on Duty</option></select>
-<label data-i18n="phoneLabel2">Phone for SMS *</label><input type="tel" id="phonePri" placeholder="0788 123 456">
-<button class="btn-pri" onclick="getTicket('priority')" data-i18n="getPriBtn">⭐ Get Priority Ticket</button>
-<div class="ticket pri" id="ticketPri"><div data-i18n="yourPriTicket">Your Priority Ticket</div><b id="ticketNumP">P-001</b><div id="ticketBranchP"></div><div id="ticketServiceP" style="font-size:13px;color:#555"></div></div>
-<div class="sms" id="smsPri"></div>
-</div>
+<!-- MAMA ROSE -->
+<div id="rose" style="display:none"><h2 data-lang="ussdTitle">Mama Rose - USSD *123#</h2>
+<p class="small">Elderly, basic phone, priority lane 1:2</p>
+<button class="btn" onclick="joinRose()" data-lang="ussdBtn">Dial *123# - Join as PRIORITY</button>
+<div id="roseTicket"></div>
+<div class="kig" id="smsPreview">SMS: "Ticket P-012, Counter 2, Tegereza guhamagarwa. Murakoze!"</div></div>
 
-<!-- TELLER -->
-<div id="interface-teller" class="interface">
-<div id="tellerAuth" class="auth-box" style="background:#F3E8FF;border:2px solid #9C27B0">
-<div style="font-weight:bold;color:#6A1B9A;text-align:center;font-size:16px" data-i18n="tellerLoginTitle">🏦 Teller Login - Staff Only</div>
-<p style="font-size:13px;color:#555;text-align:center;margin:6px 0" data-i18n="tellerLoginSub">Tellers must login to call tickets</p>
-<label data-i18n="staffId">Staff ID *</label><input type="text" id="tellerId" placeholder="Ex: T001">
-<label data-i18n="pinLabel">PIN - 4 digits *</label><input type="password" id="tellerPin" placeholder="****" maxlength="4">
-<button class="btn" style="background:#9C27B0" onclick="doTellerLogin()" data-i18n="loginBtn">🔐 Login</button>
-<div id="tellerError" class="error">⚠️ Wrong Staff ID or PIN</div>
-<p style="font-size:12px;color:#888;text-align:center;margin:10px 0 0">Demo: T001/1111, T002/2222, T003/3333</p>
-<button class="link-btn" onclick="showChangePin('teller')">🔑 Forgot / Change PIN?</button>
-<button class="link-btn" onclick="showAddStaff('teller')">➕ Add New Teller (Manager Only)</button>
-</div>
-<div id="tellerDash" style="display:none">
-<div class="auth-logged">👋 <span data-i18n="welcome">Welcome</span>, <b id="tellerName">Teller</b>!<br><small id="tellerBranch"></small><br>
-<button class="btn-small" style="background:#FFC72C;margin-top:6px" onclick="showChangePin('teller')">🔑 Change My PIN</button>
-<button class="btn-small" style="background:#D32F2F;color:#fff" onclick="doTellerLogout()" data-i18n="logoutBtn">🚪 Logout</button></div>
-<div class="now-serving"><div data-i18n="nowServing">🔔 NOW SERVING:</div><b id="nowServingTeller">---</b><div id="nowServingBranchTeller" style="font-size:14px;color:#555">No ticket called yet</div></div>
-<button class="btn-teller-call" onclick="callNextTicket('teller')" data-i18n="callNextBtn">📢 CALL NEXT TICKET</button>
-<button class="btn-small" style="background:#FF9800;color:#fff;width:100%;padding:10px;margin-top:8px" onclick="callPriorityNext('teller')" data-i18n="callPriBtn">⭐ Call Next PRIORITY Ticket</button>
-<div style="margin-top:16px"><div style="display:flex;justify-content:space-between;font-weight:bold"><span data-i18n="queueTitle">Waiting Queue</span><span id="queueCountTeller">0 waiting</span></div><div id="queueListTeller" style="background:#fff;border:1px solid #ddd;border-radius:8px;margin-top:8px;min-height:60px"></div></div>
-</div>
-</div>
+<!-- GRACE -->
+<div id="grace" style="display:none"><h2 data-lang="etaTitle">Grace - Igihe cyo gutegereza</h2>
+<p class="small">Teacher - needs ETA to teach and return on time</p>
+<div class="row"><span data-lang="ticketLabel">Ticket</span><b>A-045</b></div>
+<div class="row"><span data-lang="positionLabel">Position</span><b>3</b></div>
+<div class="row"><span data-lang="etaLabel">ETA</span><b style="color:#198754">~15 min</b></div>
+<div class="kig">SMS: "Grace, uri uwa 3, garuka nyuma y'iminota 15. Ticket A-045"</div>
+<button class="btn btn2" onclick="alert('SMS sent: 3 away - Return now!')" data-lang="smsBtn">Simulate SMS When 3 Away</button></div>
 
-<!-- MANAGER -->
-<div id="interface-manager" class="interface">
-<div id="mgrAuth" class="auth-box" style="background:#E8F5E9;border:2px solid #4CAF50">
-<div style="font-weight:bold;color:#2E7D32;text-align:center;font-size:16px" data-i18n="mgrLoginTitle">👨‍💼 Manager Login - Staff Only</div>
-<p style="font-size:13px;color:#555;text-align:center;margin:6px 0" data-i18n="mgrLoginSub">Managers must login to monitor queue</p>
-<label data-i18n="staffId">Staff ID *</label><input type="text" id="mgrId" placeholder="Ex: M001">
-<label data-i18n="pinLabel">PIN - 4 digits *</label><input type="password" id="mgrPin" placeholder="****" maxlength="4">
-<button class="btn" style="background:#4CAF50" onclick="doMgrLogin()" data-i18n="loginBtn">🔐 Login</button>
-<div id="mgrError" class="error">⚠️ Wrong Staff ID or PIN</div>
-<p style="font-size:12px;color:#888;text-align:center;margin:10px 0 0">Demo: M001/2222, M002/4444, M003/5555</p>
-<button class="link-btn-mgr" onclick="showChangePin('manager')">🔑 Forgot / Change PIN?</button>
-<button class="link-btn-mgr" onclick="showAddStaff('manager')">➕ Add New Manager</button>
-</div>
-<div id="mgrDash" style="display:none">
-<div class="auth-logged">👋 <span data-i18n="welcome">Welcome</span>, <b id="mgrName">Manager</b>!<br><small id="mgrBranch"></small><br>
-<button class="btn-small" style="background:#FFC72C;margin-top:6px" onclick="showChangePin('manager')">🔑 Change My PIN</button>
-<button class="btn-small" style="background:#D32F2F;color:#fff" onclick="doMgrLogout()" data-i18n="logoutBtn">🚪 Logout</button></div>
-<div style="display:flex;gap:8px;text-align:center">
-<div style="flex:1;background:#EAF2FF;padding:10px;border-radius:8px"><b id="statTotal" style="font-size:20px">0</b><div style="font-size:12px" data-i18n="statTotal">Total Tickets</div></div>
-<div style="flex:1;background:#FFF8DC;padding:10px;border-radius:8px"><b id="statPri" style="font-size:20px">0</b><div style="font-size:12px" data-i18n="statPri">Priority</div></div>
-<div style="flex:1;background:#E8F5E9;padding:10px;border-radius:8px"><b id="statWaiting" style="font-size:20px">0</b><div style="font-size:12px" data-i18n="statWaiting">Waiting</div></div>
-</div>
-<div class="now-serving"><div data-i18n="nowServing">🔔 NOW SERVING:</div><b id="nowServingNum">---</b><div id="nowServingBranch" style="font-size:14px;color:#555">No ticket called yet</div></div>
-<button class="btn-call" onclick="callNextTicket('manager')" data-i18n="callNextBtn">📢 CALL NEXT TICKET</button>
-<button class="btn-small" style="background:#FF9800;color:#fff;width:100%;padding:10px;margin-top:8px" onclick="callPriorityNext('manager')" data-i18n="callPriBtn">⭐ Call Next PRIORITY Ticket</button>
-<div style="margin-top:16px"><div style="display:flex;justify-content:space-between;font-weight:bold"><span data-i18n="queueTitle">Waiting Queue</span><span id="queueCount">0 waiting</span></div><div id="queueList" style="background:#fff;border:1px solid #ddd;border-radius:8px;margin-top:8px;min-height:60px"></div></div>
-<div style="margin-top:16px;background:#F5F8FF;border:1px solid #DCE6FF;border-radius:8px;padding:10px"><b>👥 Staff List</b><div id="staffList" style="font-size:13px;margin-top:6px"></div></div>
-<button class="btn-small" style="background:#D32F2F;color:#fff;width:100%;padding:10px;margin-top:10px" onclick="clearQueue()" data-i18n="clearQueueBtn">🗑️ Clear Queue</button>
-</div>
-</div>
+<!-- CLAUDINE -->
+<div id="claudine" style="display:none"><h2 data-lang="tellerTitle">Claudine - Uwakira</h2>
+<p class="small">Calls next, recall, no-show, transfer</p>
+<div id="queueList"></div>
+<button class="btn btn2" onclick="callNext()" data-lang="callNext">HAMAGARA UKURIKIYE</button>
+<button class="btn" onclick="recall()" data-lang="recall">SUBIRAMO</button>
+<button class="btn btn3" onclick="noShow()" data-lang="noShow">NTAJE</button>
+<div class="small" style="margin-top:8px">Now Serving: <b id="serving">-</b></div></div>
+
+<!-- JEAN PAUL -->
+<div id="jean" style="display:none"><h2 data-lang="managerTitle">Jean Paul - Umuyobozi</h2>
+<p class="small">Dashboard + Export Report in 30s</p>
+<div class="row"><span data-lang="inQueue">In Queue</span><b id="mQueue">18</b></div>
+<div class="row"><span>Avg Wait</span><b>22 min</b></div>
+<div class="row"><span>Served Today</span><b>42</b></div>
+<div class="row"><span>Bottleneck</span><b style="color:#dc3545">Counter 2 Slow</b></div>
+<button class="btn" onclick="alert('Report Exported: PDF / CSV')" data-lang="exportBtn">KOHEREZA RAPORO PDF/CSV</button></div>
 
 </div>
-
-<!-- CHANGE PIN MODAL -->
-<div id="changePinBox" class="modal"><div class="modal-inner">
-<h3 style="text-align:center;color:#0057A8;margin:0">🔑 Change PIN</h3><p style="font-size:13px;text-align:center;color:#666" id="changePinFor">For: Teller</p>
-<label>Staff ID *</label><input type="text" id="cpStaffId" placeholder="Ex: T001">
-<label>Old PIN *</label><input type="password" id="cpOldPin" placeholder="Old PIN" maxlength="4">
-<label>New PIN (4 digits) *</label><input type="password" id="cpNewPin" placeholder="New PIN" maxlength="4">
-<label>Confirm New PIN *</label><input type="password" id="cpConfirmPin" placeholder="Confirm New PIN" maxlength="4">
-<div id="cpError" style="color:red;font-size:13px;display:none;margin-top:6px"></div>
-<div id="cpSuccess" style="color:green;font-size:13px;display:none;margin-top:6px">✅ PIN yahindutse neza!</div>
-<button onclick="doChangePin()" style="width:100%;padding:12px;background:#0057A8;color:#fff;border:none;border-radius:8px;font-weight:bold;margin-top:12px">✅ Save New PIN</button>
-<button onclick="hideChangePin()" style="width:100%;padding:10px;background:#eee;border:none;border-radius:8px;margin-top:8px;cursor:pointer">Cancel</button>
-</div></div>
-
-<!-- ADD STAFF MODAL -->
-<div id="addStaffBox" class="modal"><div class="modal-inner">
-<h3 style="text-align:center;color:#0057A8;margin:0">➕ Add New Staff</h3><p style="font-size:13px;text-align:center;color:#666" id="addStaffFor">Add Teller</p>
-<label>Role *</label><select id="addRole"><option value="teller">Teller</option><option value="manager">Manager</option></select>
-<label>Full Name *</label><input type="text" id="addName" placeholder="Ex: Grace Ingabire">
-<label>Staff ID *</label><input type="text" id="addId" placeholder="Ex: T004">
-<label>Branch *</label><select id="addBranch"></select>
-<label>Initial PIN (4 digits) *</label><input type="password" id="addPin" placeholder="Ex: 1234" maxlength="4">
-<div id="addError" style="color:red;font-size:13px;display:none;margin-top:6px"></div>
-<div id="addSuccess" style="color:green;font-size:13px;display:none;margin-top:6px">✅ Staff yongewe neza!</div>
-<button onclick="doAddStaff()" style="width:100%;padding:12px;background:#4CAF50;color:#fff;border:none;border-radius:8px;font-weight:bold;margin-top:12px">✅ Add Staff</button>
-<button onclick="hideAddStaff()" style="width:100%;padding:10px;background:#eee;border:none;border-radius:8px;margin-top:8px;cursor:pointer">Cancel</button>
-</div></div>
-
 <script>
-// ===== FULL BRANCHES - 32 =====
-const branches=["Kigali - Head Office KN 3 Rd","Kigali - Remera","Kigali - Nyabugogo","Kigali - Kicukiro","Kigali - Kimironko","Kigali - Gikondo","Kigali - Nyarugenge","Kigali - Kacyiru","Kigali - Kanombe","Kigali - Kabuga","Musanze","Rubavu - Gisenyi","Huye","Rusizi - Kamembe","Muhanga","Karongi","Nyagatare","Rwamagana","Kayonza","Ngoma - Kibungo","Kirehe","Gatsibo","Bugesera - Nyamata","Nyanza","Gisagara","Nyamasheke","Rutsiro","Ngororero","Burera","Gakenke","Rulindo","Kamonyi"];
-// ===== FULL SERVICES - 12 =====
-const services=["Deposit - Kubitsa","Withdrawal - Gukura Amafaranga","Loan Application - Gusaba Inguzanyo","Loan Repayment - Kwishyura Inguzanyo","Account Opening - Gufungura Konti","Account Statement - Inyandiko ya Konti","Cheque Services - Serivisi za Cheque","Mobile Banking - Banki ya Telefone","Card Services - Serivisi z'Ikarita","School Fees Payment - Kwishyura Amashuri","Salary Processing - Gutunganya Umushahara","General Inquiry - Kubaza Ibibazo"];
-// ===== ACCOUNTS - EACH HAS OWN =====
-let tellers=[{id:"T001",name:"Jean Muse",branch:"Kigali - Remera",pin:"1111"},{id:"T002",name:"Aline Uwase",branch:"Musanze",pin:"2222"},{id:"T003",name:"Eric Niyonsenga",branch:"Huye",pin:"3333"}];
-let managers=[{id:"M001",name:"Patrick Habimana",branch:"Kigali - Head Office KN 3 Rd",pin:"2222"},{id:"M002",name:"Marie Mukamana",branch:"Rubavu - Gisenyi",pin:"4444"},{id:"M003",name:"David Kagabo",branch:"Rusizi - Kamembe",pin:"5555"}];
-let queue=[]; let normalCount=0; let priCount=0; let currentLang='en'; let currentTeller=null; let currentManager=null; let changePinType='teller'; let addStaffType='teller';
-let T={
-en:{loginBtn:"🔐 Login",welcome:"Welcome",logoutBtn:"🚪 Logout",normalTab:"Normal Ticket",priTab:"⭐ Priority Ticket",tellerTab:"🏦 Teller",mgrTab:"👨‍💼 Manager",searchBranch:"🔍 Search Branch *",serviceLabel:"Service *",phoneLabel2:"Phone for SMS *",getTicketBtn:"🎟️ Get Normal Ticket",getPriBtn:"⭐ Get Priority Ticket",yourTicket:"Your Ticket",yourPriTicket:"Your Priority Ticket",priNote:"⭐ Priority for: Elderly, Pregnant, Disabled, Emergency",priCategory:"Priority Category *",nowServing:"🔔 NOW SERVING:",callNextBtn:"📢 CALL NEXT TICKET",callPriBtn:"⭐ Call Next PRIORITY Ticket",queueTitle:"Waiting Queue",clearQueueBtn:"🗑️ Clear Queue",customerInfo:"👋 Customers: No login needed - Just take your ticket directly!",tellerLoginTitle:"🏦 Teller Login - Staff Only",tellerLoginSub:"Tellers must login to call tickets",mgrLoginTitle:"👨‍💼 Manager Login - Staff Only",mgrLoginSub:"Managers must login to monitor queue",staffId:"Staff ID *",pinLabel:"PIN - 4 digits *",statTotal:"Total Tickets",statPri:"Priority",statWaiting:"Waiting"},
-rw:{loginBtn:"🔐 Injira",welcome:"Murakaza neza",logoutBtn:"🚪 Sohoka",normalTab:"Ticket Isanzwe",priTab:"⭐ Ticket y'Ibanze",tellerTab:"🏦 Teller",mgrTab:"👨‍💼 Manager",searchBranch:"🔍 Shaka Ishami *",serviceLabel:"Serivisi *",phoneLabel2:"Telefone yo kohereza SMS *",getTicketBtn:"🎟️ Fata Ticket Isanzwe",getPriBtn:"⭐ Fata Ticket y'Ibanze",yourTicket:"Ticket Yawe",yourPriTicket:"Ticket Yawe y'Ibanze",priNote:"⭐ Ibanze kuri: Abageze mu zabukuru, Abatwite, Abafite ubumuga, Ibyihutirwa",priCategory:"Icyiciro cy'Ibanze *",nowServing:"🔔 UBU URIMO KORERA:",callNextBtn:"📢 HAMAGARA UKURIKIRA",callPriBtn:"⭐ Hamagara Ticket y'Ibanze Ikurikira",queueTitle:"Umurongo Utegereje",clearQueueBtn:"🗑️ Siba Umurongo",customerInfo:"👋 Abakiriya: Nta kwinjira bisabwa - Fata ticket yawe ako kanya!",tellerLoginTitle:"🏦 Injira kwa Teller - Abakozi Gusa",tellerLoginSub:"Teller agomba kwinjira kugirango ahamagare ticket",mgrLoginTitle:"👨‍💼 Injira kwa Manager - Abakozi Gusa",mgrLoginSub:"Manager agomba kwinjira kugirango arebe umurongo",staffId:"Staff ID *",pinLabel:"PIN - Imibare 4 *",statTotal:"Ticket Zose",statPri:"Ibanze",statWaiting:"Zitegereje"},
-sw:{loginBtn:"🔐 Ingia",welcome:"Karibu",logoutBtn:"🚪 Toka",normalTab:"Tiketi ya Kawaida",priTab:"⭐ Tiketi ya Kipaumbele",tellerTab:"🏦 Teller",mgrTab:"👨‍💼 Meneja",searchBranch:"🔍 Tafuta Tawi *",serviceLabel:"Huduma *",phoneLabel2:"Simu ya SMS *",getTicketBtn:"🎟️ Pata Tiketi ya Kawaida",getPriBtn:"⭐ Pata Tiketi ya Kipaumbele",yourTicket:"Tiketi Yako",yourPriTicket:"Tiketi Yako ya Kipaumbele",priNote:"⭐ Kipaumbele kwa: Wazee, Wajawazito, Walemavu, Dharura",priCategory:"Kategoria ya Kipaumbele *",nowServing:"🔔 SASA ANAHUDUMIWA:",callNextBtn:"📢 ITA TIKETI INAYOFUATA",callPriBtn:"⭐ Ita Tiketi ya Kipaumbele Inayofuata",queueTitle:"Foleni Inayosubiri",clearQueueBtn:"🗑️ Futa Foleni",customerInfo:"👋 Wateja: Hakuna kuingia - Chukua tiketi yako moja kwa moja!",tellerLoginTitle:"🏦 Ingia kwa Teller - Wafanyakazi Tu",tellerLoginSub:"Teller lazima aingie ili aite tiketi",mgrLoginTitle:"👨‍💼 Ingia kwa Meneja - Wafanyakazi Tu",mgrLoginSub:"Meneja lazima aingie ili afuatilie foleni",staffId:"Staff ID *",pinLabel:"PIN - Nambari 4 *",statTotal:"Tiketi Zote",statPri:"Kipaumbele",statWaiting:"Zinasubiri"},
-fr:{loginBtn:"🔐 Se Connecter",welcome:"Bienvenue",logoutBtn:"🚪 Déconnexion",normalTab:"Ticket Normal",priTab:"⭐ Ticket Prioritaire",tellerTab:"🏦 Guichetier",mgrTab:"👨‍💼 Gérant",searchBranch:"🔍 Rechercher Agence *",serviceLabel:"Service *",phoneLabel2:"Téléphone pour SMS *",getTicketBtn:"🎟️ Obtenir Ticket Normal",getPriBtn:"⭐ Obtenir Ticket Prioritaire",yourTicket:"Votre Ticket",yourPriTicket:"Votre Ticket Prioritaire",priNote:"⭐ Priorité pour: Personnes âgées, Femmes enceintes, Handicapés, Urgence",priCategory:"Catégorie Prioritaire *",nowServing:"🔔 EN COURS DE SERVICE:",callNextBtn:"📢 APPELER TICKET SUIVANT",callPriBtn:"⭐ Appeler Ticket Prioritaire Suivant",queueTitle:"File d'attente",clearQueueBtn:"🗑️ Effacer la File",customerInfo:"👋 Clients: Pas de connexion - Prenez votre ticket directement!",tellerLoginTitle:"🏦 Connexion Guichetier - Personnel Seulement",tellerLoginSub:"Le guichetier doit se connecter pour appeler",mgrLoginTitle:"👨‍💼 Connexion Gérant - Personnel Seulement",mgrLoginSub:"Le gérant doit se connecter pour surveiller",staffId:"Staff ID *",pinLabel:"PIN - 4 chiffres *",statTotal:"Total Tickets",statPri:"Priorité",statWaiting:"En attente"}
+// === SMARTQUEUE ENGINE + LANGUAGE ENGINE ===
+let queue=[{id:'P-012',name:'Mama Rose',priority:true},{id:'A-042',name:'Eric',priority:false},{id:'A-043',name:'Grace',priority:false},{id:'A-044',name:'John',priority:false}];
+let ticketCounter=45, priorityCounter=12, servingNow=null, currentLang='rw';
+const LANG={
+rw:{title:'SmartQueue - Umwalimu SACCO',languageLabel:'Hitamo Ururimi / Select Language:',tabEric:'Eric - Join',tabRose:'Mama Rose - USSD',tabGrace:'Grace - ETA',tabClaudine:'Claudine - Teller',tabJean:'Jean Paul - Manager',joinTitle:'Eric - Kwinjira mu murongo',serviceLabel:'Service',nameLabel:'Izina Ryawe',joinBtn:'JOINS QUEUE',ussdTitle:'Mama Rose - USSD *123#',ussdBtn:'Dial *123# - Join as PRIORITY',etaTitle:'Grace - Igihe cyo gutegereza',ticketLabel:'Ticket',positionLabel:'Umwanya',etaLabel:'ETA',smsBtn:'Simulate SMS When 3 Away',tellerTitle:'Claudine - Uwakira',callNext:'HAMAGARA UKURIKIYE',recall:'SUBIRAMO',noShow:'NTAJE',managerTitle:'Jean Paul - Umuyobozi',inQueue:'Abari mu murongo',exportBtn:'KOHEREZA RAPORO PDF/CSV'},
+en:{title:'SmartQueue - Umwalimu SACCO',languageLabel:'Select Language / Hitamo Ururimi:',tabEric:'Eric - Join',tabRose:'Mama Rose - USSD',tabGrace:'Grace - ETA',tabClaudine:'Claudine - Teller',tabJean:'Jean Paul - Manager',joinTitle:'Eric - Join Queue',serviceLabel:'Service',nameLabel:'Your Name',joinBtn:'JOIN QUEUE',ussdTitle:'Mama Rose - USSD *123#',ussdBtn:'Dial *123# - Join as PRIORITY',etaTitle:'Grace - Waiting Time',ticketLabel:'Ticket',positionLabel:'Position',etaLabel:'ETA',smsBtn:'Simulate SMS When 3 Away',tellerTitle:'Claudine - Teller',callNext:'CALL NEXT',recall:'RECALL',noShow:'NO-SHOW',managerTitle:'Jean Paul - Manager',inQueue:'In Queue',exportBtn:'EXPORT REPORT PDF/CSV'},
+fr:{title:'SmartQueue - Umwalimu SACCO',languageLabel:'Choisir la langue:',tabEric:'Eric - Rejoindre',tabRose:'Mama Rose - USSD',tabGrace:'Grace - ETA',tabClaudine:'Claudine - Caissiere',tabJean:'Jean Paul - Manager',joinTitle:'Eric - Rejoindre la file',serviceLabel:'Service',nameLabel:'Votre Nom',joinBtn:'REJOINDRE LA FILE',ussdTitle:'Mama Rose - USSD *123#',ussdBtn:'Composer *123# - PRIORITE',etaTitle:'Grace - Temps d attente',ticketLabel:'Ticket',positionLabel:'Position',etaLabel:'Temps estime',smsBtn:'Simuler SMS',tellerTitle:'Claudine - Caissiere',callNext:'APPELER SUIVANT',recall:'RAPPELER',noShow:'ABSENT',managerTitle:'Jean Paul - Manager',inQueue:'En file',exportBtn:'EXPORTER RAPPORT PDF/CSV'}
 };
-function fillServices(){document.getElementById('serviceNormal').innerHTML=services.map(s=>`<option>${s}</option>`).join(''); document.getElementById('servicePri').innerHTML=services.map(s=>`<option>${s}</option>`).join(''); document.getElementById('addBranch').innerHTML=branches.map(b=>`<option>${b}</option>`).join('');}
-fillServices();
-function changeLang(){currentLang=document.getElementById('langSelect').value; document.querySelectorAll('[data-i18n]').forEach(el=>{let k=el.getAttribute('data-i18n'); if(T[currentLang][k]) el.textContent=T[currentLang][k];});}
-function showTab(t){document.querySelectorAll('.interface').forEach(e=>e.classList.remove('active')); document.querySelectorAll('.tab').forEach(e=>e.classList.remove('active')); if(t=='normal'){document.getElementById('interface-normal').classList.add('active');document.getElementById('tabN').classList.add('active');} if(t=='priority'){document.getElementById('interface-priority').classList.add('active');document.getElementById('tabP').classList.add('active');} if(t=='teller'){document.getElementById('interface-teller').classList.add('active');document.getElementById('tabT').classList.add('active'); if(currentTeller) renderQueue();} if(t=='manager'){document.getElementById('interface-manager').classList.add('active');document.getElementById('tabM').classList.add('active'); if(currentManager) renderQueue();}}
-function filterBranch(type){let inp=type=='normal'?document.getElementById('branchNormal'):document.getElementById('branchPri'); let list=type=='normal'?document.getElementById('listNormal'):document.getElementById('listPri'); let v=inp.value.toLowerCase(); if(!v){list.style.display='none';return;} let f=branches.filter(b=>b.toLowerCase().includes(v)); list.innerHTML=f.length?f.map(b=>`<div class="search-item" onclick="pickBranch('${type}','${b}')">${b}</div>`).join(''):`<div style="padding:10px;color:#888;text-align:center">No branch found</div>`; list.style.display='block';}
-function pickBranch(type,b){if(type=='normal')document.getElementById('branchNormal').value=b; else document.getElementById('branchPri').value=b; document.getElementById(type=='normal'?'listNormal':'listPri').style.display='none';}
-function clearBranch(type){if(type=='normal')document.getElementById('branchNormal').value=''; else document.getElementById('branchPri').value='';}
-function getTicket(type){let branch=type=='normal'?document.getElementById('branchNormal').value:document.getElementById('branchPri').value; if(!branch){alert('Select branch first! / Hitamo ishami mbere!');return;} let service=type=='normal'?document.getElementById('serviceNormal').value:document.getElementById('servicePri').value; let phone=type=='normal'?document.getElementById('phoneNormal').value:document.getElementById('phonePri').value; let num; if(type=='normal'){normalCount++; num='N-'+String(normalCount).padStart(3,'0'); document.getElementById('ticketNumN').textContent=num; document.getElementById('ticketBranchN').textContent=branch; document.getElementById('ticketServiceN').textContent=service; document.getElementById('ticketNormal').style.display='block'; document.getElementById('smsNormal').innerHTML=`✅ SMS sent to ${phone||'your phone'}: Ticket ${num} - ${branch} - ${service} - Umwalimu SACCO`; document.getElementById('smsNormal').style.display='block';}else{priCount++; num='P-'+String(priCount).padStart(3,'0'); document.getElementById('ticketNumP').textContent=num; document.getElementById('ticketBranchP').textContent=branch; document.getElementById('ticketServiceP').textContent=service+' - '+document.getElementById('priCat').value; document.getElementById('ticketPri').style.display='block'; document.getElementById('smsPri').innerHTML=`✅ SMS sent: Priority Ticket ${num} - ${branch} - ${service}`; document.getElementById('smsPri').style.display='block';} queue.push({num:num,branch:branch,service:service,type:type,time:new Date().toLocaleTimeString()}); renderQueue(); alert('Ticket '+num+' created!');}
-function doTellerLogin(){let id=document.getElementById('tellerId').value.trim().toUpperCase(); let pin=document.getElementById('tellerPin').value.trim(); let f=tellers.find(t=>t.id===id&&t.pin===pin); if(!f){document.getElementById('tellerError').style.display='block';return;} currentTeller=f; document.getElementById('tellerAuth').style.display='none'; document.getElementById('tellerDash').style.display='block'; document.getElementById('tellerName').textContent=f.name+' ('+f.id+')'; document.getElementById('tellerBranch').textContent=f.branch; renderQueue(); alert('Welcome '+f.name+' - '+f.branch);}
-function doTellerLogout(){currentTeller=null; document.getElementById('tellerAuth').style.display='block'; document.getElementById('tellerDash').style.display='none'; document.getElementById('tellerId').value=''; document.getElementById('tellerPin').value='';}
-function doMgrLogin(){let id=document.getElementById('mgrId').value.trim().toUpperCase(); let pin=document.getElementById('mgrPin').value.trim(); let f=managers.find(m=>m.id===id&&m.pin===pin); if(!f){document.getElementById('mgrError').style.display='block';return;} currentManager=f; document.getElementById('mgrAuth').style.display='none'; document.getElementById('mgrDash').style.display='block'; document.getElementById('mgrName').textContent=f.name+' ('+f.id+')'; document.getElementById('mgrBranch').textContent=f.branch; renderQueue(); alert('Welcome '+f.name+' - '+f.branch);}
-function doMgrLogout(){currentManager=null; document.getElementById('mgrAuth').style.display='block'; document.getElementById('mgrDash').style.display='none'; document.getElementById('mgrId').value=''; document.getElementById('mgrPin').value='';}
-function showChangePin(type){changePinType=type; document.getElementById('changePinBox').style.display='block'; document.getElementById('changePinFor').textContent='For: '+(type=='teller'?'Teller':'Manager'); if(type=='teller'&&currentTeller) document.getElementById('cpStaffId').value=currentTeller.id; if(type=='manager'&&currentManager) document.getElementById('cpStaffId').value=currentManager.id; document.getElementById('cpError').style.display='none'; document.getElementById('cpSuccess').style.display='none';}
-function hideChangePin(){document.getElementById('changePinBox').style.display='none'; document.getElementById('cpStaffId').value=''; document.getElementById('cpOldPin').value=''; document.getElementById('cpNewPin').value=''; document.getElementById('cpConfirmPin').value='';}
-function doChangePin(){let id=document.getElementById('cpStaffId').value.trim().toUpperCase(); let oldPin=document.getElementById('cpOldPin').value.trim(); let newPin=document.getElementById('cpNewPin').value.trim(); let confirmPin=document.getElementById('cpConfirmPin').value.trim(); let err=document.getElementById('cpError'); if(!id||!oldPin||!newPin||!confirmPin){err.textContent='⚠️ Uzuza byose!';err.style.display='block';return;} if(newPin.length!==4){err.textContent='⚠️ New PIN igomba kuba imibare 4!';err.style.display='block';return;} if(newPin!==confirmPin){err.textContent='⚠️ New PIN na Confirm ntibihuye!';err.style.display='block';return;} if(newPin===oldPin){err.textContent='⚠️ New PIN igomba gutandukana na Old PIN!';err.style.display='block';return;} let list=changePinType=='teller'?tellers:managers; let user=list.find(u=>u.id===id&&u.pin===oldPin); if(!user){err.textContent='⚠️ Staff ID cyangwa Old PIN si yo!';err.style.display='block';return;} user.pin=newPin; document.getElementById('cpSuccess').style.display='block'; err.style.display='none'; setTimeout(hideChangePin,1800);}
-function showAddStaff(type){addStaffType=type; document.getElementById('addStaffBox').style.display='block'; document.getElementById('addStaffFor').textContent='Add '+(type=='teller'?'Teller':'Manager'); document.getElementById('addRole').value=type; document.getElementById('addError').style.display='none'; document.getElementById('addSuccess').style.display='none';}
-function hideAddStaff(){document.getElementById('addStaffBox').style.display='none';}
-function doAddStaff(){let role=document.getElementById('addRole').value; let name=document.getElementById('addName').value.trim(); let id=document.getElementById('addId').value.trim().toUpperCase(); let branch=document.getElementById('addBranch').value; let pin=document.getElementById('addPin').value.trim(); let err=document.getElementById('addError'); if(!name||!id||!pin){err.textContent='⚠️ Uzuza byose!';err.style.display='block';return;} if(pin.length!==4){err.textContent='⚠️ PIN igomba kuba imibare 4!';err.style.display='block';return;} let exists=(role=='teller'?tellers:managers).find(u=>u.id===id); if(exists){err.textContent='⚠️ Iyi Staff ID isanzwe ihari!';err.style.display='block';return;} if(role=='teller') tellers.push({id:id,name:name,branch:branch,pin:pin}); else managers.push({id:id,name:name,branch:branch,pin:pin}); document.getElementById('addSuccess').style.display='block'; err.style.display='none'; renderStaffList(); setTimeout(hideAddStaff,1500);}
-function renderStaffList(){let el=document.getElementById('staffList'); if(!el) return; el.innerHTML='<b>Tellers:</b><br>'+tellers.map(t=>`• ${t.id} - ${t.name} - ${t.branch} - PIN: ${t.pin}`).join('<br>')+'<br><br><b>Managers:</b><br>'+managers.map(m=>`• ${m.id} - ${m.name} - ${m.branch} - PIN: ${m.pin}`).join('<br>');}
-function renderQueue(){let html=queue.length?queue.map(q=>`<div class="queue-item ${q.type=='priority'?'pri':''}"><span><b>${q.num}</b> - ${q.branch}<br><small>${q.service} | ${q.time}</small></span><span class="badge ${q.type=='priority'?'badge-pri':'badge-normal'}">${q.type=='priority'?'PRIORITY':'NORMAL'}</span></div>`).join(''):`<div style="padding:14px;text-align:center;color:#888">No tickets yet</div>`; let lt=document.getElementById('queueListTeller'); if(lt) lt.innerHTML=html; let lm=document.getElementById('queueList'); if(lm) lm.innerHTML=html; let ct=document.getElementById('queueCountTeller'); if(ct) ct.textContent=queue.length+' waiting'; let cm=document.getElementById('queueCount'); if(cm) cm.textContent=queue.length+' waiting'; document.getElementById('statTotal').textContent=normalCount+priCount; document.getElementById('statPri').textContent=priCount; document.getElementById('statWaiting').textContent=queue.length;}
-function callNextTicket(who){if(!queue.length){alert('No tickets in queue!');return;} let next=queue.shift(); document.getElementById('nowServingNum').textContent=next.num; document.getElementById('nowServingBranch').textContent=next.branch+' - '+next.type.toUpperCase(); document.getElementById('nowServingTeller').textContent=next.num; document.getElementById('nowServingBranchTeller').textContent=next.branch+' - '+next.type.toUpperCase(); renderQueue(); alert('📢 Calling '+next.num+' - Please go to Counter!');}
-function callPriorityNext(who){let idx=queue.findIndex(q=>q.type=='priority'); if(idx==-1){callNextTicket(who);return;} let next=queue.splice(idx,1)[0]; document.getElementById('nowServingNum').textContent=next.num; document.getElementById('nowServingBranch').textContent=next.branch+' - PRIORITY'; document.getElementById('nowServingTeller').textContent=next.num; document.getElementById('nowServingBranchTeller').textContent=next.branch+' - PRIORITY'; renderQueue(); alert('📢 Calling PRIORITY '+next.num);}
-function clearQueue(){queue=[]; document.getElementById('nowServingNum').textContent='---'; document.getElementById('nowServingTeller').textContent='---'; renderQueue();}
-renderQueue(); renderStaffList();
+function changeLanguage(lang){
+currentLang=lang; const t=LANG[lang];
+document.querySelectorAll('[data-lang]').forEach(el=>{const k=el.getAttribute('data-lang'); if(t[k]) el.innerText=t[k];});
+const sms=document.getElementById('smsPreview');
+if(sms){ if(lang==='rw') sms.innerText='SMS: "Ticket P-012, Counter 2, Tegereza guhamagarwa. Murakoze!"'; if(lang==='en') sms.innerText='SMS: "Ticket P-012, Counter 2, Please wait to be called. Thank you!"'; if(lang==='fr') sms.innerText='SMS: "Ticket P-012, Guichet 2, Veuillez attendre. Merci!"'; }
+try{localStorage.setItem('smartqueue_lang',lang);}catch(e){}
+}
+function show(id,btn){document.querySelectorAll('#eric,#rose,#grace,#claudine,#jean').forEach(c=>c.style.display='none');document.getElementById(id).style.display='block';document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderQueue();}
+function joinQueue(){const name=document.getElementById('name').value||'Eric';const service=document.getElementById('service').value;ticketCounter++;const tid='A-0'+ticketCounter;queue.push({id:tid,name:name,priority:false});const pos=queue.length,eta=pos*5;let sms='';if(currentLang==='rw')sms=`SMS: "Ticket ${tid}, Umwanya ${pos}, ~${eta} min. Murakoze!"`;if(currentLang==='en')sms=`SMS: "Ticket ${tid}, Position ${pos}, ~${eta} min. Thank you!"`;if(currentLang==='fr')sms=`SMS: "Ticket ${tid}, Position ${pos}, ~${eta} min. Merci!"`;document.getElementById('ericTicket').innerHTML=`<div class="ticket"><h3>Ticket ${tid}</h3><p>${service}<br>Position: ${pos}<br>ETA ~${eta} min</p></div><div class="kig">${sms}</div>`;renderQueue();}
+function joinRose(){priorityCounter++;const tid='P-0'+priorityCounter;queue.unshift({id:tid,name:'Mama Rose',priority:true});document.getElementById('roseTicket').innerHTML=`<div class="ticket"><h3>${tid} - PRIORITY 1:2</h3><p>Counter 2</p></div>`;renderQueue();}
+function renderQueue(){const list=document.getElementById('queueList');if(!list)return;list.innerHTML=queue.map(q=>`<div class="row"><span>${q.id} - ${q.name}</span><span>${q.priority?'PRIORITY':'Normal'}</span></div>`).join('');const mq=document.getElementById('mQueue');if(mq)mq.innerText=queue.length;}
+function callNext(){if(queue.length===0){alert('Queue empty');return;}let next=queue.find(q=>q.priority)||queue[0];queue=queue.filter(q=>q!==next);servingNow=next;document.getElementById('serving').innerText=next.id+' - '+next.name;renderQueue();}
+function recall(){if(servingNow)alert('Recall: '+servingNow.id+' - '+servingNow.name);}
+function noShow(){alert('No-Show - Next called');servingNow=null;callNext();}
+document.addEventListener('DOMContentLoaded',()=>{const saved=localStorage.getItem('smartqueue_lang')||'rw';const sel=document.getElementById('langSelect');if(sel)sel.value=saved;changeLanguage(saved);renderQueue();});
+renderQueue();
 </script>
-</body></html>
+</body>
+</html>
