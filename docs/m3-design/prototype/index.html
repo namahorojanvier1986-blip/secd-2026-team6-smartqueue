@@ -27,6 +27,9 @@ input,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ccc;border-r
 .small{font-size:13px;color:#555}
 .badge{background:#FFC72C;padding:3px 8px;border-radius:10px;font-size:12px}
 .prio{color:#dc3545;font-weight:bold}
+.auth-box{background:#F5F8FF;border:2px solid #DCE6FF;border-radius:12px;padding:16px;margin-top:10px}
+.auth-box h3{margin:0 0 8px;text-align:center}
+.demo{font-size:12px;color:#666;text-align:center;margin-top:8px}
 </style>
 </head>
 <body>
@@ -50,6 +53,7 @@ input,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ccc;border-r
 <button class="tab it" onclick="show('it',this)" data-lang="tabIT">IT</button>
 </div>
 
+<!-- CUSTOMER - NO LOGIN -->
 <div id="customer"><h2 data-lang="customerTitle">Customer</h2>
 <p class="small" data-lang="customerDesc">Get your ticket and wait for your turn</p>
 <label data-lang="serviceLabel">Service</label>
@@ -71,42 +75,90 @@ input,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ccc;border-r
 <div id="statusResult"></div></div>
 </div>
 
-<div id="teller" style="display:none"><h2 data-lang="tellerTitle">Teller</h2>
+<!-- TELLER - WITH AUTH -->
+<div id="teller" style="display:none">
+<div id="tellerLogin" class="auth-box">
+<h3 data-lang="loginTitle">Login - Staff Only</h3>
+<p class="small" style="text-align:center" data-lang="loginDesc">Please login to continue</p>
+<label data-lang="staffId">Staff ID</label>
+<input id="tellerId" placeholder="e.g. teller">
+<label data-lang="pinLabel">PIN / Password</label>
+<input id="tellerPin" type="password" placeholder="1234">
+<button class="btn btn2" onclick="login('teller')" data-lang="loginBtn">Login</button>
+<div class="demo">Demo: teller / 1234</div>
+<div id="tellerError" style="color:red;font-size:13px;text-align:center"></div>
+</div>
+<div id="tellerContent" style="display:none"><h2 data-lang="tellerTitle">Teller</h2>
 <p class="small" data-lang="tellerDesc">Manage the queue - serve customers in order</p>
 <div id="queueList"></div>
 <button class="btn btn2" onclick="callNext()" data-lang="callNext">Call Next</button>
 <button class="btn" onclick="recall()" data-lang="recall">Recall</button>
 <button class="btn btn3" onclick="noShow()" data-lang="noShow">No-Show</button>
-<div class="small" style="margin-top:8px">Now Serving: <b id="serving">-</b></div></div>
+<div class="small" style="margin-top:8px">Now Serving: <b id="serving">-</b></div>
+<button class="btn btn-dark" onclick="logout('teller')" data-lang="logoutBtn">Logout</button></div>
+</div>
 
-<div id="manager" style="display:none"><h2 data-lang="managerTitle">Manager</h2>
+<!-- MANAGER - WITH AUTH -->
+<div id="manager" style="display:none">
+<div id="managerLogin" class="auth-box">
+<h3 data-lang="loginTitle">Login - Staff Only</h3>
+<p class="small" style="text-align:center" data-lang="loginDesc">Please login to continue</p>
+<label data-lang="staffId">Staff ID</label>
+<input id="managerId" placeholder="e.g. manager">
+<label data-lang="pinLabel">PIN / Password</label>
+<input id="managerPin" type="password" placeholder="1234">
+<button class="btn" onclick="login('manager')" data-lang="loginBtn">Login</button>
+<div class="demo">Demo: manager / 1234</div>
+<div id="managerError" style="color:red;font-size:13px;text-align:center"></div>
+</div>
+<div id="managerContent" style="display:none"><h2 data-lang="managerTitle">Manager</h2>
 <p class="small" data-lang="managerDesc">Overview of today - performance and reports</p>
 <div class="row"><span data-lang="inQueue">In Queue</span><b id="mQueue">18</b></div>
 <div class="row"><span data-lang="avgWait">Average Wait</span><b>22 min</b></div>
 <div class="row"><span data-lang="served">Served Today</span><b id="servedCount">42</b></div>
 <div class="row"><span data-lang="bottleneck">Bottleneck</span><b style="color:#dc3545">Counter 2 Slow</b></div>
-<button class="btn" onclick="alert('Report Exported: PDF / CSV')" data-lang="exportBtn">Export Report</button></div>
+<button class="btn" onclick="alert('Report Exported: PDF / CSV')" data-lang="exportBtn">Export Report</button>
+<button class="btn btn-dark" onclick="logout('manager')" data-lang="logoutBtn">Logout</button></div>
+</div>
 
-<div id="it" style="display:none"><h2 data-lang="itTitle">IT</h2>
+<!-- IT - WITH AUTH -->
+<div id="it" style="display:none">
+<div id="itLogin" class="auth-box">
+<h3 data-lang="loginTitle">Login - Staff Only</h3>
+<p class="small" style="text-align:center" data-lang="loginDesc">Please login to continue</p>
+<label data-lang="staffId">Staff ID</label>
+<input id="itId" placeholder="e.g. it">
+<label data-lang="pinLabel">PIN / Password</label>
+<input id="itPin" type="password" placeholder="1234">
+<button class="btn" onclick="login('it')" data-lang="loginBtn">Login</button>
+<div class="demo">Demo: it / 1234</div>
+<div id="itError" style="color:red;font-size:13px;text-align:center"></div>
+</div>
+<div id="itContent" style="display:none"><h2 data-lang="itTitle">IT</h2>
 <p class="small" data-lang="itDesc">System health and settings</p>
 <div class="row"><span data-lang="systemStatus">System Status</span><b style="color:#198754">Online</b></div>
 <div class="row"><span data-lang="activeCounters">Active Counters</span><b>3 / 4</b></div>
 <div class="row"><span data-lang="smsService">SMS Service</span><b style="color:#198754">Working</b></div>
 <div class="row"><span data-lang="priorityMode">Priority Mode</span><b>1 Priority : 2 Normal</b></div>
 <button class="btn btn-dark" onclick="resetQueue()" data-lang="resetBtn">Reset Queue</button>
-<button class="btn" onclick="alert('Settings Saved')" data-lang="saveBtn">Save Settings</button></div>
+<button class="btn" onclick="alert('Settings Saved')" data-lang="saveBtn">Save Settings</button>
+<button class="btn btn-dark" onclick="logout('it')" data-lang="logoutBtn">Logout</button></div>
+</div>
 
 </div>
 <script>
 let queue=[{id:'P-012',name:'Customer 1',priority:true},{id:'A-042',name:'Customer 2',priority:false},{id:'A-043',name:'Customer 3',priority:false}];
 let ticketCounter=45, priorityCounter=12, servingNow=null, served=42, currentLang='rw';
+const CRED={teller:{id:'teller',pin:'1234'},manager:{id:'manager',pin:'1234'},it:{id:'it',pin:'1234'}};
 const LANG={
-rw:{title:'SmartQueue - Umwalimu SACCO',languageLabel:'Hitamo Ururimi / Select Language:',tabCustomer:'Customer',tabTeller:'Teller',tabManager:'Manager',tabIT:'IT',customerTitle:'Customer',customerDesc:'Fata ticket yawe utegereze igihe cyawe',serviceLabel:'Service',nameLabel:'Izina Ryawe',phoneLabel:'Numero ya Telephone',getTicketBtn:'Fata Ticket',statusTitle:'Reba Aho Ugeze',checkBtn:'Reba Status',tellerTitle:'Teller',tellerDesc:'Genzura umurongo - wakira abakiriya',callNext:'HAMAGARA UKURIKIYE',recall:'SUBIRAMO',noShow:'NTAJE',managerTitle:'Manager',managerDesc:'Incamake y uyu munsi',inQueue:'Abari mu murongo',avgWait:'Igihe cyo gutegereza',served:'Bakiriwe Uyu Munsi',bottleneck:'Ahari Ikibazo',exportBtn:'Kohereza Raporo',itTitle:'IT',itDesc:'Ubuzima bwa sisitemu',systemStatus:'Sisitemu',activeCounters:'Counters Zikora',smsService:'SMS',priorityMode:'Priority Mode',resetBtn:'Gusubiramo Umurongo',saveBtn:'Bika',optDeposit:'Kubitsa',optWithdrawal:'Gukura Amafaranga',optAccount:'Gufungura Konti',optLoan:'Kubaza Inguzanyo'},
-en:{title:'SmartQueue - Umwalimu SACCO',languageLabel:'Select Language / Hitamo Ururimi:',tabCustomer:'Customer',tabTeller:'Teller',tabManager:'Manager',tabIT:'IT',customerTitle:'Customer',customerDesc:'Get your ticket and wait for your turn',serviceLabel:'Service',nameLabel:'Your Name',phoneLabel:'Phone Number',getTicketBtn:'Get Ticket',statusTitle:'Check Your Status',checkBtn:'Check Status',tellerTitle:'Teller',tellerDesc:'Manage the queue - serve customers in order',callNext:'CALL NEXT',recall:'RECALL',noShow:'NO-SHOW',managerTitle:'Manager',managerDesc:'Overview of today',inQueue:'In Queue',avgWait:'Average Wait',served:'Served Today',bottleneck:'Bottleneck',exportBtn:'Export Report',itTitle:'IT',itDesc:'System health and settings',systemStatus:'System Status',activeCounters:'Active Counters',smsService:'SMS Service',priorityMode:'Priority Mode',resetBtn:'Reset Queue',saveBtn:'Save Settings',optDeposit:'Deposit',optWithdrawal:'Withdrawal',optAccount:'Account Opening',optLoan:'Loan Inquiry'},
-fr:{title:'SmartQueue - Umwalimu SACCO',languageLabel:'Choisir la langue:',tabCustomer:'Client',tabTeller:'Caissiere',tabManager:'Manager',tabIT:'IT',customerTitle:'Client',customerDesc:'Prenez votre ticket et attendez',serviceLabel:'Service',nameLabel:'Votre Nom',phoneLabel:'Numero de Telephone',getTicketBtn:'Obtenir Ticket',statusTitle:'Verifier Statut',checkBtn:'Verifier',tellerTitle:'Caissiere',tellerDesc:'Gerer la file',callNext:'APPELER SUIVANT',recall:'RAPPELER',noShow:'ABSENT',managerTitle:'Manager',managerDesc:'Apercu du jour',inQueue:'En file',avgWait:'Attente moyenne',served:'Servis Aujourdhui',bottleneck:'Goulot',exportBtn:'Exporter Rapport',itTitle:'IT',itDesc:'Sante du systeme',systemStatus:'Statut Systeme',activeCounters:'Guichets Actifs',smsService:'Service SMS',priorityMode:'Mode Priorite',resetBtn:'Reinitialiser File',saveBtn:'Enregistrer',optDeposit:'Depot',optWithdrawal:'Retrait',optAccount:'Ouverture de Compte',optLoan:'Demande de Pret'}
+rw:{title:'SmartQueue - Umwalimu SACCO',languageLabel:'Hitamo Ururimi / Select Language:',tabCustomer:'Customer',tabTeller:'Teller',tabManager:'Manager',tabIT:'IT',customerTitle:'Customer',customerDesc:'Fata ticket yawe utegereze igihe cyawe',serviceLabel:'Service',nameLabel:'Izina Ryawe',phoneLabel:'Numero ya Telephone',getTicketBtn:'Fata Ticket',statusTitle:'Reba Aho Ugeze',checkBtn:'Reba Status',tellerTitle:'Teller',tellerDesc:'Genzura umurongo - wakira abakiriya',callNext:'HAMAGARA UKURIKIYE',recall:'SUBIRAMO',noShow:'NTAJE',managerTitle:'Manager',managerDesc:'Incamake y uyu munsi',inQueue:'Abari mu murongo',avgWait:'Igihe cyo gutegereza',served:'Bakiriwe Uyu Munsi',bottleneck:'Ahari Ikibazo',exportBtn:'Kohereza Raporo',itTitle:'IT',itDesc:'Ubuzima bwa sisitemu',systemStatus:'Sisitemu',activeCounters:'Counters Zikora',smsService:'SMS',priorityMode:'Priority Mode',resetBtn:'Gusubiramo Umurongo',saveBtn:'Bika',optDeposit:'Kubitsa',optWithdrawal:'Gukura Amafaranga',optAccount:'Gufungura Konti',optLoan:'Kubaza Inguzanyo',loginTitle:'Injira - Abakozi Gusa',loginDesc:'Injira kugirango ukomeze',staffId:'Staff ID',pinLabel:'PIN / Ijambo ryibanga',loginBtn:'Injira',logoutBtn:'Sohoka'},
+en:{title:'SmartQueue - Umwalimu SACCO',languageLabel:'Select Language / Hitamo Ururimi:',tabCustomer:'Customer',tabTeller:'Teller',tabManager:'Manager',tabIT:'IT',customerTitle:'Customer',customerDesc:'Get your ticket and wait for your turn',serviceLabel:'Service',nameLabel:'Your Name',phoneLabel:'Phone Number',getTicketBtn:'Get Ticket',statusTitle:'Check Your Status',checkBtn:'Check Status',tellerTitle:'Teller',tellerDesc:'Manage the queue - serve customers in order',callNext:'CALL NEXT',recall:'RECALL',noShow:'NO-SHOW',managerTitle:'Manager',managerDesc:'Overview of today',inQueue:'In Queue',avgWait:'Average Wait',served:'Served Today',bottleneck:'Bottleneck',exportBtn:'Export Report',itTitle:'IT',itDesc:'System health and settings',systemStatus:'System Status',activeCounters:'Active Counters',smsService:'SMS Service',priorityMode:'Priority Mode',resetBtn:'Reset Queue',saveBtn:'Save Settings',optDeposit:'Deposit',optWithdrawal:'Withdrawal',optAccount:'Account Opening',optLoan:'Loan Inquiry',loginTitle:'Login - Staff Only',loginDesc:'Please login to continue',staffId:'Staff ID',pinLabel:'PIN / Password',loginBtn:'Login',logoutBtn:'Logout'},
+fr:{title:'SmartQueue - Umwalimu SACCO',languageLabel:'Choisir la langue:',tabCustomer:'Client',tabTeller:'Caissiere',tabManager:'Manager',tabIT:'IT',customerTitle:'Client',customerDesc:'Prenez votre ticket et attendez',serviceLabel:'Service',nameLabel:'Votre Nom',phoneLabel:'Numero de Telephone',getTicketBtn:'Obtenir Ticket',statusTitle:'Verifier Statut',checkBtn:'Verifier',tellerTitle:'Caissiere',tellerDesc:'Gerer la file',callNext:'APPELER SUIVANT',recall:'RAPPELER',noShow:'ABSENT',managerTitle:'Manager',managerDesc:'Apercu du jour',inQueue:'En file',avgWait:'Attente moyenne',served:'Servis Aujourdhui',bottleneck:'Goulot',exportBtn:'Exporter Rapport',itTitle:'IT',itDesc:'Sante du systeme',systemStatus:'Statut Systeme',activeCounters:'Guichets Actifs',smsService:'Service SMS',priorityMode:'Mode Priorite',resetBtn:'Reinitialiser File',saveBtn:'Enregistrer',optDeposit:'Depot',optWithdrawal:'Retrait',optAccount:'Ouverture de Compte',optLoan:'Demande de Pret',loginTitle:'Connexion - Personnel Seulement',loginDesc:'Veuillez vous connecter',staffId:'ID Personnel',pinLabel:'PIN / Mot de passe',loginBtn:'Se Connecter',logoutBtn:'Deconnexion'}
 };
-function changeLanguage(lang){currentLang=lang;const t=LANG[lang];document.querySelectorAll('[data-lang]').forEach(el=>{const k=el.getAttribute('data-lang');if(t[k])el.innerText=t[k];});try{localStorage.setItem('smartqueue_lang',lang);}catch(e){}}
+function changeLanguage(lang){currentLang=lang;const t=LANG[lang];document.querySelectorAll('[data-lang]').forEach(el=>{const k=el.getAttribute('data-lang');if(t[k]){el.textContent=t[k];}});try{localStorage.setItem('smartqueue_lang',lang);}catch(e){}}
 function show(id,btn){document.querySelectorAll('#customer,#teller,#manager,#it').forEach(c=>c.style.display='none');document.getElementById(id).style.display='block';document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderQueue();}
+function login(role){const id=document.getElementById(role+'Id').value.trim().toLowerCase();const pin=document.getElementById(role+'Pin').value.trim();const err=document.getElementById(role+'Error');if(id===CRED[role].id&&pin===CRED[role].pin){document.getElementById(role+'Login').style.display='none';document.getElementById(role+'Content').style.display='block';err.textContent='';renderQueue();}else{err.textContent=currentLang==='rw'?'ID cyangwa PIN siyo! Gerageza nanone':currentLang==='fr'?'ID ou PIN incorrect!':'Wrong ID or PIN! Try again';}}
+function logout(role){document.getElementById(role+'Login').style.display='block';document.getElementById(role+'Content').style.display='none';document.getElementById(role+'Id').value='';document.getElementById(role+'Pin').value='';}
 function getTicket(){const name=document.getElementById('name').value||'Customer';const sel=document.getElementById('service');const service=sel.options[sel.selectedIndex].text;ticketCounter++;const tid='A-0'+ticketCounter;queue.push({id:tid,name:name,priority:false});const pos=queue.length,wait=pos*5;let sms='';if(currentLang==='rw')sms=`SMS: "Ticket ${tid}, Umwanya ${pos}, ~${wait} min. Murakoze!"`;if(currentLang==='en')sms=`SMS: "Ticket ${tid}, Position ${pos}, ~${wait} min. Thank you!"`;if(currentLang==='fr')sms=`SMS: "Ticket ${tid}, Position ${pos}, ~${wait} min. Merci!"`;document.getElementById('customerTicket').innerHTML=`<div class="ticket"><h3>Ticket ${tid}</h3><p>${service}<br>Position: ${pos}<br>~${wait} min</p></div><div class="kig">${sms}</div>`;renderQueue();}
 function checkStatus(){const v=document.getElementById('checkTicket').value||'A-045';document.getElementById('statusResult').innerHTML=`<div class="kig">Ticket ${v} - Position 3 - ~15 min - Please wait</div>`;}
 function renderQueue(){const list=document.getElementById('queueList');if(!list)return;list.innerHTML=queue.map(q=>`<div class="row"><span>${q.id} - ${q.name}</span><span>${q.priority?'<span class="prio">PRIORITY</span>':'<span class="badge">Normal</span>'}</span></div>`).join('');const mq=document.getElementById('mQueue');if(mq)mq.innerText=queue.length;}
