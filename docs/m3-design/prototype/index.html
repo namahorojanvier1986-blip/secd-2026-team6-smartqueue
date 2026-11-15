@@ -30,6 +30,8 @@ input,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ccc;border-r
 .auth-box{background:#F5F8FF;border:2px solid #DCE6FF;border-radius:12px;padding:16px;margin-top:10px}
 .auth-box h3{margin:0 0 8px;text-align:center}
 .demo{font-size:12px;color:#666;text-align:center;margin-top:8px}
+.otp-box{background:#FFF3CD;border:2px dashed #FFC72C;border-radius:12px;padding:14px;margin-top:12px}
+.refresh{font-size:12px;color:#198754;text-align:center;margin-top:8px;font-weight:bold}
 </style>
 </head>
 <body>
@@ -74,6 +76,7 @@ input,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ccc;border-r
 <div id="statusResult"></div></div>
 </div>
 
+<!-- TELLER -->
 <div id="teller" style="display:none">
 <div id="tellerLogin" class="auth-box">
 <h3 data-lang="loginTitle">Login - Staff Only</h3>
@@ -82,8 +85,16 @@ input,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ccc;border-r
 <input id="tellerId" placeholder="e.g. teller">
 <label data-lang="pinLabel">PIN / Password</label>
 <input id="tellerPin" type="password" placeholder="1234">
-<button class="btn btn2" onclick="login('teller')" data-lang="loginBtn">Login</button>
+<button class="btn btn2" onclick="loginStep1('teller')" data-lang="loginBtn">Login</button>
 <div class="demo">Demo: teller / 1234</div>
+<div id="tellerOtpBox" class="otp-box" style="display:none">
+<h3 style="margin:0" data-lang="otpTitle">Enter OTP</h3>
+<p class="small" style="text-align:center" data-lang="otpDesc">OTP sent to your phone</p>
+<input id="tellerOtp" placeholder="Enter 6-digit OTP" maxlength="6">
+<button class="btn btn2" onclick="verifyOtp('teller')" data-lang="verifyBtn">Verify OTP</button>
+<button class="btn" onclick="resendOtp('teller')" data-lang="resendBtn">Resend OTP</button>
+<div class="demo" id="tellerOtpDemo"></div>
+</div>
 <div id="tellerError" style="color:red;font-size:13px;text-align:center"></div>
 </div>
 <div id="tellerContent" style="display:none"><h2 data-lang="tellerTitle">Teller</h2>
@@ -96,6 +107,7 @@ input,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ccc;border-r
 <button class="btn btn-dark" onclick="logout('teller')" data-lang="logoutBtn">Logout</button></div>
 </div>
 
+<!-- MANAGER -->
 <div id="manager" style="display:none">
 <div id="managerLogin" class="auth-box">
 <h3 data-lang="loginTitle">Login - Staff Only</h3>
@@ -104,20 +116,31 @@ input,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ccc;border-r
 <input id="managerId" placeholder="e.g. manager">
 <label data-lang="pinLabel">PIN / Password</label>
 <input id="managerPin" type="password" placeholder="1234">
-<button class="btn" onclick="login('manager')" data-lang="loginBtn">Login</button>
+<button class="btn" onclick="loginStep1('manager')" data-lang="loginBtn">Login</button>
 <div class="demo">Demo: manager / 1234</div>
+<div id="managerOtpBox" class="otp-box" style="display:none">
+<h3 style="margin:0" data-lang="otpTitle">Enter OTP</h3>
+<p class="small" style="text-align:center" data-lang="otpDesc">OTP sent to your phone</p>
+<input id="managerOtp" placeholder="Enter 6-digit OTP" maxlength="6">
+<button class="btn" onclick="verifyOtp('manager')" data-lang="verifyBtn">Verify OTP</button>
+<button class="btn" onclick="resendOtp('manager')" data-lang="resendBtn">Resend OTP</button>
+<div class="demo" id="managerOtpDemo"></div>
+</div>
 <div id="managerError" style="color:red;font-size:13px;text-align:center"></div>
 </div>
 <div id="managerContent" style="display:none"><h2 data-lang="managerTitle">Manager</h2>
 <p class="small" data-lang="managerDesc">Overview of today - performance and reports</p>
 <div class="row"><span data-lang="inQueue">In Queue</span><b id="mQueue">18</b></div>
-<div class="row"><span data-lang="avgWait">Average Wait</span><b>22 min</b></div>
+<div class="row"><span data-lang="avgWait">Average Wait</span><b id="mAvgWait">22 min</b></div>
 <div class="row"><span data-lang="served">Served Today</span><b id="servedCount">42</b></div>
-<div class="row"><span data-lang="bottleneck">Bottleneck</span><b style="color:#dc3545">Counter 2 Slow</b></div>
+<div class="row"><span data-lang="bottleneck">Bottleneck</span><b style="color:#dc3545" id="mBottleneck">Counter 2 Slow</b></div>
+<div class="refresh" id="managerRefresh">Auto-refresh: every 1 min | Last updated: <span id="lastUpdated">-</span></div>
+<button class="btn" onclick="refreshManager()" data-lang="refreshNow">Refresh Now</button>
 <button class="btn" onclick="alert('Report Exported: PDF / CSV')" data-lang="exportBtn">Export Report</button>
 <button class="btn btn-dark" onclick="logout('manager')" data-lang="logoutBtn">Logout</button></div>
 </div>
 
+<!-- IT -->
 <div id="it" style="display:none">
 <div id="itLogin" class="auth-box">
 <h3 data-lang="loginTitle">Login - Staff Only</h3>
@@ -126,8 +149,16 @@ input,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ccc;border-r
 <input id="itId" placeholder="e.g. it">
 <label data-lang="pinLabel">PIN / Password</label>
 <input id="itPin" type="password" placeholder="1234">
-<button class="btn" onclick="login('it')" data-lang="loginBtn">Login</button>
+<button class="btn" onclick="loginStep1('it')" data-lang="loginBtn">Login</button>
 <div class="demo">Demo: it / 1234</div>
+<div id="itOtpBox" class="otp-box" style="display:none">
+<h3 style="margin:0" data-lang="otpTitle">Enter OTP</h3>
+<p class="small" style="text-align:center" data-lang="otpDesc">OTP sent to your phone</p>
+<input id="itOtp" placeholder="Enter 6-digit OTP" maxlength="6">
+<button class="btn" onclick="verifyOtp('it')" data-lang="verifyBtn">Verify OTP</button>
+<button class="btn" onclick="resendOtp('it')" data-lang="resendBtn">Resend OTP</button>
+<div class="demo" id="itOtpDemo"></div>
+</div>
 <div id="itError" style="color:red;font-size:13px;text-align:center"></div>
 </div>
 <div id="itContent" style="display:none"><h2 data-lang="itTitle">IT</h2>
@@ -145,16 +176,20 @@ input,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ccc;border-r
 <script>
 let queue=[{id:'P-012',name:'Customer 1',priority:true},{id:'A-042',name:'Customer 2',priority:false},{id:'A-043',name:'Customer 3',priority:false}];
 let ticketCounter=45, priorityCounter=12, servingNow=null, served=42, currentLang='rw';
+let otpStore={};
 const CRED={teller:{id:'teller',pin:'1234'},manager:{id:'manager',pin:'1234'},it:{id:'it',pin:'1234'}};
 const LANG={
-rw:{title:'SmartQueue - Umwalimu SACCO',languageLabel:'Hitamo Ururimi / Select Language:',tabCustomer:'Customer',tabTeller:'Teller',tabManager:'Manager',tabIT:'IT',customerTitle:'Customer',customerDesc:'Fata ticket yawe utegereze igihe cyawe',serviceLabel:'Service',nameLabel:'Izina Ryawe',phoneLabel:'Numero ya Telephone',getTicketBtn:'Fata Ticket',statusTitle:'Reba Aho Ugeze',checkBtn:'Reba Status',tellerTitle:'Teller',tellerDesc:'Genzura umurongo - wakira abakiriya',callNext:'HAMAGARA UKURIKIYE',recall:'SUBIRAMO',noShow:'NTAJE',managerTitle:'Manager',managerDesc:'Incamake y uyu munsi',inQueue:'Abari mu murongo',avgWait:'Igihe cyo gutegereza',served:'Bakiriwe Uyu Munsi',bottleneck:'Ahari Ikibazo',exportBtn:'Kohereza Raporo',itTitle:'IT',itDesc:'Ubuzima bwa sisitemu',systemStatus:'Sisitemu',activeCounters:'Counters Zikora',smsService:'SMS',priorityMode:'Priority Mode',resetBtn:'Gusubiramo Umurongo',saveBtn:'Bika',optDeposit:'Kubitsa',optWithdrawal:'Kubikura Amafaranga',optAccount:'Gufungura Konti',optLoan:'Gusaba Inguzanyo',loginTitle:'Injira - Abakozi Gusa',loginDesc:'Injira kugirango ukomeze',staffId:'Staff ID',pinLabel:'PIN / Ijambo ryibanga',loginBtn:'Injira',logoutBtn:'Sohoka'},
-en:{title:'SmartQueue - Umwalimu SACCO',languageLabel:'Select Language / Hitamo Ururimi:',tabCustomer:'Customer',tabTeller:'Teller',tabManager:'Manager',tabIT:'IT',customerTitle:'Customer',customerDesc:'Get your ticket and wait for your turn',serviceLabel:'Service',nameLabel:'Your Name',phoneLabel:'Phone Number',getTicketBtn:'Get Ticket',statusTitle:'Check Your Status',checkBtn:'Check Status',tellerTitle:'Teller',tellerDesc:'Manage the queue - serve customers in order',callNext:'CALL NEXT',recall:'RECALL',noShow:'NO-SHOW',managerTitle:'Manager',managerDesc:'Overview of today',inQueue:'In Queue',avgWait:'Average Wait',served:'Served Today',bottleneck:'Bottleneck',exportBtn:'Export Report',itTitle:'IT',itDesc:'System health and settings',systemStatus:'System Status',activeCounters:'Active Counters',smsService:'SMS Service',priorityMode:'Priority Mode',resetBtn:'Reset Queue',saveBtn:'Save Settings',optDeposit:'Deposit',optWithdrawal:'Withdrawal',optAccount:'Account Opening',optLoan:'Loan Inquiry',loginTitle:'Login - Staff Only',loginDesc:'Please login to continue',staffId:'Staff ID',pinLabel:'PIN / Password',loginBtn:'Login',logoutBtn:'Logout'},
-fr:{title:'SmartQueue - Umwalimu SACCO',languageLabel:'Choisir la langue:',tabCustomer:'Client',tabTeller:'Caissiere',tabManager:'Manager',tabIT:'IT',customerTitle:'Client',customerDesc:'Prenez votre ticket et attendez',serviceLabel:'Service',nameLabel:'Votre Nom',phoneLabel:'Numero de Telephone',getTicketBtn:'Obtenir Ticket',statusTitle:'Verifier Statut',checkBtn:'Verifier',tellerTitle:'Caissiere',tellerDesc:'Gerer la file',callNext:'APPELER SUIVANT',recall:'RAPPELER',noShow:'ABSENT',managerTitle:'Manager',managerDesc:'Apercu du jour',inQueue:'En file',avgWait:'Attente moyenne',served:'Servis Aujourdhui',bottleneck:'Goulot',exportBtn:'Exporter Rapport',itTitle:'IT',itDesc:'Sante du systeme',systemStatus:'Statut Systeme',activeCounters:'Guichets Actifs',smsService:'Service SMS',priorityMode:'Mode Priorite',resetBtn:'Reinitialiser File',saveBtn:'Enregistrer',optDeposit:'Depot',optWithdrawal:'Retrait',optAccount:'Ouverture de Compte',optLoan:'Demande de Pret',loginTitle:'Connexion - Personnel Seulement',loginDesc:'Veuillez vous connecter',staffId:'ID Personnel',pinLabel:'PIN / Mot de passe',loginBtn:'Se Connecter',logoutBtn:'Deconnexion'}
+rw:{title:'SmartQueue - Umwalimu SACCO',languageLabel:'Hitamo Ururimi / Select Language:',tabCustomer:'Customer',tabTeller:'Teller',tabManager:'Manager',tabIT:'IT',customerTitle:'Customer',customerDesc:'Fata ticket yawe utegereze igihe cyawe',serviceLabel:'Service',nameLabel:'Izina Ryawe',phoneLabel:'Numero ya Telephone',getTicketBtn:'Fata Ticket',statusTitle:'Reba Aho Ugeze',checkBtn:'Reba Status',tellerTitle:'Teller',tellerDesc:'Genzura umurongo - wakira abakiriya',callNext:'HAMAGARA UKURIKIYE',recall:'SUBIRAMO',noShow:'NTAJE',managerTitle:'Manager',managerDesc:'Incamake y uyu munsi',inQueue:'Abari mu murongo',avgWait:'Igihe cyo gutegereza',served:'Bakiriwe Uyu Munsi',bottleneck:'Ahari Ikibazo',exportBtn:'Kohereza Raporo',itTitle:'IT',itDesc:'Ubuzima bwa sisitemu',systemStatus:'Sisitemu',activeCounters:'Counters Zikora',smsService:'SMS',priorityMode:'Priority Mode',resetBtn:'Gusubiramo Umurongo',saveBtn:'Bika',optDeposit:'Kubitsa',optWithdrawal:'Kubikura Amafaranga',optAccount:'Gufungura Konti',optLoan:'Gusaba Inguzanyo',loginTitle:'Injira - Abakozi Gusa',loginDesc:'Injira kugirango ukomeze',staffId:'Staff ID',pinLabel:'PIN / Ijambo ryibanga',loginBtn:'Injira',logoutBtn:'Sohoka',otpTitle:'Andika OTP',otpDesc:'OTP yoherejwe kuri telephone yawe',verifyBtn:'Emeza OTP',resendBtn:'Ongera Wohereza OTP',refreshNow:'Vugurura Ubu'},
+en:{title:'SmartQueue - Umwalimu SACCO',languageLabel:'Select Language / Hitamo Ururimi:',tabCustomer:'Customer',tabTeller:'Teller',tabManager:'Manager',tabIT:'IT',customerTitle:'Customer',customerDesc:'Get your ticket and wait for your turn',serviceLabel:'Service',nameLabel:'Your Name',phoneLabel:'Phone Number',getTicketBtn:'Get Ticket',statusTitle:'Check Your Status',checkBtn:'Check Status',tellerTitle:'Teller',tellerDesc:'Manage the queue - serve customers in order',callNext:'CALL NEXT',recall:'RECALL',noShow:'NO-SHOW',managerTitle:'Manager',managerDesc:'Overview of today',inQueue:'In Queue',avgWait:'Average Wait',served:'Served Today',bottleneck:'Bottleneck',exportBtn:'Export Report',itTitle:'IT',itDesc:'System health and settings',systemStatus:'System Status',activeCounters:'Active Counters',smsService:'SMS Service',priorityMode:'Priority Mode',resetBtn:'Reset Queue',saveBtn:'Save Settings',optDeposit:'Deposit',optWithdrawal:'Withdrawal',optAccount:'Account Opening',optLoan:'Loan Inquiry',loginTitle:'Login - Staff Only',loginDesc:'Please login to continue',staffId:'Staff ID',pinLabel:'PIN / Password',loginBtn:'Login',logoutBtn:'Logout',otpTitle:'Enter OTP',otpDesc:'OTP sent to your phone',verifyBtn:'Verify OTP',resendBtn:'Resend OTP',refreshNow:'Refresh Now'},
+fr:{title:'SmartQueue - Umwalimu SACCO',languageLabel:'Choisir la langue:',tabCustomer:'Client',tabTeller:'Caissiere',tabManager:'Manager',tabIT:'IT',customerTitle:'Client',customerDesc:'Prenez votre ticket et attendez',serviceLabel:'Service',nameLabel:'Votre Nom',phoneLabel:'Numero de Telephone',getTicketBtn:'Obtenir Ticket',statusTitle:'Verifier Statut',checkBtn:'Verifier',tellerTitle:'Caissiere',tellerDesc:'Gerer la file',callNext:'APPELER SUIVANT',recall:'RAPPELER',noShow:'ABSENT',managerTitle:'Manager',managerDesc:'Apercu du jour',inQueue:'En file',avgWait:'Attente moyenne',served:'Servis Aujourdhui',bottleneck:'Goulot',exportBtn:'Exporter Rapport',itTitle:'IT',itDesc:'Sante du systeme',systemStatus:'Statut Systeme',activeCounters:'Guichets Actifs',smsService:'Service SMS',priorityMode:'Mode Priorite',resetBtn:'Reinitialiser File',saveBtn:'Enregistrer',optDeposit:'Depot',optWithdrawal:'Retrait',optAccount:'Ouverture de Compte',optLoan:'Demande de Pret',loginTitle:'Connexion - Personnel Seulement',loginDesc:'Veuillez vous connecter',staffId:'ID Personnel',pinLabel:'PIN / Mot de passe',loginBtn:'Se Connecter',logoutBtn:'Deconnexion',otpTitle:'Entrer OTP',otpDesc:'OTP envoye a votre telephone',verifyBtn:'Verifier OTP',resendBtn:'Renvoyer OTP',refreshNow:'Actualiser Maintenant'}
 };
 function changeLanguage(lang){currentLang=lang;const t=LANG[lang];document.querySelectorAll('[data-lang]').forEach(el=>{const k=el.getAttribute('data-lang');if(t[k]){el.textContent=t[k];}});try{localStorage.setItem('smartqueue_lang',lang);}catch(e){}}
 function show(id,btn){document.querySelectorAll('#customer,#teller,#manager,#it').forEach(c=>c.style.display='none');document.getElementById(id).style.display='block';document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderQueue();}
-function login(role){const id=document.getElementById(role+'Id').value.trim().toLowerCase();const pin=document.getElementById(role+'Pin').value.trim();const err=document.getElementById(role+'Error');if(id===CRED[role].id&&pin===CRED[role].pin){document.getElementById(role+'Login').style.display='none';document.getElementById(role+'Content').style.display='block';err.textContent='';renderQueue();}else{err.textContent=currentLang==='rw'?'ID cyangwa PIN siyo! Gerageza nanone':currentLang==='fr'?'ID ou PIN incorrect!':'Wrong ID or PIN! Try again';}}
-function logout(role){document.getElementById(role+'Login').style.display='block';document.getElementById(role+'Content').style.display='none';document.getElementById(role+'Id').value='';document.getElementById(role+'Pin').value='';}
+function genOtp(){return Math.floor(100000+Math.random()*900000).toString();}
+function loginStep1(role){const id=document.getElementById(role+'Id').value.trim().toLowerCase();const pin=document.getElementById(role+'Pin').value.trim();const err=document.getElementById(role+'Error');if(id===CRED[role].id&&pin===CRED[role].pin){const otp=genOtp();otpStore[role]=otp;document.getElementById(role+'OtpBox').style.display='block';document.getElementById(role+'OtpDemo').textContent='Demo OTP (SMS): '+otp;err.textContent='';}else{err.textContent=currentLang==='rw'?'ID cyangwa PIN siyo! Gerageza nanone':currentLang==='fr'?'ID ou PIN incorrect!':'Wrong ID or PIN! Try again';}}
+function resendOtp(role){const otp=genOtp();otpStore[role]=otp;document.getElementById(role+'OtpDemo').textContent='Demo OTP (SMS): '+otp;alert(currentLang==='rw'?'OTP nshya yoherejwe!':'New OTP sent!');}
+function verifyOtp(role){const v=document.getElementById(role+'Otp').value.trim();const err=document.getElementById(role+'Error');if(v===otpStore[role]){document.getElementById(role+'Login').style.display='none';document.getElementById(role+'Content').style.display='block';err.textContent='';if(role==='manager')refreshManager();renderQueue();}else{err.textContent=currentLang==='rw'?'OTP siyo! Gerageza nanone':currentLang==='fr'?'OTP incorrect!':'Wrong OTP! Try again';}}
+function logout(role){document.getElementById(role+'Login').style.display='block';document.getElementById(role+'Content').style.display='none';document.getElementById(role+'OtpBox').style.display='none';document.getElementById(role+'Id').value='';document.getElementById(role+'Pin').value='';document.getElementById(role+'Otp').value='';}
 function getTicket(){const name=document.getElementById('name').value||'Customer';const sel=document.getElementById('service');const service=sel.options[sel.selectedIndex].text;ticketCounter++;const tid='A-0'+ticketCounter;queue.push({id:tid,name:name,priority:false});const pos=queue.length,wait=pos*5;let sms='';if(currentLang==='rw')sms=`SMS: "Ticket ${tid}, Umwanya ${pos}, ~${wait} min. Murakoze!"`;if(currentLang==='en')sms=`SMS: "Ticket ${tid}, Position ${pos}, ~${wait} min. Thank you!"`;if(currentLang==='fr')sms=`SMS: "Ticket ${tid}, Position ${pos}, ~${wait} min. Merci!"`;document.getElementById('customerTicket').innerHTML=`<div class="ticket"><h3>Ticket ${tid}</h3><p>${service}<br>Position: ${pos}<br>~${wait} min</p></div><div class="kig">${sms}</div>`;renderQueue();}
 function checkStatus(){const v=document.getElementById('checkTicket').value||'A-045';document.getElementById('statusResult').innerHTML=`<div class="kig">Ticket ${v} - Position 3 - ~15 min - Please wait</div>`;}
 function renderQueue(){const list=document.getElementById('queueList');if(!list)return;list.innerHTML=queue.map(q=>`<div class="row"><span>${q.id} - ${q.name}</span><span>${q.priority?'<span class="prio">PRIORITY</span>':'<span class="badge">Normal</span>'}</span></div>`).join('');const mq=document.getElementById('mQueue');if(mq)mq.innerText=queue.length;}
@@ -162,6 +197,8 @@ function callNext(){if(queue.length===0){alert('Queue empty');return;}let next=q
 function recall(){if(servingNow)alert('Recall: '+servingNow.id);}
 function noShow(){alert('No-Show - Next called');servingNow=null;callNext();}
 function resetQueue(){queue=[];servingNow=null;document.getElementById('serving').innerText='-';renderQueue();alert('Queue Reset by IT');}
+function refreshManager(){const mq=document.getElementById('mQueue');if(mq)mq.innerText=queue.length;const sc=document.getElementById('servedCount');if(sc)sc.innerText=served;const aw=document.getElementById('mAvgWait');if(aw)aw.innerText=(18+queue.length*2)+' min';const lu=document.getElementById('lastUpdated');if(lu)lu.innerText=new Date().toLocaleTimeString();}
+setInterval(()=>{const mc=document.getElementById('managerContent');if(mc&&mc.style.display==='block'){refreshManager();}},60000);
 document.addEventListener('DOMContentLoaded',()=>{const saved=localStorage.getItem('smartqueue_lang')||'rw';const sel=document.getElementById('langSelect');if(sel)sel.value=saved;changeLanguage(saved);renderQueue();});
 renderQueue();
 </script>
