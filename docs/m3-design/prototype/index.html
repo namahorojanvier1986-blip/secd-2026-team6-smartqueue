@@ -37,9 +37,9 @@ input,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ccc;border-r
 <div class="lang-bar">
 <label data-lang="languageLabel">Hitamo Ururimi / Select Language:</label>
 <select id="langSelect" onchange="changeLanguage(this.value)">
-<option value="rw">🇷🇼 Ikinyarwanda</option>
-<option value="en">🇬🇧 English</option>
-<option value="fr">🇫🇷 Français</option>
+<option value="rw">Ikinyarwanda</option>
+<option value="en">English</option>
+<option value="fr">Français</option>
 </select>
 </div>
 
@@ -50,7 +50,6 @@ input,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ccc;border-r
 <button class="tab it" onclick="show('it',this)" data-lang="tabIT">IT</button>
 </div>
 
-<!-- CUSTOMER -->
 <div id="customer"><h2 data-lang="customerTitle">Customer</h2>
 <p class="small" data-lang="customerDesc">Get your ticket and wait for your turn</p>
 <label data-lang="serviceLabel">Service</label>
@@ -67,7 +66,6 @@ input,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ccc;border-r
 <div id="statusResult"></div></div>
 </div>
 
-<!-- TELLER -->
 <div id="teller" style="display:none"><h2 data-lang="tellerTitle">Teller</h2>
 <p class="small" data-lang="tellerDesc">Manage the queue - serve customers in order</p>
 <div id="queueList"></div>
@@ -76,7 +74,6 @@ input,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ccc;border-r
 <button class="btn btn3" onclick="noShow()" data-lang="noShow">No-Show</button>
 <div class="small" style="margin-top:8px">Now Serving: <b id="serving">-</b></div></div>
 
-<!-- MANAGER -->
 <div id="manager" style="display:none"><h2 data-lang="managerTitle">Manager</h2>
 <p class="small" data-lang="managerDesc">Overview of today - performance and reports</p>
 <div class="row"><span data-lang="inQueue">In Queue</span><b id="mQueue">18</b></div>
@@ -85,12 +82,11 @@ input,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ccc;border-r
 <div class="row"><span data-lang="bottleneck">Bottleneck</span><b style="color:#dc3545">Counter 2 Slow</b></div>
 <button class="btn" onclick="alert('Report Exported: PDF / CSV')" data-lang="exportBtn">Export Report</button></div>
 
-<!-- IT -->
 <div id="it" style="display:none"><h2 data-lang="itTitle">IT</h2>
 <p class="small" data-lang="itDesc">System health and settings</p>
-<div class="row"><span data-lang="systemStatus">System Status</span><b style="color:#198754">● Online</b></div>
+<div class="row"><span data-lang="systemStatus">System Status</span><b style="color:#198754">Online</b></div>
 <div class="row"><span data-lang="activeCounters">Active Counters</span><b>3 / 4</b></div>
-<div class="row"><span data-lang="smsService">SMS Service</span><b style="color:#198754">● Working</b></div>
+<div class="row"><span data-lang="smsService">SMS Service</span><b style="color:#198754">Working</b></div>
 <div class="row"><span data-lang="priorityMode">Priority Mode</span><b>1 Priority : 2 Normal</b></div>
 <button class="btn btn-dark" onclick="resetQueue()" data-lang="resetBtn">Reset Queue</button>
 <button class="btn" onclick="alert('Settings Saved')" data-lang="saveBtn">Save Settings</button></div>
