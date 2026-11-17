@@ -1,206 +1,290 @@
-<!DOCTYPE html>
-<html lang="rw">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SmartQueue - Umwalimu SACCO</title>
-<style>
-body{font-family:Arial,sans-serif;background:#eef2f7;margin:0;padding:12px}
-.card{max-width:580px;margin:auto;background:#fff;padding:22px;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.1)}
-h1{color:#0057A8;margin:0;font-size:28px;text-align:center}
-.sub{color:#666;margin:6px 0 16px;text-align:center}
-.lang-bar{display:flex;justify-content:space-between;align-items:center;background:#F5F8FF;border:2px solid #DCE6FF;border-radius:10px;padding:10px 12px}
-.lang-bar label{font-weight:bold;font-size:13px;color:#0057A8;margin:0}
-.lang-bar select{width:auto;padding:8px;border:2px solid #0057A8;border-radius:8px;font-weight:bold}
-.tabs{display:flex;gap:8px;margin:16px 0;flex-wrap:wrap}
-.tab{flex:1;padding:12px;border:none;border-radius:10px;font-size:14px;font-weight:bold;cursor:pointer;min-width:110px}
-.tab.cust{background:#EAF2FF;color:#0057A8;border:2px solid #0057A8}.tab.cust.active{background:#0057A8;color:#fff}
-.tab.teller{background:#E8F8EF;color:#0B6B3A;border:2px solid #0B6B3A}.tab.teller.active{background:#0B6B3A;color:#fff}
-.tab.mgr{background:#F0E9FF;color:#5B2EA6;border:2px solid #5B2EA6}.tab.mgr.active{background:#5B2EA6;color:#fff}
-.tab.it{background:#FFF3DC;color:#8A6500;border:2px solid #FFC72C}.tab.it.active{background:#FFC72C;color:#000}
-input,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ccc;border-radius:10px;font-size:16px;box-sizing:border-box}
-.btn{width:100%;padding:14px;border:0;border-radius:10px;background:#0057A8;color:#fff;font-weight:bold;font-size:16px;margin-top:8px;cursor:pointer}
-.btn2{background:#198754}.btn3{background:#dc3545}.btn-dark{background:#333}
-.ticket{background:#e7f1ff;border:2px dashed #0057A8;padding:14px;border-radius:12px;text-align:center;margin-top:10px}
-.kig{background:#fff3cd;padding:10px;border-radius:10px;margin-top:10px;font-size:14px}
-.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eee}
-.small{font-size:13px;color:#555}
-.badge{background:#FFC72C;padding:3px 8px;border-radius:10px;font-size:12px}
-.prio{color:#dc3545;font-weight:bold}
-.auth-box{background:#F5F8FF;border:2px solid #DCE6FF;border-radius:12px;padding:16px;margin-top:10px}
-.auth-box h3{margin:0 0 8px;text-align:center}
-.demo{font-size:12px;color:#666;text-align:center;margin-top:8px}
-.otp-box{background:#FFF3CD;border:2px dashed #FFC72C;border-radius:12px;padding:14px;margin-top:12px}
-.refresh{font-size:12px;color:#198754;text-align:center;margin-top:8px;font-weight:bold}
-</style>
-</head>
-<body>
-<div class="card">
-<h1 data-lang="title">SmartQueue - Umwalimu SACCO</h1>
-<p class="sub">Team 6 | Customer Queue Management System</p>
+// ================= SMARTQUEUE - FULL SYSTEM =================
+// Roles: CUSTOMER, TELLER, MANAGER, IT
+// Services: Deposit, Withdrawals, Customer Service
 
-<div class="lang-bar">
-<label data-lang="languageLabel">Hitamo Ururimi / Select Language:</label>
-<select id="langSelect" onchange="changeLanguage(this.value)">
-<option value="rw">Ikinyarwanda</option>
-<option value="en">English</option>
-<option value="fr">Francais</option>
-</select>
-</div>
-
-<div class="tabs">
-<button class="tab cust active" onclick="show('customer',this)" data-lang="tabCustomer">Customer</button>
-<button class="tab teller" onclick="show('teller',this)" data-lang="tabTeller">Teller</button>
-<button class="tab mgr" onclick="show('manager',this)" data-lang="tabManager">Manager</button>
-<button class="tab it" onclick="show('it',this)" data-lang="tabIT">IT</button>
-</div>
-
-<div id="customer"><h2 data-lang="customerTitle">Customer</h2>
-<p class="small" data-lang="customerDesc">Get your ticket and wait for your turn</p>
-<label data-lang="serviceLabel">Service</label>
-<select id="service">
-<option value="deposit" data-lang="optDeposit">Deposit</option>
-<option value="withdrawal" data-lang="optWithdrawal">Withdrawal</option>
-<option value="account" data-lang="optAccount">Account Opening</option>
-<option value="loan" data-lang="optLoan">Loan Inquiry</option>
-</select>
-<label data-lang="nameLabel">Your Name</label>
-<input id="name" placeholder="Your Name" value="">
-<label data-lang="phoneLabel">Phone Number</label>
-<input id="phone" placeholder="0780 000 000">
-<button class="btn" onclick="getTicket()" data-lang="getTicketBtn">Get Ticket</button>
-<div id="customerTicket"></div>
-<div style="margin-top:14px"><h3 data-lang="statusTitle">Check Your Status</h3>
-<input id="checkTicket" placeholder="e.g. A-046">
-<button class="btn btn2" onclick="checkStatus()" data-lang="checkBtn">Check Status</button>
-<div id="statusResult"></div></div>
-</div>
-
-<!-- TELLER -->
-<div id="teller" style="display:none">
-<div id="tellerLogin" class="auth-box">
-<h3 data-lang="loginTitle">Login - Staff Only</h3>
-<p class="small" style="text-align:center" data-lang="loginDesc">Please login to continue</p>
-<label data-lang="staffId">Staff ID</label>
-<input id="tellerId" placeholder="e.g. teller">
-<label data-lang="pinLabel">PIN / Password</label>
-<input id="tellerPin" type="password" placeholder="1234">
-<button class="btn btn2" onclick="loginStep1('teller')" data-lang="loginBtn">Login</button>
-<div class="demo">Demo: teller / 1234</div>
-<div id="tellerOtpBox" class="otp-box" style="display:none">
-<h3 style="margin:0" data-lang="otpTitle">Enter OTP</h3>
-<p class="small" style="text-align:center" data-lang="otpDesc">OTP sent to your phone</p>
-<input id="tellerOtp" placeholder="Enter 6-digit OTP" maxlength="6">
-<button class="btn btn2" onclick="verifyOtp('teller')" data-lang="verifyBtn">Verify OTP</button>
-<button class="btn" onclick="resendOtp('teller')" data-lang="resendBtn">Resend OTP</button>
-<div class="demo" id="tellerOtpDemo"></div>
-</div>
-<div id="tellerError" style="color:red;font-size:13px;text-align:center"></div>
-</div>
-<div id="tellerContent" style="display:none"><h2 data-lang="tellerTitle">Teller</h2>
-<p class="small" data-lang="tellerDesc">Manage the queue - serve customers in order</p>
-<div id="queueList"></div>
-<button class="btn btn2" onclick="callNext()" data-lang="callNext">Call Next</button>
-<button class="btn" onclick="recall()" data-lang="recall">Recall</button>
-<button class="btn btn3" onclick="noShow()" data-lang="noShow">No-Show</button>
-<div class="small" style="margin-top:8px">Now Serving: <b id="serving">-</b></div>
-<button class="btn btn-dark" onclick="logout('teller')" data-lang="logoutBtn">Logout</button></div>
-</div>
-
-<!-- MANAGER -->
-<div id="manager" style="display:none">
-<div id="managerLogin" class="auth-box">
-<h3 data-lang="loginTitle">Login - Staff Only</h3>
-<p class="small" style="text-align:center" data-lang="loginDesc">Please login to continue</p>
-<label data-lang="staffId">Staff ID</label>
-<input id="managerId" placeholder="e.g. manager">
-<label data-lang="pinLabel">PIN / Password</label>
-<input id="managerPin" type="password" placeholder="1234">
-<button class="btn" onclick="loginStep1('manager')" data-lang="loginBtn">Login</button>
-<div class="demo">Demo: manager / 1234</div>
-<div id="managerOtpBox" class="otp-box" style="display:none">
-<h3 style="margin:0" data-lang="otpTitle">Enter OTP</h3>
-<p class="small" style="text-align:center" data-lang="otpDesc">OTP sent to your phone</p>
-<input id="managerOtp" placeholder="Enter 6-digit OTP" maxlength="6">
-<button class="btn" onclick="verifyOtp('manager')" data-lang="verifyBtn">Verify OTP</button>
-<button class="btn" onclick="resendOtp('manager')" data-lang="resendBtn">Resend OTP</button>
-<div class="demo" id="managerOtpDemo"></div>
-</div>
-<div id="managerError" style="color:red;font-size:13px;text-align:center"></div>
-</div>
-<div id="managerContent" style="display:none"><h2 data-lang="managerTitle">Manager</h2>
-<p class="small" data-lang="managerDesc">Overview of today - performance and reports</p>
-<div class="row"><span data-lang="inQueue">In Queue</span><b id="mQueue">18</b></div>
-<div class="row"><span data-lang="avgWait">Average Wait</span><b id="mAvgWait">22 min</b></div>
-<div class="row"><span data-lang="served">Served Today</span><b id="servedCount">42</b></div>
-<div class="row"><span data-lang="bottleneck">Bottleneck</span><b style="color:#dc3545" id="mBottleneck">Counter 2 Slow</b></div>
-<div class="refresh" id="managerRefresh">Auto-refresh: every 1 min | Last updated: <span id="lastUpdated">-</span></div>
-<button class="btn" onclick="refreshManager()" data-lang="refreshNow">Refresh Now</button>
-<button class="btn" onclick="alert('Report Exported: PDF / CSV')" data-lang="exportBtn">Export Report</button>
-<button class="btn btn-dark" onclick="logout('manager')" data-lang="logoutBtn">Logout</button></div>
-</div>
-
-<!-- IT -->
-<div id="it" style="display:none">
-<div id="itLogin" class="auth-box">
-<h3 data-lang="loginTitle">Login - Staff Only</h3>
-<p class="small" style="text-align:center" data-lang="loginDesc">Please login to continue</p>
-<label data-lang="staffId">Staff ID</label>
-<input id="itId" placeholder="e.g. it">
-<label data-lang="pinLabel">PIN / Password</label>
-<input id="itPin" type="password" placeholder="1234">
-<button class="btn" onclick="loginStep1('it')" data-lang="loginBtn">Login</button>
-<div class="demo">Demo: it / 1234</div>
-<div id="itOtpBox" class="otp-box" style="display:none">
-<h3 style="margin:0" data-lang="otpTitle">Enter OTP</h3>
-<p class="small" style="text-align:center" data-lang="otpDesc">OTP sent to your phone</p>
-<input id="itOtp" placeholder="Enter 6-digit OTP" maxlength="6">
-<button class="btn" onclick="verifyOtp('it')" data-lang="verifyBtn">Verify OTP</button>
-<button class="btn" onclick="resendOtp('it')" data-lang="resendBtn">Resend OTP</button>
-<div class="demo" id="itOtpDemo"></div>
-</div>
-<div id="itError" style="color:red;font-size:13px;text-align:center"></div>
-</div>
-<div id="itContent" style="display:none"><h2 data-lang="itTitle">IT</h2>
-<p class="small" data-lang="itDesc">System health and settings</p>
-<div class="row"><span data-lang="systemStatus">System Status</span><b style="color:#198754">Online</b></div>
-<div class="row"><span data-lang="activeCounters">Active Counters</span><b>3 / 4</b></div>
-<div class="row"><span data-lang="smsService">SMS Service</span><b style="color:#198754">Working</b></div>
-<div class="row"><span data-lang="priorityMode">Priority Mode</span><b>1 Priority : 2 Normal</b></div>
-<button class="btn btn-dark" onclick="resetQueue()" data-lang="resetBtn">Reset Queue</button>
-<button class="btn" onclick="alert('Settings Saved')" data-lang="saveBtn">Save Settings</button>
-<button class="btn btn-dark" onclick="logout('it')" data-lang="logoutBtn">Logout</button></div>
-</div>
-
-</div>
-<script>
-let queue=[{id:'P-012',name:'Customer 1',priority:true},{id:'A-042',name:'Customer 2',priority:false},{id:'A-043',name:'Customer 3',priority:false}];
-let ticketCounter=45, priorityCounter=12, servingNow=null, served=42, currentLang='rw';
-let otpStore={};
-const CRED={teller:{id:'teller',pin:'1234'},manager:{id:'manager',pin:'1234'},it:{id:'it',pin:'1234'}};
-const LANG={
-rw:{title:'SmartQueue - Umwalimu SACCO',languageLabel:'Hitamo Ururimi / Select Language:',tabCustomer:'Customer',tabTeller:'Teller',tabManager:'Manager',tabIT:'IT',customerTitle:'Customer',customerDesc:'Fata ticket yawe utegereze igihe cyawe',serviceLabel:'Service',nameLabel:'Izina Ryawe',phoneLabel:'Numero ya Telephone',getTicketBtn:'Fata Ticket',statusTitle:'Reba Aho Ugeze',checkBtn:'Reba Status',tellerTitle:'Teller',tellerDesc:'Genzura umurongo - wakira abakiriya',callNext:'HAMAGARA UKURIKIYE',recall:'SUBIRAMO',noShow:'NTAJE',managerTitle:'Manager',managerDesc:'Incamake y uyu munsi',inQueue:'Abari mu murongo',avgWait:'Igihe cyo gutegereza',served:'Bakiriwe Uyu Munsi',bottleneck:'Ahari Ikibazo',exportBtn:'Kohereza Raporo',itTitle:'IT',itDesc:'Ubuzima bwa sisitemu',systemStatus:'Sisitemu',activeCounters:'Counters Zikora',smsService:'SMS',priorityMode:'Priority Mode',resetBtn:'Gusubiramo Umurongo',saveBtn:'Bika',optDeposit:'Kubitsa',optWithdrawal:'Kubikura Amafaranga',optAccount:'Gufungura Konti',optLoan:'Gusaba Inguzanyo',loginTitle:'Injira - Abakozi Gusa',loginDesc:'Injira kugirango ukomeze',staffId:'Staff ID',pinLabel:'PIN / Ijambo ryibanga',loginBtn:'Injira',logoutBtn:'Sohoka',otpTitle:'Andika OTP',otpDesc:'OTP yoherejwe kuri telephone yawe',verifyBtn:'Emeza OTP',resendBtn:'Ongera Wohereza OTP',refreshNow:'Vugurura Ubu'},
-en:{title:'SmartQueue - Umwalimu SACCO',languageLabel:'Select Language / Hitamo Ururimi:',tabCustomer:'Customer',tabTeller:'Teller',tabManager:'Manager',tabIT:'IT',customerTitle:'Customer',customerDesc:'Get your ticket and wait for your turn',serviceLabel:'Service',nameLabel:'Your Name',phoneLabel:'Phone Number',getTicketBtn:'Get Ticket',statusTitle:'Check Your Status',checkBtn:'Check Status',tellerTitle:'Teller',tellerDesc:'Manage the queue - serve customers in order',callNext:'CALL NEXT',recall:'RECALL',noShow:'NO-SHOW',managerTitle:'Manager',managerDesc:'Overview of today',inQueue:'In Queue',avgWait:'Average Wait',served:'Served Today',bottleneck:'Bottleneck',exportBtn:'Export Report',itTitle:'IT',itDesc:'System health and settings',systemStatus:'System Status',activeCounters:'Active Counters',smsService:'SMS Service',priorityMode:'Priority Mode',resetBtn:'Reset Queue',saveBtn:'Save Settings',optDeposit:'Deposit',optWithdrawal:'Withdrawal',optAccount:'Account Opening',optLoan:'Loan Inquiry',loginTitle:'Login - Staff Only',loginDesc:'Please login to continue',staffId:'Staff ID',pinLabel:'PIN / Password',loginBtn:'Login',logoutBtn:'Logout',otpTitle:'Enter OTP',otpDesc:'OTP sent to your phone',verifyBtn:'Verify OTP',resendBtn:'Resend OTP',refreshNow:'Refresh Now'},
-fr:{title:'SmartQueue - Umwalimu SACCO',languageLabel:'Choisir la langue:',tabCustomer:'Client',tabTeller:'Caissiere',tabManager:'Manager',tabIT:'IT',customerTitle:'Client',customerDesc:'Prenez votre ticket et attendez',serviceLabel:'Service',nameLabel:'Votre Nom',phoneLabel:'Numero de Telephone',getTicketBtn:'Obtenir Ticket',statusTitle:'Verifier Statut',checkBtn:'Verifier',tellerTitle:'Caissiere',tellerDesc:'Gerer la file',callNext:'APPELER SUIVANT',recall:'RAPPELER',noShow:'ABSENT',managerTitle:'Manager',managerDesc:'Apercu du jour',inQueue:'En file',avgWait:'Attente moyenne',served:'Servis Aujourdhui',bottleneck:'Goulot',exportBtn:'Exporter Rapport',itTitle:'IT',itDesc:'Sante du systeme',systemStatus:'Statut Systeme',activeCounters:'Guichets Actifs',smsService:'Service SMS',priorityMode:'Mode Priorite',resetBtn:'Reinitialiser File',saveBtn:'Enregistrer',optDeposit:'Depot',optWithdrawal:'Retrait',optAccount:'Ouverture de Compte',optLoan:'Demande de Pret',loginTitle:'Connexion - Personnel Seulement',loginDesc:'Veuillez vous connecter',staffId:'ID Personnel',pinLabel:'PIN / Mot de passe',loginBtn:'Se Connecter',logoutBtn:'Deconnexion',otpTitle:'Entrer OTP',otpDesc:'OTP envoye a votre telephone',verifyBtn:'Verifier OTP',resendBtn:'Renvoyer OTP',refreshNow:'Actualiser Maintenant'}
+// ---------- 1. DATA ----------
+const SERVICES = {
+  DEPOSIT: { id: 'DEPOSIT', name: 'Deposit', prefix: 'D', color: '#2E7D32' },
+  WITHDRAWAL: { id: 'WITHDRAWAL', name: 'Withdrawals', prefix: 'W', color: '#E65100' },
+  CUSTOMER_SERVICE: { id: 'CUSTOMER_SERVICE', name: 'Customer Service', prefix: 'C', color: '#1565C0' }
 };
-function changeLanguage(lang){currentLang=lang;const t=LANG[lang];document.querySelectorAll('[data-lang]').forEach(el=>{const k=el.getAttribute('data-lang');if(t[k]){el.textContent=t[k];}});try{localStorage.setItem('smartqueue_lang',lang);}catch(e){}}
-function show(id,btn){document.querySelectorAll('#customer,#teller,#manager,#it').forEach(c=>c.style.display='none');document.getElementById(id).style.display='block';document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderQueue();}
-function genOtp(){return Math.floor(100000+Math.random()*900000).toString();}
-function loginStep1(role){const id=document.getElementById(role+'Id').value.trim().toLowerCase();const pin=document.getElementById(role+'Pin').value.trim();const err=document.getElementById(role+'Error');if(id===CRED[role].id&&pin===CRED[role].pin){const otp=genOtp();otpStore[role]=otp;document.getElementById(role+'OtpBox').style.display='block';document.getElementById(role+'OtpDemo').textContent='Demo OTP (SMS): '+otp;err.textContent='';}else{err.textContent=currentLang==='rw'?'ID cyangwa PIN siyo! Gerageza nanone':currentLang==='fr'?'ID ou PIN incorrect!':'Wrong ID or PIN! Try again';}}
-function resendOtp(role){const otp=genOtp();otpStore[role]=otp;document.getElementById(role+'OtpDemo').textContent='Demo OTP (SMS): '+otp;alert(currentLang==='rw'?'OTP nshya yoherejwe!':'New OTP sent!');}
-function verifyOtp(role){const v=document.getElementById(role+'Otp').value.trim();const err=document.getElementById(role+'Error');if(v===otpStore[role]){document.getElementById(role+'Login').style.display='none';document.getElementById(role+'Content').style.display='block';err.textContent='';if(role==='manager')refreshManager();renderQueue();}else{err.textContent=currentLang==='rw'?'OTP siyo! Gerageza nanone':currentLang==='fr'?'OTP incorrect!':'Wrong OTP! Try again';}}
-function logout(role){document.getElementById(role+'Login').style.display='block';document.getElementById(role+'Content').style.display='none';document.getElementById(role+'OtpBox').style.display='none';document.getElementById(role+'Id').value='';document.getElementById(role+'Pin').value='';document.getElementById(role+'Otp').value='';}
-function getTicket(){const name=document.getElementById('name').value||'Customer';const sel=document.getElementById('service');const service=sel.options[sel.selectedIndex].text;ticketCounter++;const tid='A-0'+ticketCounter;queue.push({id:tid,name:name,priority:false});const pos=queue.length,wait=pos*5;let sms='';if(currentLang==='rw')sms=`SMS: "Ticket ${tid}, Umwanya ${pos}, ~${wait} min. Murakoze!"`;if(currentLang==='en')sms=`SMS: "Ticket ${tid}, Position ${pos}, ~${wait} min. Thank you!"`;if(currentLang==='fr')sms=`SMS: "Ticket ${tid}, Position ${pos}, ~${wait} min. Merci!"`;document.getElementById('customerTicket').innerHTML=`<div class="ticket"><h3>Ticket ${tid}</h3><p>${service}<br>Position: ${pos}<br>~${wait} min</p></div><div class="kig">${sms}</div>`;renderQueue();}
-function checkStatus(){const v=document.getElementById('checkTicket').value||'A-045';document.getElementById('statusResult').innerHTML=`<div class="kig">Ticket ${v} - Position 3 - ~15 min - Please wait</div>`;}
-function renderQueue(){const list=document.getElementById('queueList');if(!list)return;list.innerHTML=queue.map(q=>`<div class="row"><span>${q.id} - ${q.name}</span><span>${q.priority?'<span class="prio">PRIORITY</span>':'<span class="badge">Normal</span>'}</span></div>`).join('');const mq=document.getElementById('mQueue');if(mq)mq.innerText=queue.length;}
-function callNext(){if(queue.length===0){alert('Queue empty');return;}let next=queue.find(q=>q.priority)||queue[0];queue=queue.filter(q=>q!==next);servingNow=next;served++;document.getElementById('serving').innerText=next.id+' - '+next.name;document.getElementById('servedCount').innerText=served;renderQueue();}
-function recall(){if(servingNow)alert('Recall: '+servingNow.id);}
-function noShow(){alert('No-Show - Next called');servingNow=null;callNext();}
-function resetQueue(){queue=[];servingNow=null;document.getElementById('serving').innerText='-';renderQueue();alert('Queue Reset by IT');}
-function refreshManager(){const mq=document.getElementById('mQueue');if(mq)mq.innerText=queue.length;const sc=document.getElementById('servedCount');if(sc)sc.innerText=served;const aw=document.getElementById('mAvgWait');if(aw)aw.innerText=(18+queue.length*2)+' min';const lu=document.getElementById('lastUpdated');if(lu)lu.innerText=new Date().toLocaleTimeString();}
-setInterval(()=>{const mc=document.getElementById('managerContent');if(mc&&mc.style.display==='block'){refreshManager();}},60000);
-document.addEventListener('DOMContentLoaded',()=>{const saved=localStorage.getItem('smartqueue_lang')||'rw';const sel=document.getElementById('langSelect');if(sel)sel.value=saved;changeLanguage(saved);renderQueue();});
-renderQueue();
-</script>
-</body>
-</html>
+
+const ROLES = ['CUSTOMER', 'TELLER', 'MANAGER', 'IT'];
+
+// Load from localStorage or start fresh
+let DB = JSON.parse(localStorage.getItem('smartqueue_db')) || {
+  tickets: [],
+  users: [
+    { id: 'U1', name: 'Admin IT', role: 'IT', username: 'admin', password: 'admin123', status: 'Active' },
+    { id: 'U2', name: 'Jean Teller', role: 'TELLER', username: 'jean', password: '1234', counter: 1, status: 'Active' },
+    { id: 'U3', name: 'Mary Manager', role: 'MANAGER', username: 'mary', password: '1234', status: 'Active' }
+  ],
+  counters: [
+    { id: 1, name: 'Counter 1', service: 'DEPOSIT', teller: 'Jean Teller', status: 'Open' },
+    { id: 2, name: 'Counter 2', service: 'WITHDRAWAL', teller: '-', status: 'Open' },
+    { id: 3, name: 'Counter 3', service: 'CUSTOMER_SERVICE', teller: '-', status: 'Closed' },
+    { id: 4, name: 'Counter 4', service: 'DEPOSIT', teller: '-', status: 'Open' }
+  ],
+  countersTicket: { DEPOSIT: 0, WITHDRAWAL: 0, CUSTOMER_SERVICE: 0 },
+  currentUser: null,
+  logs: []
+};
+
+function save() {
+  localStorage.setItem('smartqueue_db', JSON.stringify(DB));
+  log(`DB saved at ${new Date().toLocaleTimeString()}`);
+}
+
+function log(msg) {
+  DB.logs.unshift({ time: new Date().toISOString(), msg });
+  if (DB.logs.length > 100) DB.logs.pop();
+}
+
+// ---------- 2. AUTH ----------
+function login(username, password) {
+  const user = DB.users.find(u => u.username === username && u.password === password && u.status === 'Active');
+  if (!user) return { success: false, message: 'Wrong username or password' };
+  DB.currentUser = user;
+  save();
+  return { success: true, user, redirect: getDashboardForRole(user.role) };
+}
+
+function logout() {
+  DB.currentUser = null;
+  save();
+  window.location.href = 'login.html';
+}
+
+function getDashboardForRole(role) {
+  if (role === 'TELLER') return 'teller.html';
+  if (role === 'MANAGER') return 'manager.html';
+  if (role === 'IT') return 'it.html';
+  return 'customer.html';
+}
+
+function requireRole(...allowed) {
+  if (!DB.currentUser || !allowed.includes(DB.currentUser.role)) {
+    window.location.href = 'login.html';
+    return false;
+  }
+  return true;
+}
+
+// ---------- 3. CUSTOMER - GET TICKET ----------
+function getTicket(serviceId, customerName = 'Guest', phone = '') {
+  if (!SERVICES[serviceId]) return { success: false, message: 'Invalid service' };
+  DB.countersTicket[serviceId]++;
+  const num = String(DB.countersTicket[serviceId]).padStart(3, '0');
+  const ticketNo = `${SERVICES[serviceId].prefix}-${num}`;
+
+  const waitingBefore = DB.tickets.filter(t => t.service === serviceId && t.status === 'WAITING').length;
+  const waitMin = waitingBefore * 4; // 4 min per person
+
+  const ticket = {
+    id: Date.now(),
+    number: ticketNo,
+    service: serviceId,
+    serviceName: SERVICES[serviceId].name,
+    customerName,
+    phone,
+    status: 'WAITING', // WAITING | SERVING | SERVED | SKIPPED
+    position: waitingBefore + 1,
+    waitMin,
+    createdAt: new Date().toISOString(),
+    counter: null,
+    teller: null
+  };
+  DB.tickets.push(ticket);
+  save();
+  return { success: true, ticket, message: `Your ticket is ${ticketNo}. Position ${ticket.position}, ~${waitMin} min` };
+}
+
+function getMyTicket(ticketId) {
+  return DB.tickets.find(t => t.id === ticketId);
+}
+
+function getWaitingList(serviceId = null) {
+  let list = DB.tickets.filter(t => t.status === 'WAITING' || t.status === 'SERVING');
+  if (serviceId) list = list.filter(t => t.service === serviceId);
+  return list.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+}
+
+function getNowServing(serviceId = null) {
+  let list = DB.tickets.filter(t => t.status === 'SERVING');
+  if (serviceId) list = list.filter(t => t.service === serviceId);
+  return list[0] || null;
+}
+
+// ---------- 4. TELLER ----------
+function tellerCallNext(tellerName, counterId, serviceId) {
+  const next = getWaitingList(serviceId)[0];
+  if (!next) return { success: false, message: 'No one waiting' };
+
+  // Mark previous SERVING as SERVED if any for this counter
+  DB.tickets.forEach(t => { if (t.counter === counterId && t.status === 'SERVING') t.status = 'SERVED'; });
+
+  next.status = 'SERVING';
+  next.counter = counterId;
+  next.teller = tellerName;
+  next.calledAt = new Date().toISOString();
+  save();
+  return { success: true, ticket: next, message: `Now serving ${next.number}` };
+}
+
+function tellerComplete(ticketId) {
+  const t = DB.tickets.find(x => x.id === ticketId);
+  if (!t) return { success: false, message: 'Ticket not found' };
+  t.status = 'SERVED';
+  t.servedAt = new Date().toISOString();
+  save();
+  return { success: true, ticket: t };
+}
+
+function tellerSkip(ticketId) {
+  const t = DB.tickets.find(x => x.id === ticketId);
+  if (!t) return { success: false, message: 'Ticket not found' };
+  t.status = 'SKIPPED';
+  save();
+  return { success: true, ticket: t };
+}
+
+function tellerCallAgain(ticketId) {
+  const t = DB.tickets.find(x => x.id === ticketId);
+  if (!t) return { success: false, message: 'Ticket not found' };
+  t.calledAt = new Date().toISOString();
+  save();
+  return { success: true, message: `Calling ${t.number} again` };
+}
+
+// ---------- 5. MANAGER ----------
+function getManagerStats() {
+  const today = new Date().toDateString();
+  const todayTickets = DB.tickets.filter(t => new Date(t.createdAt).toDateString() === today);
+  const served = todayTickets.filter(t => t.status === 'SERVED').length;
+  const waiting = todayTickets.filter(t => t.status === 'WAITING').length;
+  const serving = todayTickets.filter(t => t.status === 'SERVING').length;
+
+  // Avg wait - simulated from served count
+  const avgWait = served > 0 ? Math.round(todayTickets.reduce((a, t) => a + (t.waitMin || 0), 0) / todayTickets.length) : 0;
+
+  const byService = {};
+  for (let key in SERVICES) {
+    byService[key] = {
+      name: SERVICES[key].name,
+      waiting: todayTickets.filter(t => t.service === key && t.status === 'WAITING').length,
+      served: todayTickets.filter(t => t.service === key && t.status === 'SERVED').length
+    };
+  }
+
+  const byTeller = {};
+  DB.tickets.filter(t => t.teller).forEach(t => {
+    if (!byTeller[t.teller]) byTeller[t.teller] = { served: 0, skipped: 0 };
+    if (t.status === 'SERVED') byTeller[t.teller].served++;
+    if (t.status === 'SKIPPED') byTeller[t.teller].skipped++;
+  });
+
+  return {
+    total: todayTickets.length,
+    served,
+    waiting,
+    serving,
+    avgWait,
+    activeCounters: DB.counters.filter(c => c.status === 'Open').length,
+    byService,
+    byTeller
+  };
+}
+
+function getReports(fromDate, toDate) {
+  return DB.tickets.filter(t => {
+    const d = new Date(t.createdAt);
+    return d >= new Date(fromDate) && d <= new Date(toDate);
+  });
+}
+
+// ---------- 6. IT ADMIN ----------
+function itAddUser({ name, role, username, password, counter }) {
+  if (DB.users.find(u => u.username === username)) return { success: false, message: 'Username already exists' };
+  if (!ROLES.includes(role)) return { success: false, message: 'Invalid role' };
+  const user = { id: 'U' + Date.now(), name, role, username, password, counter: counter || null, status: 'Active' };
+  DB.users.push(user);
+  save();
+  return { success: true, user };
+}
+
+function itEditUser(userId, updates) {
+  const u = DB.users.find(x => x.id === userId);
+  if (!u) return { success: false, message: 'User not found' };
+  Object.assign(u, updates);
+  save();
+  return { success: true, user: u };
+}
+
+function itDeleteUser(userId) {
+  DB.users = DB.users.filter(u => u.id !== userId);
+  save();
+  return { success: true };
+}
+
+function itToggleCounter(counterId) {
+  const c = DB.counters.find(x => x.id === counterId);
+  if (!c) return { success: false, message: 'Counter not found' };
+  c.status = c.status === 'Open' ? 'Closed' : 'Open';
+  save();
+  return { success: true, counter: c };
+}
+
+function itResetQueue() {
+  DB.tickets = [];
+  DB.countersTicket = { DEPOSIT: 0, WITHDRAWAL: 0, CUSTOMER_SERVICE: 0 };
+  save();
+  return { success: true, message: 'Queue reset' };
+}
+
+function getSystemHealth() {
+  return {
+    status: 'Online',
+    uptime: '99.9%',
+    totalTickets: DB.tickets.length,
+    totalUsers: DB.users.length,
+    activeCounters: DB.counters.filter(c => c.status === 'Open').length,
+    logs: DB.logs.slice(0, 20)
+  };
+}
+
+// ---------- 7. UI HELPERS ----------
+function renderQueueBoard(containerId, serviceId = null) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  const list = getWaitingList(serviceId);
+  const now = getNowServing(serviceId);
+  el.innerHTML = `
+    <div>Now Serving: <b>${now ? now.number : '---'}</b> - ${now ? now.serviceName : ''}</div>
+    <div>Waiting: ${list.length}</div>
+    <ul>${list.map((t, i) => `<li>${i + 1}. ${t.number} - ${t.serviceName} - ${t.customerName} - ~${t.waitMin} min</li>`).join('')}</ul>
+  `;
+}
+
+function renderManagerDashboard() {
+  const s = getManagerStats();
+  const el = document.getElementById('managerStats');
+  if (el) el.innerHTML = `
+    <p>Total Today: ${s.total} | Served: ${s.served} | Waiting: ${s.waiting} | Avg Wait: ${s.avgWait} min | Active Counters: ${s.activeCounters}</p>
+  `;
+}
+
+// Auto-refresh every 5 seconds for live boards
+setInterval(() => {
+  if (document.getElementById('queueBoard')) renderQueueBoard('queueBoard');
+  if (document.getElementById('managerStats')) renderManagerDashboard();
+}, 5000);
+
+// ---------- 8. EXAMPLE USAGE ----------
+// Customer: getTicket('DEPOSIT', 'Eric', '0780000000')
+// Teller: tellerCallNext('Jean Teller', 1, 'DEPOSIT')
+// Teller: tellerComplete(ticketId)
+// Manager: getManagerStats()
+// IT: itAddUser({ name:'New Teller', role:'TELLER', username:'teller2', password:'1234' })
+// IT: itToggleCounter(3)
+
+console.log('SmartQueue loaded. DB:', DB);
