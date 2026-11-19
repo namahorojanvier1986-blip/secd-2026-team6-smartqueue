@@ -1,1 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartQueue</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#f0f2f5;display:flex;justify-content:center;padding:15px}
+.phone{width:390px;background:white;border-radius:30px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.15);border:6px solid #111;min-height:680px}
+.header{background:#1e5bbf;color:white;padding:14px;text-align:center}
+.content{padding:12px}.hidden{display:none}
+.btn{width:100%;border:none;padding:16px;border-radius:14px;font-weight:800;cursor:pointer;color:white;background:#1e5bbf;font-size:18px}
+.btn-green{background:#2ea36b}.btn-dark{background:#222}
+input{width:100%;padding:14px;border:2px solid #ddd;border-radius:12px;margin-bottom:10px;font-size:16px}
+.lang-bar{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}.lang-bar button{border:2px solid #ddd;background:white;padding:8px 12px;border-radius:20px;cursor:pointer;font-size:14px;font-weight:800}.lang-bar button.active{background:#1e5bbf;color:white}
+.big-icon-btn{border:3px solid #ddd;border-radius:18px;padding:16px;margin-bottom:12px;cursor:pointer;text-align:center;background:white}
+.icon{font-size:55px;display:block}.label{font-size:20px;font-weight:800;margin:6px 0 2px}.sub{font-size:14px;color:#555}
+.service{display:flex;align-items:center;gap:12px;border:2px solid #e5e7eb;border-radius:16px;padding:12px;margin-bottom:9px;cursor:pointer;background:white}
+.service.active{border-color:#1e5bbf;background:#eaf2ff;border-width:3px}.service .ic{font-size:38px}.service b{font-size:17px}.service small{color:#666;font-size:12px}
+.cat{background:#1e5bbf;color:white;padding:9px 12px;border-radius:10px;font-weight:800;font-size:15px;margin:14px 0 8px}
+.now-serving{background:#d6e8ff;border-radius:16px;text-align:center;padding:14px}.now-serving h2{color:#1e5bbf;font-size:46px}
+.steps{display:flex;gap:8px;text-align:center;margin:10px 0}.step{flex:1;background:#f0f6ff;border-radius:12px;padding:10px 4px}.step span{font-size:30px}.step p{font-size:11px;font-weight:700;margin-top:4px}
+.help-btn{position:fixed;bottom:20px;right:20px;background:#ff0000;color:white;border:none;width:60px;height:60px;border-radius:50%;font-size:28px;cursor:pointer;box-shadow:0 4px 10px rgba(0,0,0,.3)}
+.ussd{border:3px solid #111;border-radius:20px;padding:14px;background:#111;color:#0f0}.ussd input{background:#111;color:#0f0;border:1px solid #0f0;text-align:center}
+.keypad{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px}.keypad button{background:#333;color:white;border:none;padding:14px;border-radius:12px;font-size:20px;cursor:pointer}
+.role-row{display:flex;gap:8px}.role{flex:1;padding:12px;border:2px solid #ddd;border-radius:12px;text-align:center;font-weight:800;cursor:pointer}.role.active{border-color:#1e5bbf;background:#eaf2ff}
+.topbar{display:flex;justify-content:space-between;padding:10px;background:#eef2ff;font-weight:700}
+.card{background:#f8f9fa;border-radius:12px;padding:12px;margin-bottom:10px;text-align:center}
+.voice{width:100%;background:#ffeb3b;border:2px solid #ff9800;padding:12px;border-radius:12px;font-weight:800;cursor:pointer;font-size:16px;margin-bottom:10px}
+.wait-box{background:#fff3cd;border:2px solid #ffc107;border-radius:10px;padding:8px;margin-top:8px;font-size:13px}
+.live-dot{color:#e74c3c;animation:blink 1s infinite}@keyframes blink{50%{opacity:0}}
+.term{color:#1e5bbf;font-weight:800}
+.five-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.five{border:3px solid #1e5bbf;border-radius:16px;padding:14px 8px;text-align:center;cursor:pointer;background:#eaf2ff}
+.five:active{transform:scale(0.97)}.five .big-ic{font-size:42px;display:block}.five b{font-size:15px;display:block;margin-top:4px}.five small{font-size:11px;color:#555}.five.active{border-color:#e74c3c;background:#ffeaea}
+.five-wide{grid-column:1/3;border-color:#2ea36b;background:#e6f7ee}
+.see-all{width:100%;background:white;border:2px dashed #1e5bbf;color:#1e5bbf;padding:11px;border-radius:12px;font-weight:800;cursor:pointer;margin-bottom:10px}
+</style>
+</head>
+<body>
+<div class="phone">
+<div style="background:#eef2ff;padding:8px;text-align:center">
+  <div style="font-size:14px;font-weight:800" data-i18n="chooseLang">🌐 HITAMO URURIMI</div>
+  <div class="lang-bar" style="margin-top:6px">
+    <button id="lang-en" onclick="setLang('en')">🇬🇧 EN</button>
+    <button id="lang-rw" class="active" onclick="setLang('rw')">🇷🇼 KINY</button>
+    <button id="lang-fr" onclick="setLang('fr')">🇫🇷 FR</button>
+    <button id="lang-sw" onclick="setLang('sw')">🇹🇿 SW</button>
+  </div>
+</div>
 
+<!-- HOME -->
+<div id="homeScreen">
+  <div class="header"><h1>🏦 SmartQueue</h1></div>
+  <div class="content">
+    <div class="steps">
+      <div class="step"><span>1️⃣</span><p data-i18n="step1">👆 HITAMO</p></div>
+      <div class="step"><span>➡️</span><p><span data-i18n="step2a">🎫 FATA</span> <span class="term">TICKET</span></p></div>
+      <div class="step"><span>🪑</span><p data-i18n="step3">TEGEREZA</p></div>
+      <div class="step"><span>🔔</span><p data-i18n="step4">HAMAGARWA</p></div>
+    </div>
+    <button class="voice" onclick="speak()">🔊 <span data-i18n="hearVoice">UMVA IJWI</span></button>
+
+    <!-- 5 IMPORTANT FIRST -->
+    <div style="text-align:center;font-weight:800;font-size:17px">⭐ <span data-i18n="importantTitle">SERVICES Z'INGENZI - 5</span> ⭐</div>
+    <div class="five-grid">
+      <div class="five" onclick="quickTicket('Deposit','💵 Kubitsa')"><span class="big-ic">💵⬇️</span><b data-i18n="sDeposit">💵 Kubitsa</b><small>Deposit</small></div>
+      <div class="five" onclick="quickTicket('Withdrawal','💵 Kubikuza')"><span class="big-ic">💵⬆️</span><b data-i18n="sWithdraw">💵 Kubikuza</b><small>Withdrawal</small></div>
+      <div class="five" onclick="quickTicket('Loan','💳 Inguzanyo')"><span class="big-ic">💳❓</span><b data-i18n="sLoan">💳 Inguzanyo</b><small>Loan</small></div>
+      <div class="five" onclick="quickTicket('MoMo','📱 MoMo')"><span class="big-ic">📱💰</span><b>📱 MoMo</b><small>MoMo / Airtel Money</small></div>
+      <div class="five five-wide" onclick="quickTicket('Balance','💰 Kureba Amafaranga')"><span class="big-ic">💰👀</span><b data-i18n="sBalance">💰 Kureba Amafaranga</b><small>Balance</small></div>
+    </div>
+    <div id="quickTicketBox" class="card hidden" style="background:#e6f7ee;border:2px solid #2ea36b"><b style="font-size:20px">🎫 <span data-i18n="yourTicket">TICKET Yawe</span>: <span id="quickTicketNum">A-042</span></b><br><span id="quickTicketService">Deposit</span><br><span>📱 <span class="term">SMS</span> <span data-i18n="smsSent">Yoherejwe</span> ✅ | ⏳ <span data-i18n="wait">Tegereza</span>: <span class="waitTime">15</span> <span data-i18n="min">min</span></span></div>
+
+    <button class="see-all" onclick="showWebApp()">👀 <span data-i18n="seeAllServices">Reba Services Zose - ALL</span> →</button>
+
+    <div class="big-icon-btn" onclick="showCustomer()">
+      <span class="icon">👤🎫</span>
+      <div class="label" data-i18n="iAmCustomer">NDI UMUKIRIYA</div>
+      <div class="sub"><span data-i18n="pressHere">👆 Kanda hano</span><br>🌐 <span class="term">WEB APP</span> | 📱 <span class="term">USSD</span> *384*123#</div>
+    </div>
+    <div class="big-icon-btn" onclick="showStaffLogin()">
+      <span class="icon">🧑‍💼🔐</span>
+      <div class="label" data-i18n="iAmStaff">NDI UMUKOZI</div>
+      <div class="sub"><span class="term">TELLER / MANAGER / IT</span> - <span data-i18n="loginWord">Login</span></div>
+    </div>
+    <div class="card" style="font-size:18px">📍 <b><span data-i18n="nowServing">Turakwakiriye</span>: <span id="homeServing">A-041</span></b><br>
+      ⏳ <span data-i18n="wait">Tegereza</span>: <b><span class="waitTime">15</span> <span data-i18n="min">min</span></b> 🕒<br>
+      <div class="wait-box"><span class="live-dot">●</span> LIVE - 👥 <span data-i18n="peopleAhead">Abantu</span> <b><span class="peopleAheadNum">5</span></b> <span data-i18n="aheadOfYou">imbere yawe</span></div>
+    </div>
+    <div style="text-align:center;font-size:13px;color:#666">❓ <span data-i18n="helpHint">Niba utabizi, kanda HELP hepfo</span></div>
+  </div>
+</div>
+
+<!-- CUSTOMER CHOICE -->
+<div id="customerChoice" class="hidden">
+  <div class="header"><h1>← SmartQueue</h1></div>
+  <div class="content" style="text-align:center">
+    <h2 style="font-size:22px" data-i18n="howWant">Ushaka gute?</h2><br>
+    <div class="big-icon-btn" onclick="showWebApp()"><span class="icon">🌐📱</span><div class="label term">WEB APP</div><div class="sub">📱 <span data-i18n="hasInternet">Ufite Internet</span><br>👀 <span data-i18n="seeAll">Reba byose - ALL</span></div></div>
+    <div class="big-icon-btn" onclick="showUSSD()"><span class="icon">📞⌨️</span><div class="label term">USSD - *384*123#</div><div class="sub">📵 <span data-i18n="noInternet">Nta Internet</span><br>📱 <span data-i18n="anyPhone">Telefoni iyo ari yo yose</span></div></div>
+    <button class="btn btn-dark" onclick="backHome()">⬅️ <span data-i18n="back">SUBIRA</span></button>
+  </div>
+</div>
+
+<!-- WEB APP - 5 IMPORTANT + ALL SERVICES -->
+<div id="webApp" class="hidden">
+  <div class="header"><h1>☰ SmartQueue</h1></div>
+  <div class="content">
+    <div class="now-serving"><div style="font-size:18px">🔔 <span data-i18n="nowServingUpper">TURAKWAKIRIYE</span></div><h2 id="serving1">A-041</h2><p>⏳ <span data-i18n="wait">Tegereza</span>: <b><span class="waitTime">15</span> <span data-i18n="min">min</span></b> 🕒</p>
+      <div class="wait-box"><span class="live-dot">●</span> LIVE - 👥 <span data-i18n="peopleAhead">Abantu</span> <b><span class="peopleAheadNum">5</span></b> <span data-i18n="aheadOfYou">imbere yawe</span> | ⏱️ <span data-i18n="perPerson">Buri muntu ~3 min</span></div>
+    </div><br>
+
+    <!-- 5 IMPORTANT FIRST -->
+    <div style="text-align:center;font-weight:800;font-size:18px">⭐ <span data-i18n="importantTitle">SERVICES Z'INGENZI - 5</span> ⭐</div>
+    <div class="five-grid">
+      <div class="five" onclick="selImportant(this,'Deposit')"><span class="big-ic">💵⬇️</span><b data-i18n="sDeposit">💵 Kubitsa</b><small>Deposit</small></div>
+      <div class="five" onclick="selImportant(this,'Withdrawal')"><span class="big-ic">💵⬆️</span><b data-i18n="sWithdraw">💵 Kubikuza</b><small>Withdrawal</small></div>
+      <div class="five" onclick="selImportant(this,'Loan')"><span class="big-ic">💳❓</span><b data-i18n="sLoan">💳 Inguzanyo</b><small>Loan</small></div>
+      <div class="five" onclick="selImportant(this,'MoMo')"><span class="big-ic">📱💰</span><b>📱 MoMo</b><small>MoMo / Airtel Money</small></div>
+      <div class="five five-wide" onclick="selImportant(this,'Balance')"><span class="big-ic">💰👀</span><b data-i18n="sBalance">💰 Kureba Amafaranga</b><small>Balance</small></div>
+    </div>
+
+    <!-- ALL SERVICES - ZOSE ZIGARUTSE -->
+    <div style="background:#1e5bbf;color:white;padding:10px;border-radius:10px;text-align:center;font-weight:800;margin:14px 0 10px">📋 <span data-i18n="allServicesTitle">SERVICES ZOSE - ALL SERVICES</span> (32)</div>
+    <div id="serviceList">
+      <div class="cat">🏦 1. <span data-i18n="catAccounts">KONTI</span> / ACCOUNTS</div>
+      <div class="service" onclick="sel(this)"><span class="ic">👤📝</span><div><b data-i18n="sOpen">👤 Gufungura Konti</b><small><span data-i18n="sOpenSub">🖼️ Zana</span> <span class="term">ID</span> - Open Account</small></div><span>→</span></div>
+      <div class="service" onclick="sel(this)"><span class="ic">💰👀</span><div><b data-i18n="sBalance">💰 Kureba Amafaranga</b><small data-i18n="sBalanceSub">👀 Reba amafaranga yawe - Balance</small></div><span>→</span></div>
+      <div class="service" onclick="sel(this)"><span class="ic">🧾🖨️</span><div><b data-i18n="sStatement">🧾 Raporo</b><small data-i18n="sStatementSub">🖨️ Fungura - Statement</small></div><span>→</span></div>
+      <div class="service" onclick="sel(this)"><span class="ic">🪪✏️</span><div><b data-i18n="sKyc">🪪 Guhindura Amakuru</b><small><span class="term">ID</span>, Telefoni, Aderesi - Update Info</small></div><span>→</span></div>
+
+      <div class="cat">💵 2. <span data-i18n="catCash">AMAFARANGA</span> / CASH</div>
+      <div class="service" onclick="sel(this)"><span class="ic">💵⬇️</span><div><b data-i18n="sDeposit">💵 Kubitsa</b><small data-i18n="sDepositSub">⬇️ Shyiramo amafaranga - Deposit</small></div><span>→</span></div>
+      <div class="service" onclick="sel(this)"><span class="ic">💵⬆️</span><div><b data-i18n="sWithdraw">💵 Kubikuza</b><small data-i18n="sWithdrawSub">⬆️ Kuramo amafaranga - Withdrawal</small></div><span>→</span></div>
+      <div class="service" onclick="sel(this)"><span class="ic">📄✍️</span><div><b data-i18n="sCheque">📄 Sheki</b><small data-i18n="sChequeSub">✍️ Shyira sheki - Cheque</small></div><span>→</span></div>
+
+      <div class="cat">💸 3. <span data-i18n="catPay">KOHEREZA</span> / PAYMENTS</div>
+      <div class="service" onclick="sel(this)"><span class="ic">🔁💸</span><div><b data-i18n="sTransfer">🔁 Kohereza Amafaranga</b><small data-i18n="sTransferSub">➡️ Oherereza undi - Transfer</small></div><span>→</span></div>
+      <div class="service" onclick="sel(this)"><span class="ic">📱💰</span><div><b>📱 <span class="term">MoMo / Airtel Money</span></b><small data-i18n="sMomoSub">📱 Telefoni yawe</small></div><span>→</span></div>
+      <div class="service" onclick="sel(this)"><span class="ic">🧾💡</span><div><b data-i18n="sBill">🧾 Kwishyura</b><small data-i18n="sBillSub">💡 Amashanyarazi, Amazi, Ishuri - Bill Payment</small></div><span>→</span></div>
+      <div class="service" onclick="sel(this)"><span class="ic">👥💰</span><div><b data-i18n="sSalary">👥 Umushahara</b><small data-i18n="sSalarySub">🏢 Ku bakoresha - Salary</small></div><span>→</span></div>
+
+      <div class="cat">💳 4. <span data-i18n="catLoan">INGUZANYO</span> / LOANS</div>
+      <div class="service" onclick="sel(this)"><span class="ic">💳❓</span><div><b data-i18n="sLoan">💳 Inguzanyo</b><small data-i18n="sLoanSub">❓ Baza inguzanyo - Loan</small></div><span>→</span></div>
+      <div class="service" onclick="sel(this)"><span class="ic">👤💰</span><div><b data-i18n="sPersonal">👤 Inguzanyo Yanjye</b><small data-i18n="sPersonalSub">🏠 Ku bintu byawe - Personal Loan</small></div><span>→</span></div>
+      <div class="service" onclick="sel(this)"><span class="ic">🏪💰</span><div><b data-i18n="sBusiness">🏪 Inguzanyo y'Ubucuruzi</b><small data-i18n="sBusinessSub">🛒 Ku bucuruzi bwawe - Business Loan</small></div><span>→</span></div>
+      <div class="service" onclick="sel(this)"><span class="ic">🏠🔑</span><div><b data-i18n="sHouse">🏠 Inzu</b><small data-i18n="sHouseSub">🔑 Kugura / Kubaka inzu - House Loan</small></div><span>→</span></div>
+      <div class="service" onclick="sel(this)"><span class="ic">🚗🔑</span><div><b data-i18n="sCar">🚗 Imodoka</b><small data-i18n="sCarSub">🚙 Kugura imodoka / moto - Car Loan</small></div><span>→</span></div>
+      <div class="service" onclick="sel(this)"><span class="ic">✅💰</span><div><b data-i18n="sRepay">✅ Kwishyura Inguzanyo</b><small data-i18n="sRepaySub">💰 Ishyura inguzanyo yawe - Repay Loan</small></div><span>→</span></div>
+
+      <div class="cat">💳 5. <span data-i18n="catCard">IKARITA</span> / CARDS</div>
+      <div class="service" onclick="sel(this)"><span class="ic">💳🏧</span><div><b><span class="term">ATM</span> <span data-i18n="sAtm2">Ikarita</span></b><small data-i18n="sAtmSub">🆕 Nshya / Gusimbuza - ATM Card</small></div><span>→</span></div>
+      <div class="service" onclick="sel(this)"><span class="ic">💎💳</span><div><b><span class="term">Credit Card</span></b><small data-i18n="sCreditSub">💳 Saba ikarita</small></div><span>→</span></div>
+      <div class="service" onclick="sel(this)"><span class="ic">🚫💳</span><div><b data-i18n="sLost">🚫 Ikarita Yatakaye</b><small><span data-i18n="sLostSub">🔒 Bika - Wibagiwe</span> <span class="term">PIN</span> - Lost Card</small></div><span>→</span></div>
+
+      <div class="cat">📱 6. <span data-i18n="catDigital">TELEFONI</span> / DIGITAL</div>
+      <div class="service" onclick="sel(this)"><span class="ic">📱📲</span><div><b><span data-i18n="sMobile1">📱 Banki kuri Telefoni</span> - <span class="term">Mobile Banking</span></b><small data-i18n="sMobileSub">📲 Fungura App</small></div><span>→</span></div>
+      <div class="service" onclick="sel(this)"><span class="ic">🌐💻</span><div><b><span data-i18n="sInternet1">🌐 Banki kuri Internet</span> - <span class="term">Internet Banking</span></b><small data-i18n="sInternetSub">💻 Mudasobwa</small></div><span>→</span></div>
+
+      <div class="cat">💱 7. <span data-i18n="catForex">AMADEVIZE</span> / FOREX</div>
+      <div class="service" onclick="sel(this)"><span class="ic">💱💵</span><div><b><span data-i18n="sForex1">💱 Guhindura Amafaranga</span> - <span class="term">FOREX</span></b><small>💵 Dollar, Euro</small></div><span>→</span></div>
+      <div class="service" onclick="sel(this)"><span class="ic">🌍✈️</span><div><b data-i18n="sAbroad">🌍 Kohereza Hanze</b><small><span class="term">Western Union, MoneyGram</span></small></div><span>→</span></div>
+
+      <div class="cat">📈 8. <span data-i18n="catInvest">KUZIGAMA</span> / INVESTMENT</div>
+      <div class="service" onclick="sel(this)"><span class="ic">📈🔒</span><div><b><span data-i18n="sFixed1">📈 Kuzigama</span> - <span class="term">Fixed Deposit</span></b><small data-i18n="sFixedSub">🔒 Bika - Wunguke</small></div><span>→</span></div>
+      <div class="service" onclick="sel(this)"><span class="ic">🛡️❤️</span><div><b data-i18n="sIns">🛡️ Ubwishingizi</b><small data-i18n="sInsSub">🏥 Ubuzima, 🚗 Imodoka - Insurance</small></div><span>→</span></div>
+      <div class="service" onclick="sel(this)"><span class="ic">👴💰</span><div><b data-i18n="sPension">👴 Pansiyo</b><small data-i18n="sPensionSub">👵 Ku basaza - Pension</small></div><span>→</span></div>
+
+      <div class="cat">🛎️ 9. <span data-i18n="catHelp">UBUFASHA</span> / HELP</div>
+      <div class="service" onclick="sel(this)"><span class="ic">📣😡</span><div><b data-i18n="sComplaint">📣 Ikibazo</b><small data-i18n="sComplaintSub">😡 Hari ikibazo? Bwira - Complaint</small></div><span>→</span></div>
+      <div class="service" onclick="sel(this)"><span class="ic">❓🙋</span><div><b data-i18n="sAsk">❓ Kubaza</b><small data-i18n="sAskSub">🙋 Baza ikintu icyo ari cyo - Ask</small></div><span>→</span></div>
+      <div class="service" onclick="sel(this)"><span class="ic">⭐♿</span><div><b><span data-i18n="sVip1">⭐ Abafite Ubumuga</span> / <span class="term">VIP</span></b><small data-i18n="sVipSub">👵 Abasaza, 🤰 Abatwite, ♿ Abamugaye</small></div><span>→</span></div>
+    </div>
+
+    <div style="background:#fff3cd;border:2px solid #ffc107;border-radius:12px;padding:12px;text-align:center;margin:12px 0"><b>📱 <span data-i18n="writeNumber">Andika Numero yawe</span></b><br><small>Ex: 0788 123 456</small></div>
+    <input id="custPhone" placeholder="📱 0788 123 456">
+    <button class="btn btn-green" onclick="getWebTicket()">🎫 <span data-i18n="getTicket">FATA</span> <span class="term">TICKET</span> ✅</button>
+    <div id="webTicket" class="card hidden" style="background:#e6f7ee"><b style="font-size:22px">🎫 <span data-i18n="yourTicket">TICKET Yawe</span>: <span id="webTicketNum">A-042</span></b><br><span style="font-size:16px">📱 <span class="term">SMS</span> <span data-i18n="smsSent">Yoherejwe</span> ✅</span><br><span style="font-size:14px">🪑 <span data-i18n="sitWait">Icare utegereze</span></span><br><span id="ticketWait" style="font-weight:800;color:#e74c3c"></span><br><small id="ticketPosition"></small></div>
+    <button class="btn btn-dark" style="margin-top:10px" onclick="backHome()">⬅️ <span data-i18n="back">SUBIRA</span></button>
+  </div>
+</div>
+
+<!-- USSD - 5 IMPORTANT + ALL -->
+<div id="ussdApp" class="hidden">
+  <div class="header"><h1>📱 <span class="term">USSD</span></h1></div>
+  <div class="content">
+    <div style="text-align:center;font-weight:800;font-size:18px">⌨️ <span data-i18n="dialThis">Kanda Iyi Numero</span><br><span style="font-size:28px;color:#1e5bbf">*384*123# 📞</span></div><br>
+    <div class="ussd"><div style="font-size:12px;color:#aaa">*384*123# - SmartQueue</div><div id="ussdScreen" style="margin:12px 0;line-height:1.8;font-size:14px"></div>
+    <input id="ussdInput" data-i18n-ph="ussdType" placeholder="Andika 1-9"><button style="width:100%;background:#0f0;color:#111;border:none;padding:12px;border-radius:8px;font-weight:800;cursor:pointer;font-size:16px" onclick="ussdReply()">📤 <span data-i18n="send">OHEREZA</span></button></div>
+    <div class="keypad"><button onclick="press('1')">1 💵</button><button onclick="press('2')">2 💵</button><button onclick="press('3')">3 💳</button><button onclick="press('4')">4 📱</button><button onclick="press('5')">5 💰</button><button onclick="press('6')">6 💱</button><button onclick="press('7')">7 💳</button><button onclick="press('8')">8 📈</button><button onclick="press('9')">9 ⭐</button><button onclick="press('0')">0 👀</button></div>
+    <div style="background:#fff8e1;border:2px solid #ff9800;border-radius:10px;padding:10px;margin-top:10px;font-size:13px;line-height:1.7;text-align:center"><b>⭐ 5 z'ingenzi + zose kuri USSD</b><br>1=Kubitsa | 2=Kubikuza | 3=Inguzanyo | 4=MoMo | 5=Balance<br>6=Forex | 7=Card | 8=Kuzigama | 9=Priority | 0=Kureba</div>
+    <button class="btn btn-dark" style="margin-top:10px" onclick="backHome()">⬅️ <span data-i18n="back">SUBIRA</span></button>
+  </div>
+</div>
+
+<!-- STAFF -->
+<div id="staffLogin" class="hidden">
+  <div class="header"><h1>☰ Staff</h1></div>
+  <div class="content" style="text-align:center"><h3>🔐 <span data-i18n="staffLogin">Staff Login</span></h3><br>
+  <div class="role-row"><div class="role active" onclick="setRole(this,'Teller')">🧑‍💼<br><span class="term">TELLER</span></div><div class="role" onclick="setRole(this,'Manager')">👔<br><span class="term">MANAGER</span></div><div class="role" onclick="setRole(this,'IT')">💻<br><span class="term">IT</span></div></div><br>
+  <input id="email" value="teller@smartqueue.com"><input id="password" type="password" value="1234">
+  <button class="btn" onclick="login()"><span data-i18n="loginAs">Login as</span> <span id="roleLabel">Teller</span></button><p id="errorMsg" style="color:red;display:none" data-i18n="wrongLogin">Wrong login</p>
+  <button class="btn btn-dark" style="margin-top:10px" onclick="backHome()">← <span data-i18n="back">SUBIRA</span></button></div>
+</div>
+<div id="appScreen" class="hidden">
+  <div class="header"><h1>☰ SmartQueue</h1></div>
+  <div class="topbar"><span id="userInfo">Teller</span><span style="color:red;cursor:pointer" onclick="logout()"><span class="term">LOGOUT</span> ↪</span></div>
+  <div id="tellerView" class="content"><div class="now-serving"><small><span data-i18n="nowServing">Turakwakiriye</span></small><h2 id="serving2">A-041</h2><p>⏳ <span data-i18n="wait">Tegereza</span>: <b><span class="waitTime">15</span> <span data-i18n="min">min</span></b> | 👥 <span class="peopleAheadNum">5</span> <span data-i18n="inQueue">mu murongo</span></p></div><br>
+  <div style="text-align:center;font-weight:800;margin-bottom:8px">⭐ Top 5 + ALL Services</div>
+  <div class="card">💵 Kubitsa: <b>32</b> | 💵 Kubikuza: <b>28</b><br>💳 Inguzanyo: <b>21</b> | 📱 MoMo: <b>18</b> | 💰 Balance: <b>25</b><br><small>ALL: 124 customers today</small></div>
+  <button class="btn btn-green" onclick="nextTicket()">▶ <span data-i18n="callNext">HAMAGARA</span></button></div>
+  <div id="managerView" class="content hidden"><h3>📊 <span class="term">MANAGER</span></h3><br><div class="card"><span data-i18n="customers">Customers</span>: <b>124</b></div><div class="card">Top 5: <b>Deposit, Withdrawal, Loan, MoMo, Balance</b></div><div class="card">ALL Services: <b>32</b></div><div class="card">⏳ Avg Wait: <b><span class="waitTime">15</span> <span data-i18n="min">min</span></b> (LIVE)</div></div>
+  <div id="itView" class="content hidden"><h3>💻 <span class="term">IT</span></h3><br><div class="card">🟢 Server <span class="term">Online</span></div><div class="card">ALL Services: <b>ON</b></div></div>
+</div>
+
+</div>
+<button class="help-btn" onclick="helpClick()">🆘</button>
+
+<script>
+const dict={
+rw:{
+chooseLang:"🌐 HITAMO URURIMI",step1:"👆 HITAMO",step2a:"🎫 FATA",step3:"🪑 TEGEREZA",step4:"🔔 HAMAGARWA",hearVoice:"UMVA IJWI - Kanda Kumva",iAmCustomer:"NDI UMUKIRIYA",pressHere:"👆 Kanda hano",iAmStaff:"NDI UMUKOZI",loginWord:"Login",nowServing:"Turakwakiriye",wait:"Tegereza",min:"min",peopleAhead:"Abantu",aheadOfYou:"imbere yawe",helpHint:"Niba utabizi, kanda HELP hepfo",howWant:"Ushaka gute?",hasInternet:"Ufite Internet",seeAll:"Reba byose - ALL",noInternet:"Nta Internet",anyPhone:"Telefoni iyo ari yo yose",back:"SUBIRA",nowServingUpper:"TURAKWAKIRIYE",choose:"HITAMO",catAccounts:"KONTI",sOpen:"👤 Gufungura Konti",sOpenSub:"🖼️ Zana",sBalance:"💰 Kureba Amafaranga",sBalanceSub:"👀 Reba amafaranga yawe - Balance",sStatement:"🧾 Raporo",sStatementSub:"🖨️ Fungura - Statement",sKyc:"🪪 Guhindura Amakuru",catCash:"AMAFARANGA",sDeposit:"💵 Kubitsa",sDepositSub:"⬇️ Shyiramo amafaranga - Deposit",sWithdraw:"💵 Kubikuza",sWithdrawSub:"⬆️ Kuramo amafaranga - Withdrawal",sCheque:"📄 Sheki",sChequeSub:"✍️ Shyira sheki - Cheque",catPay:"KOHEREZA",sTransfer:"🔁 Kohereza Amafaranga",sTransferSub:"➡️ Oherereza undi - Transfer",sMomoSub:"📱 Telefoni yawe",sBill:"🧾 Kwishyura",sBillSub:"💡 Amashanyarazi, Amazi, Ishuri - Bill Payment",sSalary:"👥 Umushahara",sSalarySub:"🏢 Ku bakoresha - Salary",catLoan:"INGUZANYO",sLoan:"💳 Inguzanyo",sLoanSub:"❓ Baza inguzanyo - Loan",sPersonal:"👤 Inguzanyo Yanjye",sPersonalSub:"🏠 Ku bintu byawe - Personal Loan",sBusiness:"🏪 Inguzanyo y'Ubucuruzi",sBusinessSub:"🛒 Ku bucuruzi bwawe - Business Loan",sHouse:"🏠 Inzu",sHouseSub:"🔑 Kugura / Kubaka inzu - House Loan",sCar:"🚗 Imodoka",sCarSub:"🚙 Kugura imodoka / moto - Car Loan",sRepay:"✅ Kwishyura Inguzanyo",sRepaySub:"💰 Ishyura inguzanyo yawe - Repay Loan",catCard:"IKARITA",sAtm2:"Ikarita",sAtmSub:"🆕 Nshya / Gusimbuza - ATM Card",sCreditSub:"💳 Saba ikarita",sLost:"🚫 Ikarita Yatakaye",sLostSub:"🔒 Bika - Wibagiwe",catDigital:"TELEFONI",sMobile1:"📱 Banki kuri Telefoni",sMobileSub:"📲 Fungura App",sInternet1:"🌐 Banki kuri Internet",sInternetSub:"💻 Mudasobwa",catForex:"AMADEVIZE",sForex1:"💱 Guhindura Amafaranga",sAbroad:"🌍 Kohereza Hanze",catInvest:"KUZIGAMA",sFixed1:"📈 Kuzigama",sFixedSub:"🔒 Bika - Wunguke",sIns:"🛡️ Ubwishingizi",sInsSub:"🏥 Ubuzima, 🚗 Imodoka - Insurance",sPension:"👴 Pansiyo",sPensionSub:"👵 Ku basaza - Pension",catHelp:"UBUFASHA",sComplaint:"📣 Ikibazo",sComplaintSub:"😡 Hari ikibazo? Bwira - Complaint",sAsk:"❓ Kubaza",sAskSub:"🙋 Baza ikintu icyo ari cyo - Ask",sVip1:"⭐ Abafite Ubumuga",sVipSub:"👵 Abasaza, 🤰 Abatwite, ♿ Abamugaye",writeNumber:"Andika Numero yawe",getTicket:"FATA",yourTicket:"TICKET Yawe",smsSent:"Yoherejwe",sitWait:"Icare utegereze",dialThis:"Kanda Iyi Numero",ussdType:"Andika 1-9",send:"OHEREZA",staffLogin:"Staff Login",loginAs:"Login as",wrongLogin:"Wrong login",callNext:"HAMAGARA",customers:"Customers",inQueue:"mu murongo",perPerson:"Buri muntu ~3 min",importantTitle:"SERVICES Z'INGENZI - 5",seeAllServices:"Reba Services Zose - ALL",allServicesTitle:"SERVICES ZOSE - ALL SERVICES",ussdWelcome:"Murakaza neza",ussdDeposit:"Kubitsa",ussdWithdraw:"Kubikuza",ussdLoan:"Inguzanyo",ussdBalance:"Kureba Amafaranga",ussdForex:"Forex",ussdCard:"Ikarita",ussdSave:"Kuzigama",ussdStatus:"Kureba",ussdTypeLabel:"Andika",helpMsg:"Kanda UMUKIRIYA, hitamo muri 5 cyangwa muri zose, kanda FATA TICKET.",voiceMsg:"Turakwakiriye kuri SmartQueue. Hitamo muri services eshanu cyangwa muri zose. Kanda fata TICKET."
+},
+en:{
+chooseLang:"🌐 CHOOSE LANGUAGE",step1:"👆 CHOOSE",step2a:"🎫 GET",step3:"🪑 WAIT",step4:"🔔 CALLED",hearVoice:"HEAR VOICE - Press to Listen",iAmCustomer:"I'M CUSTOMER",pressHere:"👆 Press here",iAmStaff:"I'M STAFF",loginWord:"Login",nowServing:"Now Serving",wait:"Wait",min:"min",peopleAhead:"People",aheadOfYou:"ahead of you",helpHint:"If you don't know, press HELP below",howWant:"How do you want?",hasInternet:"You have Internet",seeAll:"See all - ALL",noInternet:"No Internet",anyPhone:"Any phone",back:"BACK",nowServingUpper:"NOW SERVING",choose:"CHOOSE",catAccounts:"ACCOUNTS",sOpen:"👤 Open Account",sOpenSub:"🖼️ Bring",sBalance:"💰 Balance",sBalanceSub:"👀 See your money - Balance",sStatement:"🧾 Statement",sStatementSub:"🖨️ Print - Statement",sKyc:"🪪 Update Info",catCash:"CASH",sDeposit:"💵 Deposit",sDepositSub:"⬇️ Put money in - Deposit",sWithdraw:"💵 Withdrawal",sWithdrawSub:"⬆️ Take money out - Withdrawal",sCheque:"📄 Cheque",sChequeSub:"✍️ Put cheque - Cheque",catPay:"PAYMENTS",sTransfer:"🔁 Transfer Money",sTransferSub:"➡️ Send to someone - Transfer",sMomoSub:"📱 Your phone",sBill:"🧾 Bill Payment",sBillSub:"💡 Electricity, Water, School - Bill Payment",sSalary:"👥 Salary",sSalarySub:"🏢 For business - Salary",catLoan:"LOANS",sLoan:"💳 Loan",sLoanSub:"❓ Ask for loan - Loan",sPersonal:"👤 Personal Loan",sPersonalSub:"🏠 For your things - Personal Loan",sBusiness:"🏪 Business Loan",sBusinessSub:"🛒 For your business - Business Loan",sHouse:"🏠 House Loan",sHouseSub:"🔑 Buy / Build house - House Loan",sCar:"🚗 Car Loan",sCarSub:"🚙 Buy car / moto - Car Loan",sRepay:"✅ Repay Loan",sRepaySub:"💰 Pay your loan - Repay Loan",catCard:"CARDS",sAtm2:"Card",sAtmSub:"🆕 New / Replace - ATM Card",sCreditSub:"💳 Ask for card",sLost:"🚫 Lost Card",sLostSub:"🔒 Block - Forgot",catDigital:"DIGITAL",sMobile1:"📱 Mobile Banking",sMobileSub:"📲 Open App",sInternet1:"🌐 Internet Banking",sInternetSub:"💻 Computer",catForex:"FOREX",sForex1:"💱 Exchange Money",sAbroad:"🌍 Send Abroad",catInvest:"INVESTMENT",sFixed1:"📈 Fixed Deposit",sFixedSub:"🔒 Save - Earn",sIns:"🛡️ Insurance",sInsSub:"🏥 Health, 🚗 Car - Insurance",sPension:"👴 Pension",sPensionSub:"👵 For old people - Pension",catHelp:"HELP",sComplaint:"📣 Complaint",sComplaintSub:"😡 Any problem? Tell us - Complaint",sAsk:"❓ Ask",sAskSub:"🙋 Ask anything - Ask",sVip1:"⭐ Priority",sVipSub:"👵 Old, 🤰 Pregnant, ♿ Disabled",writeNumber:"Write Your Number",getTicket:"GET",yourTicket:"Your TICKET",smsSent:"Sent",sitWait:"Sit and Wait",dialThis:"Dial This Number",ussdType:"Type 1-9",send:"SEND",staffLogin:"Staff Login",loginAs:"Login as",wrongLogin:"Wrong login",callNext:"CALL NEXT",customers:"Customers",inQueue:"in queue",perPerson:"Each person ~3 min",importantTitle:"IMPORTANT SERVICES - 5",seeAllServices:"See ALL Services",allServicesTitle:"ALL SERVICES",ussdWelcome:"Welcome",ussdDeposit:"Deposit",ussdWithdraw:"Withdrawal",ussdLoan:"Loan",ussdBalance:"Balance",ussdForex:"Forex",ussdCard:"Card",ussdSave:"Saving",ussdStatus:"Status",ussdTypeLabel:"Type",helpMsg:"Press CUSTOMER, choose from 5 or from ALL, press GET TICKET.",voiceMsg:"Welcome to SmartQueue. Choose from five important or from ALL services. Press get TICKET."
+},
+fr:{
+chooseLang:"🌐 CHOISIR LA LANGUE",step1:"👆 CHOISIR",step2a:"🎫 PRENDRE",step3:"🪑 ATTENDRE",step4:"🔔 APPELÉ",hearVoice:"ÉCOUTER LA VOIX",iAmCustomer:"JE SUIS CLIENT",pressHere:"👆 Appuyez ici",iAmStaff:"JE SUIS PERSONNEL",loginWord:"Login",nowServing:"En cours",wait:"Attente",min:"min",peopleAhead:"Personnes",aheadOfYou:"devant vous",helpHint:"Si vous ne savez pas, appuyez sur HELP",howWant:"Comment voulez-vous?",hasInternet:"Vous avez Internet",seeAll:"Voir tout - ALL",noInternet:"Pas d'Internet",anyPhone:"N'importe quel téléphone",back:"RETOUR",nowServingUpper:"EN COURS",choose:"CHOISIR",catAccounts:"COMPTES",sOpen:"👤 Ouvrir Compte",sOpenSub:"🖼️ Apportez",sBalance:"💰 Solde",sBalanceSub:"👀 Voir votre argent - Balance",sStatement:"🧾 Relevé",sStatementSub:"🖨️ Imprimer - Statement",sKyc:"🪪 Mettre à jour",catCash:"ESPÈCES",sDeposit:"💵 Dépôt",sDepositSub:"⬇️ Mettre argent - Deposit",sWithdraw:"💵 Retrait",sWithdrawSub:"⬆️ Retirer argent - Withdrawal",sCheque:"📄 Chèque",sChequeSub:"✍️ Mettre chèque - Cheque",catPay:"PAIEMENTS",sTransfer:"🔁 Transfert",sTransferSub:"➡️ Envoyer à quelqu'un - Transfer",sMomoSub:"📱 Votre téléphone",sBill:"🧾 Payer Facture",sBillSub:"💡 Électricité, Eau, École - Bill Payment",sSalary:"👥 Salaire",sSalarySub:"🏢 Pour business - Salary",catLoan:"PRÊTS",sLoan:"💳 Prêt",sLoanSub:"❓ Demander prêt - Loan",sPersonal:"👤 Prêt Personnel",sPersonalSub:"🏠 Pour vos choses - Personal Loan",sBusiness:"🏪 Prêt Business",sBusinessSub:"🛒 Pour votre business - Business Loan",sHouse:"🏠 Prêt Maison",sHouseSub:"🔑 Acheter / Construire - House Loan",sCar:"🚗 Prêt Voiture",sCarSub:"🚙 Acheter voiture / moto - Car Loan",sRepay:"✅ Rembourser Prêt",sRepaySub:"💰 Payer votre prêt - Repay Loan",catCard:"CARTES",sAtm2:"Carte",sAtmSub:"🆕 Nouvelle / Remplacer - ATM Card",sCreditSub:"💳 Demander carte",sLost:"🚫 Carte Perdue",sLostSub:"🔒 Bloquer - Oublié",catDigital:"DIGITAL",sMobile1:"📱 Banque Mobile",sMobileSub:"📲 Ouvrir App",sInternet1:"🌐 Banque Internet",sInternetSub:"💻 Ordinateur",catForex:"DEVIS",sForex1:"💱 Changer Argent",sAbroad:"🌍 Envoyer à l'étranger",catInvest:"INVESTISSEMENT",sFixed1:"📈 Dépôt Fixe",sFixedSub:"🔒 Épargner - Gagner",sIns:"🛡️ Assurance",sInsSub:"🏥 Santé, 🚗 Voiture - Insurance",sPension:"👴 Pension",sPensionSub:"👵 Pour personnes âgées - Pension",catHelp:"AIDE",sComplaint:"📣 Plainte",sComplaintSub:"😡 Un problème? Dites-nous - Complaint",sAsk:"❓ Demander",sAskSub:"🙋 Demandez tout - Ask",sVip1:"⭐ Priorité",sVipSub:"👵 Âgé, 🤰 Enceinte, ♿ Handicapé",writeNumber:"Écrivez Votre Numéro",getTicket:"PRENDRE",yourTicket:"Votre TICKET",smsSent:"Envoyé",sitWait:"Asseyez-vous et attendez",dialThis:"Composez ce numéro",ussdType:"Tapez 1-9",send:"ENVOYER",staffLogin:"Connexion Personnel",loginAs:"Login as",wrongLogin:"Mauvaise connexion",callNext:"APPELER SUIVANT",customers:"Clients",inQueue:"dans la file",perPerson:"Chaque personne ~3 min",importantTitle:"SERVICES IMPORTANTS - 5",seeAllServices:"Voir TOUS les Services",allServicesTitle:"TOUS LES SERVICES",ussdWelcome:"Bienvenue",ussdDeposit:"Dépôt",ussdWithdraw:"Retrait",ussdLoan:"Prêt",ussdBalance:"Solde",ussdForex:"Forex",ussdCard:"Carte",ussdSave:"Épargne",ussdStatus:"Statut",ussdTypeLabel:"Tapez",helpMsg:"Appuyez sur CLIENT, choisissez parmi 5 ou parmi TOUS.",voiceMsg:"Bienvenue sur SmartQueue."
+},
+sw:{
+chooseLang:"🌐 CHAGUA LUGHA",step1:"👆 CHAGUA",step2a:"🎫 PATA",step3:"🪑 SUBIRI",step4:"🔔 UITWA",hearVoice:"SIKILIZA SAUTI",iAmCustomer:"MIMI NI MTEJA",pressHere:"👆 Bonyeza hapa",iAmStaff:"MIMI NI MFANYAKAZI",loginWord:"Login",nowServing:"Tunahudumia",wait:"Subiri",min:"dak",peopleAhead:"Watu",aheadOfYou:"mbele yako",helpHint:"Hujui, bonyeza HELP",howWant:"Unataka vipi?",hasInternet:"Una Internet",seeAll:"Ona yote - ALL",noInternet:"Hakuna Internet",anyPhone:"Simu yoyote",back:"RUDI",nowServingUpper:"TUNAHUDUMIA",choose:"CHAGUA",catAccounts:"AKAUNTI",sOpen:"👤 Fungua Akaunti",sOpenSub:"🖼️ Leta",sBalance:"💰 Salio",sBalanceSub:"👀 Ona pesa yako - Balance",sStatement:"🧾 Taarifa",sStatementSub:"🖨️ Chapisha - Statement",sKyc:"🪪 Sasisha Taarifa",catCash:"PESA",sDeposit:"💵 Kuweka",sDepositSub:"⬇️ Weka pesa - Deposit",sWithdraw:"💵 Kutoa",sWithdrawSub:"⬆️ Toa pesa - Withdrawal",sCheque:"📄 Cheki",sChequeSub:"✍️ Weka cheki - Cheque",catPay:"MALIPO",sTransfer:"🔁 Tuma Pesa",sTransferSub:"➡️ Tuma kwa mtu - Transfer",sMomoSub:"📱 Simu yako",sBill:"🧾 Lipa Bili",sBillSub:"💡 Umeme, Maji, Shule - Bill Payment",sSalary:"👥 Mshahara",sSalarySub:"🏢 Kwa biashara - Salary",catLoan:"MIKOPO",sLoan:"💳 Mkopo",sLoanSub:"❓ Uliza mkopo - Loan",sPersonal:"👤 Mkopo Wangu",sPersonalSub:"🏠 Kwa vitu vyako - Personal Loan",sBusiness:"🏪 Mkopo wa Biashara",sBusinessSub:"🛒 Kwa biashara yako - Business Loan",sHouse:"🏠 Mkopo wa Nyumba",sHouseSub:"🔑 Nunua / Jenga nyumba - House Loan",sCar:"🚗 Mkopo wa Gari",sCarSub:"🚙 Nunua gari / moto - Car Loan",sRepay:"✅ Lipa Mkopo",sRepaySub:"💰 Lipa mkopo wako - Repay Loan",catCard:"KADI",sAtm2:"Kadi",sAtmSub:"🆕 Mpya / Badilisha - ATM Card",sCreditSub:"💳 Omba kadi",sLost:"🚫 Kadi Imepotea",sLostSub:"🔒 Zuia - Umesahau",catDigital:"KIDIGITALI",sMobile1:"📱 Benki ya Simu",sMobileSub:"📲 Fungua App",sInternet1:"🌐 Benki ya Internet",sInternetSub:"💻 Kompyuta",catForex:"FEDHA ZA KIGENI",sForex1:"💱 Badilisha Pesa",sAbroad:"🌍 Tuma Nje",catInvest:"UWEKEZAJI",sFixed1:"📈 Weka Akiba",sFixedSub:"🔒 Weka - Pata faida",sIns:"🛡️ Bima",sInsSub:"🏥 Afya, 🚗 Gari - Insurance",sPension:"👴 Pensheni",sPensionSub:"👵 Kwa wazee - Pension",catHelp:"MSAADA",sComplaint:"📣 Malalamiko",sComplaintSub:"😡 Kuna tatizo? Tuambie - Complaint",sAsk:"❓ Uliza",sAskSub:"🙋 Uliza chochote - Ask",sVip1:"⭐ Kipaumbele",sVipSub:"👵 Wazee, 🤰 Mjamzito, ♿ Walemavu",writeNumber:"Andika Namba Yako",getTicket:"PATA",yourTicket:"TICKET Yako",smsSent:"Imetumwa",sitWait:"Kaa na Subiri",dialThis:"Bonyeza Namba Hii",ussdType:"Andika 1-9",send:"TUMA",staffLogin:"Login ya Wafanyakazi",loginAs:"Login as",wrongLogin:"Login mbaya",callNext:"ITA Anayefuata",customers:"Wateja",inQueue:"kwenye foleni",perPerson:"Kila mtu ~3 min",importantTitle:"HUDUMA MUHIMU - 5",seeAllServices:"Ona Huduma ZOTE",allServicesTitle:"HUDUMA ZOTE",ussdWelcome:"Karibu",ussdDeposit:"Kuweka",ussdWithdraw:"Kutoa",ussdLoan:"Mkopo",ussdBalance:"Salio",ussdForex:"Forex",ussdCard:"Kadi",ussdSave:"Akiba",ussdStatus:"Hali",ussdTypeLabel:"Andika",helpMsg:"Bonyeza MTEJA, chagua kati ya 5 au kati ya ZOTE.",voiceMsg:"Karibu SmartQueue."
+}
+};
+let currentLang='rw';
+function setLang(l){
+  currentLang=l;
+  ['en','rw','fr','sw'].forEach(x=>document.getElementById('lang-'+x).classList.remove('active'));
+  document.getElementById('lang-'+l).classList.add('active');
+  document.querySelectorAll('[data-i18n]').forEach(el=>{let k=el.getAttribute('data-i18n'); if(dict[l][k]) el.innerText=dict[l][k]});
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{let k=el.getAttribute('data-i18n-ph'); if(dict[l][k]) el.placeholder=dict[l][k]});
+  updateUSSDScreen();
+}
+function updateUSSDScreen(){
+  let d=dict[currentLang]; let w=document.querySelector('.waitTime')?.innerText||15;
+  document.getElementById('ussdScreen').innerHTML=d.ussdWelcome+'<br>'+d.nowServing+': A-041<br>'+d.wait+': '+w+' '+d.min+'<br><br>⭐ 5 + ALL:<br>1. 💵 '+d.ussdDeposit+'<br>2. 💵 '+d.ussdWithdraw+'<br>3. 💳 '+d.ussdLoan+'<br>4. 📱 MoMo<br>5. 💰 '+d.ussdBalance+'<br>6. 💱 '+d.ussdForex+'<br>7. 💳 '+d.ussdCard+'<br>8. 📈 '+d.ussdSave+'<br>9. ⭐ VIP<br>0. 👀 '+d.ussdStatus+'<br><br>'+d.ussdTypeLabel+':';
+}
+function speak(){let u=new SpeechSynthesisUtterance(dict[currentLang].voiceMsg);speechSynthesis.speak(u)}
+function helpClick(){alert('🆘 '+dict[currentLang].helpMsg)}
+let selectedService='Deposit',role='Teller',num=41,webNum=42;
+const users={'teller@smartqueue.com':{pass:'1234',role:'Teller'},'manager@smartqueue.com':{pass:'1234',role:'Manager'},'it@smartqueue.com':{pass:'1234',role:'IT'}};
+let peopleAhead=5, avgServiceTime=3;
+function calcWait(){
+  let wait=peopleAhead*avgServiceTime+Math.floor(Math.random()*2);
+  if(wait<4) wait=4+Math.floor(Math.random()*3);
+  if(wait>30) wait=27+Math.floor(Math.random()*4);
+  document.querySelectorAll('.waitTime').forEach(e=>e.innerText=wait);
+  document.querySelectorAll('.peopleAheadNum').forEach(e=>e.innerText=peopleAhead);
+  updateUSSDScreen();
+  return wait;
+}
+setInterval(()=>{let c=Math.floor(Math.random()*3)-1; peopleAhead=Math.max(1,Math.min(12,peopleAhead+c)); calcWait();},10000);
+function hideAll(){['homeScreen','customerChoice','webApp','ussdApp','staffLogin','appScreen'].forEach(id=>document.getElementById(id).classList.add('hidden'))}
+function backHome(){hideAll();document.getElementById('homeScreen').classList.remove('hidden')}
+function showCustomer(){hideAll();document.getElementById('customerChoice').classList.remove('hidden')}
+function showWebApp(){hideAll();document.getElementById('webApp').classList.remove('hidden')}
+function showUSSD(){hideAll();document.getElementById('ussdApp').classList.remove('hidden'); updateUSSDScreen();}
+function showStaffLogin(){hideAll();document.getElementById('staffLogin').classList.remove('hidden')}
+function quickTicket(service, label){
+  let w=calcWait(); webNum++; peopleAhead++;
+  document.getElementById('quickTicketNum').innerText='A-0'+webNum;
+  document.getElementById('quickTicketService').innerText=label+' - '+service;
+  document.getElementById('quickTicketBox').classList.remove('hidden');
+  calcWait();
+  alert('🎫 TICKET: A-0'+webNum+' - '+label+'\n⏳ '+dict[currentLang].wait+': ~'+w+' '+dict[currentLang].min);
+}
+function selImportant(el, service){
+  document.querySelectorAll('.five').forEach(i=>i.classList.remove('active'));
+  document.querySelectorAll('#serviceList .service').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active'); selectedService=service;
+}
+function sel(el){document.querySelectorAll('#serviceList .service').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.five').forEach(i=>i.classList.remove('active'));el.classList.add('active');selectedService=el.querySelector('b').innerText}
+function getWebTicket(){
+  let w=calcWait(); webNum++; peopleAhead++;
+  document.getElementById('webTicketNum').innerText='A-0'+webNum;
+  document.getElementById('webTicket').classList.remove('hidden');
+  document.getElementById('ticketWait').innerText='⏳ '+dict[currentLang].wait+': ~'+w+' '+dict[currentLang].min;
+  document.getElementById('ticketPosition').innerText='👥 '+dict[currentLang].peopleAhead+': '+peopleAhead;
+  calcWait();
+  alert('🎫 '+dict[currentLang].yourTicket+': A-0'+webNum+' - '+selectedService);
+}
+function press(v){document.getElementById('ussdInput').value+=v}
+function ussdReply(){let v=document.getElementById('ussdInput').value.trim();let w=calcWait();let d=dict[currentLang];let map={'1':'💵 '+d.ussdDeposit,'2':'💵 '+d.ussdWithdraw,'3':'💳 '+d.ussdLoan,'4':'📱 MoMo','5':'💰 '+d.ussdBalance,'6':'💱 '+d.ussdForex,'7':'💳 '+d.ussdCard,'8':'📈 '+d.ussdSave,'9':'⭐ VIP'};let scr=document.getElementById('ussdScreen');if(map[v])scr.innerHTML=d.ussdTypeLabel+': <b>'+map[v]+'</b><br>🎫 TICKET: <b>A-043</b><br>⏳ '+d.wait+': '+w+' '+d.min+'<br>📱 SMS ✅';else if(v==='0')scr.innerHTML=d.nowServing+': A-041<br>TICKET: A-043<br>🪑 '+d.wait+': '+w+' '+d.min;document.getElementById('ussdInput').value=''}
+function setRole(el,r){document.querySelectorAll('.role').forEach(x=>x.classList.remove('active'));el.classList.add('active');role=r;document.getElementById('roleLabel').innerText=r;document.getElementById('email').value=r.toLowerCase()+'@smartqueue.com'}
+function login(){let e=document.getElementById('email').value.toLowerCase().trim(),p=document.getElementById('password').value.trim(),u=users[e];if(u&&u.pass===p&&u.role===role){hideAll();document.getElementById('appScreen').classList.remove('hidden');document.getElementById('userInfo').innerText=role;['tellerView','managerView','itView'].forEach(id=>document.getElementById(id).classList.add('hidden'));document.getElementById(role==='Teller'?'tellerView':role==='Manager'?'managerView':'itView').classList.remove('hidden')}else document.getElementById('errorMsg').style.display='block'}
+function logout(){backHome()}
+function nextTicket(){num++; peopleAhead=Math.max(1,peopleAhead-1); document.getElementById('serving2').innerText='A-0'+num; document.getElementById('serving1').innerText='A-0'+num; document.getElementById('homeServing').innerText='A-0'+num; calcWait();}
+setLang('rw'); calcWait();
+</script>
+</body>
+</html>
