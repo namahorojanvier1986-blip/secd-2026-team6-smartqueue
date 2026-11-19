@@ -7,9 +7,12 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
 body{background:#f5f5f5;display:flex;justify-content:center;padding:10px}
 .phone{width:390px;background:white;border-radius:24px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.15);border:4px solid #111;min-height:640px}
-.header{background:#1e5bbf;color:white;padding:14px 12px;display:flex;align-items:center;gap:12px}
-.header .menu{font-size:20px;cursor:pointer}
-.header h1{font-size:20px;font-weight:800}
+/* HEADING IMWE GUSA - IYO HEJURU */
+.header{background:#1e5bbf;color:white;padding:14px 12px;display:flex;align-items:center;gap:10px}
+.header .menu{font-size:22px;cursor:pointer;color:white}
+.header h1{font-size:22px;font-weight:900;flex:1}
+.header h1 span{color:#ffeb3b}
+.header .home-icon{font-size:22px;cursor:pointer}
 .content{padding:12px}.hidden{display:none}
 .lang-bar{display:flex;gap:5px;justify-content:center;margin:8px 0}.lang-bar button{border:2px solid #ddd;background:white;padding:6px 12px;border-radius:20px;cursor:pointer;font-size:13px;font-weight:800}.lang-bar button.active{background:#1e5bbf;color:white}
 .now-serving{background:#d9d9d9;border-radius:22px;text-align:center;padding:16px 10px;margin:6px 0}
@@ -74,22 +77,13 @@ input{width:100%;padding:12px;border:2px solid #ddd;border-radius:20px;margin-bo
 .stmt-table td{padding:7px 6px;border-bottom:1px solid #eee}
 .stmt-table tr:nth-child(even){background:#f8f9fa}
 .auto-tag{background:#e6f7ee;border:1px solid #2ea36b;border-radius:20px;padding:4px 10px;font-size:11px;font-weight:700;display:inline-block}
-/* SMART QUEUE HEADING - YASUBIJWE */
-.main-heading{background:#1e5bbf;color:white;text-align:center;padding:14px 10px 10px}
-.main-heading h1{font-size:32px;font-weight:900;letter-spacing:1px;line-height:1}
-.main-heading h1 span{color:#ffeb3b}
-.main-heading p{font-size:12px;font-weight:700;letter-spacing:2px;margin-top:4px;opacity:.9}
-.sub-heading{background:#eaf2ff;text-align:center;padding:8px;font-size:18px;font-weight:900;color:#1e5bbf}
 </style>
 </head>
 <body>
 <div class="phone">
 
-<!-- SMART QUEUE AS HEADING - IGIHE CYOSE IGARAGARA HEJURU -->
-<div class="main-heading">
-  <h1>Smart<span>Queue</span></h1>
-  <p>🎫 SMART QUEUE - FAST • FAIR • EASY</p>
-</div>
+<!-- HEADING IMWE GUSA - IYO HEJURU YAKUWEHO, HASIGAYE IYI -->
+<div class="header"><span class="menu" onclick="showCustomer()">☰</span><h1>Smart<span>Queue</span></h1><span class="home-icon" onclick="backHome()">🏠</span></div>
 
 <div style="background:#eef2ff;padding:6px;text-align:center">
   <div style="font-size:13px;font-weight:800" data-i18n="chooseLang">CHOOSE LANGUAGE</div>
@@ -103,8 +97,6 @@ input{width:100%;padding:12px;border:2px solid #ddd;border-radius:20px;margin-bo
 
 <!-- HOME -->
 <div id="homeScreen">
-  <div class="header"><span class="menu" onclick="showCustomer()">☰</span><h1>SmartQueue</h1></div>
-  <div class="sub-heading">🏠 SmartQueue - Home</div>
   <div class="content">
     <div class="now-serving">
       <div class="title" data-i18n="nowServing">Now Serving</div>
@@ -156,8 +148,6 @@ input{width:100%;padding:12px;border:2px solid #ddd;border-radius:20px;margin-bo
 
 <!-- CUSTOMER -->
 <div id="customerChoice" class="hidden">
-  <div class="header"><span class="menu" onclick="backHome()">☰</span><h1>SmartQueue - <span data-i18n="custHeader">Umukiriya</span></h1></div>
-  <div class="sub-heading">SmartQueue - Customer</div>
   <div class="content" style="text-align:center">
     <h3 style="font-size:16px">👤 <span data-i18n="custTitle">Customer - Umukiriya</span></h3><br>
     <div class="cust-row">
@@ -178,8 +168,6 @@ input{width:100%;padding:12px;border:2px solid #ddd;border-radius:20px;margin-bo
 
 <!-- WEB APP -->
 <div id="webApp" class="hidden">
-  <div class="header"><span class="menu" onclick="backHome()">☰</span><h1>SmartQueue</h1></div>
-  <div class="sub-heading">SmartQueue - Web App</div>
   <div class="content">
     <div class="now-serving"><div class="title" data-i18n="nowServing">Now Serving</div><h2 id="serving1">A-041</h2><p>~ <span class="waitTime">15</span> <span data-i18n="min">minutes</span></p><div class="wait-box"><span class="live-dot">●</span> LIVE - 👥 <b><span class="peopleAheadNum">5</span></b> <span data-i18n="aheadOfYou">imbere yawe</span></div></div>
     <div class="two-btns"><button class="btn-blue" onclick="getWebTicket()">🎫 <span data-i18n="getMyTicket">Get my ticket</span></button><button class="btn-green" onclick="checkStatus()">👀 <span data-i18n="checkStatus">Check status</span></button></div>
@@ -240,8 +228,6 @@ input{width:100%;padding:12px;border:2px solid #ddd;border-radius:20px;margin-bo
 
 <!-- USSD -->
 <div id="ussdApp" class="hidden">
-  <div class="header"><span class="menu" onclick="backHome()">☰</span><h1>SmartQueue - 📱 <span class="term" style="color:white">USSD</span></h1></div>
-  <div class="sub-heading">SmartQueue - USSD *348*123#</div>
   <div class="content">
     <div style="text-align:center">
       <div style="font-weight:800;font-size:15px">📞 <span data-i18n="ussdStep0">INTAMBWE 0 - Kanda iyi Code</span></div>
@@ -285,10 +271,8 @@ input{width:100%;padding:12px;border:2px solid #ddd;border-radius:20px;margin-bo
   </div>
 </div>
 
-<!-- STAFF LOGIN - SMART QUEUE HEADING YASUBIJWE -->
+<!-- STAFF LOGIN -->
 <div id="staffLogin" class="hidden">
-  <div class="header"><span class="menu" onclick="backHome()">☰</span><h1>SmartQueue - Staff</h1></div>
-  <div class="sub-heading">SmartQueue - Staff Login</div>
   <div class="content" style="text-align:center">
     <h3>🔐 <span data-i18n="staffLogin">Staff Login</span></h3><br>
     <div class="role-row"><div class="role" id="role-Teller" onclick="setRole(this,'Teller')"><span>🧑‍💼</span><span class="term">TELLER</span></div><div class="role active" id="role-Manager" onclick="setRole(this,'Manager')"><span>👔</span><span class="term">MANAGER</span></div><div class="role" id="role-IT" onclick="setRole(this,'IT')"><span>💻</span><span class="term">IT</span></div></div><br>
@@ -319,8 +303,6 @@ input{width:100%;padding:12px;border:2px solid #ddd;border-radius:20px;margin-bo
   </div>
 </div>
 <div id="appScreen" class="hidden">
-  <div class="header"><span class="menu">☰</span><h1>SmartQueue</h1></div>
-  <div class="sub-heading">SmartQueue - Staff Dashboard</div>
   <div class="topbar"><span id="userInfo">Teller</span><span style="color:red;cursor:pointer" onclick="logout()"><span class="term">LOGOUT</span> ↪</span></div>
   <div id="tellerView" class="content">
     <div style="text-align:center"><b>🧑‍💼 <span class="term">TELLER</span> - <span data-i18n="staffDash">STAFF DASHBOARD</span></b> <span class="auto-tag"><span class="live-dot">●</span> LIVE - <span data-i18n="auto10">Auto 10s</span></span><br><small><span data-i18n="lastUpdate">Last update</span>: <b id="tellerLastUpdate">--:--:--</b></small></div>
@@ -680,7 +662,6 @@ function login(){ sendStaffOTP(); }
 function logout(){backHome()}
 function updateManagerStatus(){
   let remain = totalCustomers - servedCount;
-  let rate = Math.round(servedCount/totalCustomers*100);
   document.getElementById('mgrServing').innerText='A-0'+num;
 }
 function refreshManager(){ updateAllDashboards(); alert('🔄 Status: Served '+servedCount+' | None Served '+(totalCustomers-servedCount)+' | % '+calcPct()+'%'); }
