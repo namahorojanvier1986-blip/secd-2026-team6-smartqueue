@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartQueue</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
+body{background:#f0f2f5;display:flex;justify-content:center;padding:20px;min-height:100vh}
+.phone{width:360px;background:white;border-radius:35px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.15);border:6px solid #111;min-height:620px}
+.header{background:#1e5bbf;color:white;padding:18px 20px}.header h1{font-size:20px}
+.content{padding:16px}.hidden{display:none}
+.btn{width:100%;border:none;padding:13px;border-radius:10px;font-weight:700;cursor:pointer;color:white;background:#1e5bbf;font-size:14px}
+.btn-green{background:#2ea36b}.btn-orange{background:#e67e22}.btn-dark{background:#222}
+input{width:100%;padding:12px;border:1.5px solid #ddd;border-radius:10px;margin-bottom:10px}
+.card{background:#f8f9fa;border-radius:12px;padding:14px;margin-bottom:10px}
+.big-card{border:2px solid #e5e7eb;border-radius:14px;padding:16px;margin-bottom:12px;cursor:pointer;text-align:left}
+.big-card.active{border-color:#1e5bbf;background:#eaf2ff}
+.service{display:flex;justify-content:space-between;border:1.5px solid #e5e7eb;border-radius:12px;padding:13px;margin-bottom:10px;cursor:pointer}
+.service.active{border-color:#1e5bbf;background:#eaf2ff}
+.now-serving{background:#d6e8ff;border-radius:16px;text-align:center;padding:16px}
+.now-serving h2{color:#1e5bbf;font-size:42px}
+.ussd{border:3px solid #111;border-radius:20px;padding:14px;background:#111;color:#0f0;font-family:monospace}
+.ussd input{background:#111;color:#0f0;border:1px solid #0f0;text-align:center;font-size:18px;letter-spacing:2px}
+.keypad{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px}
+.keypad button{background:#333;color:white;border:none;padding:12px;border-radius:10px;font-size:16px;cursor:pointer}
+.topbar{display:flex;justify-content:space-between;padding:10px 14px;background:#eef2ff;font-size:13px;font-weight:600}
+.logout{color:#e74c3c;cursor:pointer}
+.role-row{display:flex;gap:8px;margin-bottom:12px}.role{flex:1;padding:10px;border:2px solid #e5e7eb;border-radius:10px;cursor:pointer;text-align:center;font-weight:700;font-size:13px}.role.active{border-color:#1e5bbf;background:#eaf2ff}
+.error{color:red;font-size:12px;display:none;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="phone">
+
+<!-- ===== 0. CHOOSE WHO ARE YOU ===== -->
+<div id="homeScreen">
+  <div class="header"><h1>☰ SmartQueue</h1></div>
+  <div class="content" style="text-align:center">
+    <h2 style="color:#1e5bbf;margin:10px 0 4px">Welcome to SmartQueue</h2>
+    <p style="color:#666;font-size:13px;margin-bottom:16px">Skip the line. Get your ticket.</p>
+    <div class="big-card" onclick="showCustomer()"><h3>👤 I'm a CUSTOMER</h3><p style="font-size:13px;color:#555;margin-top:4px">Get ticket via Web App or USSD<br>No login needed</p></div>
+    <div class="big-card" onclick="showStaffLogin()"><h3>🧑‍💼 I'm STAFF</h3><p style="font-size:13px;color:#555;margin-top:4px">Teller / Manager / IT - Login required</p></div>
+    <div class="card">📍 Now Serving: <b>A-041</b> | Avg Wait: <b>15 min</b></div>
+  </div>
+</div>
+
+<!-- ===== 1. CUSTOMER - CHOOSE WEB OR USSD ===== -->
+<div id="customerChoice" class="hidden">
+  <div class="header"><h1>← SmartQueue</h1></div>
+  <div class="content" style="text-align:center">
+    <h3>How do you want to get ticket?</h3><br>
+    <div class="big-card" onclick="showWebApp()"><h3>🌐 WEB APP</h3><p style="font-size:13px;color:#555">Use internet - smartphone<br>See live queue, get ticket</p></div>
+    <div class="big-card" onclick="showUSSD()"><h3>📱 USSD CODE</h3><p style="font-size:13px;color:#555">No internet needed - any phone<br>Dial <b>*384*123#</b></p></div>
+    <button class="btn btn-dark" onclick="backHome()">← Back</button>
+  </div>
+</div>
+
+<!-- ===== 1A. CUSTOMER WEB APP ===== -->
+<div id="webApp" class="hidden">
+  <div class="header"><h1>☰ SmartQueue - Web</h1></div>
+  <div class="content">
+    <div class="now-serving"><small>Now Serving</small><h2 id="serving1">A-041</h2><p>~15 minutes 🕒</p></div><br>
+    <div style="text-align:center;font-weight:700;margin-bottom:10px">Select a service</div>
+    <div class="service active" onclick="sel(this)">💵 Deposit →</div>
+    <div class="service" onclick="sel(this)">🧾 Withdrawal →</div>
+    <div class="service" onclick="sel(this)">👤 Account opening →</div>
+    <div class="service" onclick="sel(this)">💳 Loan inquiry →</div>
+    <input id="custPhone" placeholder="Your Phone Number e.g. 0788 123 456">
+    <button class="btn btn-green" onclick="getWebTicket()">Get My Ticket 🎫</button>
+    <div id="webTicket" class="card hidden" style="text-align:center;margin-top:12px;background:#e6f7ee"><b>Your Ticket: <span id="webTicketNum">A-042</span></b><br><small>SMS sent to your phone ✅</small></div>
+    <button class="btn btn-dark" style="margin-top:10px" onclick="backHome()">← Home</button>
+  </div>
+</div>
+
+<!-- ===== 1B. CUSTOMER USSD ===== -->
+<div id="ussdApp" class="hidden">
+  <div class="header"><h1>📱 USSD - SmartQueue</h1></div>
+  <div class="content">
+    <div class="ussd">
+      <div style="font-size:12px;color:#aaa">Dial: *384*123#</div>
+      <div id="ussdScreen" style="margin:12px 0;line-height:1.7;font-size:14px">Welcome to SmartQueue<br>1. Deposit<br>2. Withdrawal<br>3. Account opening<br>4. Loan inquiry<br>0. Check Status<br><br>Reply:</div>
+      <input id="ussdInput" placeholder="Type 1-4">
+      <button style="width:100%;background:#0f0;color:#111;border:none;padding:10px;border-radius:8px;font-weight:700;cursor:pointer" onclick="ussdReply()">SEND</button>
+    </div>
+    <div class="keypad"><button onclick="press('1')">1</button><button onclick="press('2')">2</button><button onclick="press('3')">3</button><button onclick="press('4')">4</button><button onclick="press('0')">0</button><button onclick="press('')">⌫</button></div>
+    <p style="font-size:12px;color:#666;margin-top:10px;text-align:center">Works on ANY phone. No internet. No app. Ticket comes by SMS.</p>
+    <button class="btn btn-dark" onclick="backHome()">← Home</button>
+  </div>
+</div>
+
+<!-- ===== 2. STAFF LOGIN ===== -->
+<div id="staffLogin" class="hidden">
+  <div class="header"><h1>☰ SmartQueue Staff</h1></div>
+  <div class="content" style="text-align:center">
+    <h3>Staff Login</h3><br>
+    <div class="role-row">
+      <div class="role active" onclick="setRole(this,'Teller')">🧑‍💼<br>Teller</div>
+      <div class="role" onclick="setRole(this,'Manager')">👔<br>Manager</div>
+      <div class="role" onclick="setRole(this,'IT')">💻<br>IT</div>
+    </div>
+    <input id="email" value="teller@smartqueue.com"><input id="password" type="password" value="1234">
+    <button class="btn" onclick="login()">Login as <span id="roleLabel">Teller</span></button>
+    <p id="errorMsg" class="error">Wrong email / password / role</p>
+    <div class="card" style="text-align:left;font-size:11px;margin-top:12px">Demo (1234):<br>teller@smartqueue.com<br>manager@smartqueue.com<br>it@smartqueue.com</div>
+    <button class="btn btn-dark" onclick="backHome()">← Back to Home</button>
+  </div>
+</div>
+
+<!-- ===== 3. STAFF APP ===== -->
+<div id="appScreen" class="hidden">
+  <div class="header"><h1>☰ SmartQueue</h1></div>
+  <div class="topbar"><span id="userInfo">Teller</span><span class="logout" onclick="logout()">Logout ↪</span></div>
+  <div id="tellerView" class="content"><div class="now-serving"><small>Now Serving</small><h2 id="serving2">A-041</h2></div><br><button class="btn btn-green" onclick="nextTicket()">Call Next ▶</button><button class="btn btn-orange" style="margin-top:8px" onclick="alert('Ticket completed!')">Complete ✓</button><div class="card" style="margin-top:12px">Waiting: A-042 (Web), A-043 (USSD), A-044 (Web)</div></div>
+  <div id="managerView" class="content hidden"><h3>📊 Manager Dashboard</h3><br><div class="card">Customers Today: <b>124</b> (78 Web, 46 USSD)</div><div class="card">Avg Wait: <b>12 min</b></div><div class="card">Active Tellers: <b>4/5</b></div></div>
+  <div id="itView" class="content hidden"><h3>💻 IT Panel</h3><br><div class="card">🟢 Server: Online</div><div class="card">📱 USSD Gateway: <b>Online</b></div><div class="card">🌐 Web App: <b>Online</b></div></div>
+</div>
+
+</div>
+<script>
+let role='Teller', num=41, webNum=42;
+const users={'teller@smartqueue.com':{pass:'1234',role:'Teller'},'manager@smartqueue.com':{pass:'1234',role:'Manager'},'it@smartqueue.com':{pass:'1234',role:'IT'}};
+function hideAll(){['homeScreen','customerChoice','webApp','ussdApp','staffLogin','appScreen'].forEach(id=>document.getElementById(id).classList.add('hidden'))}
+function backHome(){hideAll();document.getElementById('homeScreen').classList.remove('hidden')}
+function showCustomer(){hideAll();document.getElementById('customerChoice').classList.remove('hidden')}
+function showWebApp(){hideAll();document.getElementById('webApp').classList.remove('hidden')}
+function showUSSD(){hideAll();document.getElementById('ussdApp').classList.remove('hidden')}
+function showStaffLogin(){hideAll();document.getElementById('staffLogin').classList.remove('hidden')}
+function sel(el){document.querySelectorAll('#webApp .service').forEach(s=>s.classList.remove('active'));el.classList.add('active')}
+function getWebTicket(){webNum++;document.getElementById('webTicketNum').innerText='A-0'+webNum;document.getElementById('webTicket').classList.remove('hidden');alert('Ticket A-0'+webNum+' sent by SMS!')}
+function press(v){let i=document.getElementById('ussdInput');if(v==='')i.value='';else i.value+=v}
+function ussdReply(){
+  let v=document.getElementById('ussdInput').value.trim();
+  let map={'1':'Deposit','2':'Withdrawal','3':'Account opening','4':'Loan inquiry'};
+  let scr=document.getElementById('ussdScreen');
+  if(map[v]){scr.innerHTML='You selected: <b>'+map[v]+'</b><br><br>Your Ticket: <b>A-043</b><br>Wait: ~15 min<br>SMS sent! ✅<br><br>0. Back';}
+  else if(v==='0'){scr.innerHTML='Now Serving: A-041<br>Your Ticket: A-043<br>You are 2nd in queue.<br>~10 min left.'}
+  else{scr.innerHTML='Invalid. Try again:<br>1. Deposit<br>2. Withdrawal<br>3. Account opening<br>4. Loan inquiry<br>0. Check Status'}
+  document.getElementById('ussdInput').value='';
+}
+function setRole(el,r){document.querySelectorAll('.role').forEach(x=>x.classList.remove('active'));el.classList.add('active');role=r;document.getElementById('roleLabel').innerText=r;document.getElementById('email').value=r.toLowerCase()+'@smartqueue.com'}
+function login(){
+  let e=document.getElementById('email').value.toLowerCase().trim(),p=document.getElementById('password').value.trim(),u=users[e];
+  if(u&&u.pass===p&&u.role===role){hideAll();document.getElementById('appScreen').classList.remove('hidden');document.getElementById('userInfo').innerText=role;['tellerView','managerView','itView'].forEach(id=>document.getElementById(id).classList.add('hidden'));document.getElementById(role==='Teller'?'tellerView':role==='Manager'?'managerView':'itView').classList.remove('hidden')}
+  else document.getElementById('errorMsg').style.display='block';
+}
+function logout(){backHome()}
+function nextTicket(){num++;document.getElementById('serving2').innerText='A-0'+num;document.getElementById('serving1').innerText='A-0'+num}
+</script>
+</body>
+</html>
