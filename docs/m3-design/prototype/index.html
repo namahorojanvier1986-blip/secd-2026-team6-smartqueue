@@ -5,35 +5,43 @@
 <title>SmartQueue</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-body{background:#f0f2f5;display:flex;justify-content:center;padding:10px}
-.phone{width:390px;background:white;border-radius:24px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.15);border:4px solid #111;min-height:600px}
-.header{background:#1e5bbf;color:white;padding:10px;text-align:center}
-.content{padding:10px}.hidden{display:none}
-.btn{width:100%;border:none;padding:13px;border-radius:12px;font-weight:800;cursor:pointer;color:white;background:#1e5bbf;font-size:16px}
-.btn-green{background:#2ea36b}.btn-dark{background:#222}.btn-orange{background:#ff9800}
-input{width:100%;padding:12px;border:2px solid #ddd;border-radius:12px;margin-bottom:10px;font-size:15px}
-.lang-bar{display:flex;gap:5px;justify-content:center}.lang-bar button{border:2px solid #ddd;background:white;padding:6px 12px;border-radius:20px;cursor:pointer;font-size:13px;font-weight:800}.lang-bar button.active{background:#1e5bbf;color:white}
-.big-icon-btn{border:2px solid #ddd;border-radius:14px;padding:12px;margin-bottom:8px;cursor:pointer;text-align:center;background:white}
-.icon{font-size:32px;display:block}.label{font-size:17px;font-weight:800}.sub{font-size:13px;color:#555}
-.cat{background:#1e5bbf;color:white;padding:6px 10px;border-radius:8px;font-weight:800;font-size:13px;margin:10px 0 6px}
-.service{display:flex;align-items:center;gap:8px;border-bottom:1px solid #eee;padding:8px 4px;cursor:pointer;background:white}
-.service:active{background:#eaf2ff}.service.active{background:#eaf2ff;border-left:4px solid #1e5bbf}
-.service .ic{font-size:22px;width:28px;text-align:center}.service b{font-size:14px;flex:1}.service small{color:#888;font-size:11px;display:block}.service .arrow{color:#999;font-size:14px}
-.now-serving{background:#d6e8ff;border-radius:12px;text-align:center;padding:10px}.now-serving h2{color:#1e5bbf;font-size:36px}
-.steps{display:flex;gap:6px;text-align:center;margin:8px 0}.step{flex:1;background:#f0f6ff;border-radius:10px;padding:8px 2px}.step span{font-size:22px}.step p{font-size:10px;font-weight:700}
+body{background:#f5f5f5;display:flex;justify-content:center;padding:10px}
+.phone{width:390px;background:white;border-radius:24px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.15);border:4px solid #111;min-height:640px}
+.header{background:#1e5bbf;color:white;padding:14px 12px;display:flex;align-items:center;gap:12px}
+.header .menu{font-size:20px;cursor:pointer}
+.header h1{font-size:20px;font-weight:800}
+.content{padding:12px}.hidden{display:none}
+.lang-bar{display:flex;gap:5px;justify-content:center;margin:8px 0}.lang-bar button{border:2px solid #ddd;background:white;padding:6px 12px;border-radius:20px;cursor:pointer;font-size:13px;font-weight:800}.lang-bar button.active{background:#1e5bbf;color:white}
+/* FORMAT NK'IFO - NOW SERVING GRAY */
+.now-serving{background:#d9d9d9;border-radius:22px;text-align:center;padding:16px 10px;margin:6px 0}
+.now-serving .title{color:#1e5bbf;font-size:28px;font-weight:500}
+.now-serving h2{color:#1e5bbf;font-size:40px;font-weight:800;margin:6px 0}
+.now-serving p{color:#1e5bbf;font-size:13px;font-weight:700}
+/* 2 BUTTONS NK'IFO */
+.two-btns{display:flex;gap:10px;margin:16px 0}
+.two-btns button{flex:1;border:none;padding:12px;border-radius:20px;font-weight:700;font-size:14px;cursor:pointer;color:white}
+.btn-blue{background:#1e5bbf}.btn-green{background:#2ea36b}.btn-dark{background:#222}.btn-orange{background:#ff9800}
+.btn{width:100%;border:none;padding:13px;border-radius:20px;font-weight:800;cursor:pointer;color:white;background:#1e5bbf;font-size:15px}
+input{width:100%;padding:12px;border:2px solid #ddd;border-radius:20px;margin-bottom:10px;font-size:15px}
+/* SELECT A SERVICE - NK'IFO */
+.select-title{text-align:center;font-weight:700;font-size:15px;margin:14px 0}
+.service-btn{width:100%;background:white;border:1px solid #e0e0e0;border-radius:20px;padding:14px;text-align:center;font-weight:800;font-size:15px;cursor:pointer;margin-bottom:10px}
+.service-btn:active,.service-btn.active{background:#eaf2ff;border-color:#1e5bbf;color:#1e5bbf}
+.service-btn small{display:block;font-weight:400;color:#888;font-size:11px;margin-top:2px}
+.cat{background:#1e5bbf;color:white;padding:7px 10px;border-radius:20px;font-weight:800;font-size:13px;margin:10px 0;text-align:center}
+.big-icon-btn{border:1px solid #e0e0e0;border-radius:20px;padding:14px;margin-bottom:10px;cursor:pointer;text-align:center;background:white}
+.icon{font-size:28px;display:block}.label{font-size:16px;font-weight:800}.sub{font-size:12px;color:#555}
+.steps{display:flex;gap:6px;text-align:center;margin:8px 0}.step{flex:1;background:#f0f6ff;border-radius:10px;padding:8px 2px}.step span{font-size:20px}.step p{font-size:10px;font-weight:700}
 .help-btn{position:fixed;bottom:16px;right:16px;background:#ff0000;color:white;border:none;width:52px;height:52px;border-radius:50%;font-size:24px;cursor:pointer}
-.ussd{border:2px solid #111;border-radius:14px;padding:10px;background:#111;color:#0f0}.ussd input{background:#111;color:#0f0;border:1px solid #0f0;text-align:center}
+.ussd{border:2px solid #111;border-radius:14px;padding:10px;background:#111;color:#0f0}.ussd input{background:#111;color:#0f0;border:1px solid #0f0;text-align:center;border-radius:8px}
 .keypad{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:8px}.keypad button{background:#333;color:white;border:none;padding:12px;border-radius:10px;font-size:18px;cursor:pointer}
 .role-row{display:flex;gap:6px}.role{flex:1;padding:12px;border:2px solid #ddd;border-radius:12px;text-align:center;font-weight:800;cursor:pointer;font-size:13px;line-height:1.3}.role span{font-size:22px;display:block}.role.active{border-color:#1e5bbf;background:#eaf2ff}
 .cust-row{display:flex;gap:4px;flex-wrap:nowrap}
 .cust-type{flex:1 1 0;min-width:0;border:2px solid #ddd;background:white;border-radius:10px;padding:6px 2px;text-align:center;cursor:pointer;font-weight:800;line-height:1.2;white-space:nowrap;overflow:hidden}
-.cust-type span{font-size:16px;display:block;line-height:1}
-.cust-type b{font-size:10px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cust-type small{font-size:9px;font-weight:400;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cust-type.active{border-color:#1e5bbf;background:#eaf2ff}
+.cust-type span{font-size:16px;display:block;line-height:1}.cust-type b{font-size:10px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.cust-type small{font-size:9px;font-weight:400;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.cust-type.active{border-color:#1e5bbf;background:#eaf2ff}
 .topbar{display:flex;justify-content:space-between;padding:8px;background:#eef2ff;font-weight:700;font-size:14px}
-.card{background:#f8f9fa;border-radius:10px;padding:10px;margin-bottom:8px;text-align:center}
-.voice{width:100%;background:#ffeb3b;border:2px solid #ff9800;padding:10px;border-radius:10px;font-weight:800;cursor:pointer;font-size:14px;margin-bottom:8px}
+.card{background:#f8f9fa;border-radius:16px;padding:10px;margin-bottom:8px;text-align:center}
+.voice{width:100%;background:#ffeb3b;border:2px solid #ff9800;padding:10px;border-radius:20px;font-weight:800;cursor:pointer;font-size:14px;margin-bottom:8px}
 .wait-box{background:#fff3cd;border:2px solid #ffc107;border-radius:8px;padding:6px;margin-top:6px;font-size:12px}
 .live-dot{color:#e74c3c;animation:blink 1s infinite}@keyframes blink{50%{opacity:0}}
 .term{color:#1e5bbf;font-weight:800}
@@ -47,7 +55,7 @@ input{width:100%;padding:12px;border:2px solid #ddd;border-radius:12px;margin-bo
 <div class="phone">
 <div style="background:#eef2ff;padding:6px;text-align:center">
   <div style="font-size:13px;font-weight:800" data-i18n="chooseLang">CHOOSE LANGUAGE</div>
-  <div class="lang-bar" style="margin-top:4px">
+  <div class="lang-bar">
     <button id="lang-en" onclick="setLang('en')">ENG</button>
     <button id="lang-rw" class="active" onclick="setLang('rw')">KINY</button>
     <button id="lang-fr" onclick="setLang('fr')">FR</button>
@@ -55,16 +63,24 @@ input{width:100%;padding:12px;border:2px solid #ddd;border-radius:12px;margin-bo
   </div>
 </div>
 
-<!-- HOME -->
+<!-- HOME - FORMAT NK'IFO -->
 <div id="homeScreen">
-  <div class="header"><h1 style="font-size:20px">🏦 SmartQueue</h1></div>
+  <div class="header"><span class="menu" onclick="showCustomer()">☰</span><h1>SmartQueue</h1></div>
   <div class="content">
-    <div class="steps">
-      <div class="step"><span>1️⃣</span><p data-i18n="step1">HITAMO</p></div>
-      <div class="step"><span>➡️</span><p><span data-i18n="step2a">FATA</span> <span class="term">TICKET</span></p></div>
-      <div class="step"><span>🪑</span><p data-i18n="step3">TEGEREZA</p></div>
-      <div class="step"><span>🔔</span><p data-i18n="step4">HAMAGARWA</p></div>
+    <!-- NOW SERVING - GRAY BOX NK'IFO -->
+    <div class="now-serving">
+      <div class="title" data-i18n="nowServing">Now Serving</div>
+      <h2 id="homeServing">A-041</h2>
+      <p>~ <span class="waitTime">15</span> <span data-i18n="min">minutes</span></p>
+      <div class="wait-box"><span class="live-dot">●</span> LIVE - 👥 <b><span class="peopleAheadNum">5</span></b> <span data-i18n="aheadOfYou">imbere yawe</span></div>
     </div>
+    <!-- 2 BUTTONS NK'IFO -->
+    <div class="two-btns">
+      <button class="btn-blue" onclick="showCustomer()">🎫 <span data-i18n="getMyTicket">Get my ticket</span></button>
+      <button class="btn-green" onclick="checkStatus()">👀 <span data-i18n="checkStatus">Check status</span></button>
+    </div>
+    <div id="statusBox" class="card hidden" style="background:#e6f7ee;border:2px solid #2ea36b"><b>🎫 <span data-i18n="yourTicket">TICKET Yawe</span>: A-042</b><br>⏳ <span data-i18n="wait">Tegereza</span>: ~<span class="waitTime">15</span> <span data-i18n="min">min</span><br>👥 <span class="peopleAheadNum">5</span> <span data-i18n="aheadOfYou">imbere yawe</span></div>
+
     <button class="voice" onclick="speak()">🎤 <span data-i18n="hearVoice">UMVA IJWI</span></button>
     <div class="small-search">
       <input id="homeSearch" onkeyup="filterServices('homeSearch','homeList')" onfocus="showAllOnSearch('homeSearch','homeList')" data-i18n-ph="searchPh" placeholder="🔍 Shaka Service...">
@@ -81,26 +97,34 @@ input{width:100%;padding:12px;border:2px solid #ddd;border-radius:12px;margin-bo
       </div>
       <div id="priorityInfo" class="hidden" style="text-align:center;font-size:11px;margin-top:4px;color:#d35400;font-weight:700">⚡ <span data-i18n="priorityMsg">Uzahabwa Priority - Ntuzategereza cyane!</span></div>
     </div>
+
+    <!-- SELECT A SERVICE - NK'IFO -->
+    <div id="homeHint" class="select-title">→ <span data-i18n="selectService">Select a service</span> - <span data-i18n="pressSearch">Kanda Search urebe Services</span></div>
     <div id="homeList" class="hidden">
-      <div style="font-weight:800;font-size:14px;margin:6px 0">⭐ <span data-i18n="importantTitle">IMPORTANT - 5</span></div>
-      <div class="service" onclick="quickTicket('Deposit')"><span class="ic">💵</span><div style="flex:1"><b data-i18n="sDeposit">Kubitsa</b><small data-i18n="sDepositSub">Shyiramo amafaranga - Deposit</small></div><span class="arrow">→</span></div>
-      <div class="service" onclick="quickTicket('Withdrawal')"><span class="ic">💵</span><div style="flex:1"><b data-i18n="sWithdraw">Kubikuza</b><small data-i18n="sWithdrawSub">Kuramo - Withdrawal</small></div><span class="arrow">→</span></div>
-      <div class="service" onclick="quickTicket('Loan')"><span class="ic">💳</span><div style="flex:1"><b data-i18n="sLoan">Inguzanyo</b><small data-i18n="sLoanSub">Baza - Loan</small></div><span class="arrow">→</span></div>
-      <div class="service" onclick="quickTicket('MoMo')"><span class="ic">📱</span><div style="flex:1"><b>MoMo</b><small>MoMo / Airtel Money</small></div><span class="arrow">→</span></div>
-      <div class="service" onclick="quickTicket('Balance')"><span class="ic">💰</span><div style="flex:1"><b data-i18n="sBalance">Kureba Amafaranga</b><small data-i18n="sBalanceSub">Reba - Balance</small></div><span class="arrow">→</span></div>
+      <button class="service-btn" onclick="quickTicket('Deposit')">💵 <span data-i18n="sDeposit">Kubitsa</span><small data-i18n="sDepositSub">Shyiramo - Deposit</small></button>
+      <button class="service-btn" onclick="quickTicket('Withdrawal')">💵 <span data-i18n="sWithdraw">Kubikuza</span><small data-i18n="sWithdrawSub">Kuramo - Withdrawal</small></button>
+      <button class="service-btn" onclick="quickTicket('Loan')">💳 <span data-i18n="sLoan">Inguzanyo</span><small data-i18n="sLoanSub">Baza - Loan</small></button>
+      <button class="service-btn" onclick="quickTicket('MoMo')">📱 MoMo<small>MoMo / Airtel Money</small></button>
+      <button class="service-btn" onclick="quickTicket('Balance')">💰 <span data-i18n="sBalance">Kureba Amafaranga</span><small data-i18n="sBalanceSub">Reba - Balance</small></button>
       <div id="homeNoResult" class="no-result hidden" data-i18n="noResult">😢 Nta service ibonetse</div>
     </div>
-    <div id="homeHint" class="search-hint">👆 <span data-i18n="pressSearch">Kanda Search hejuru urebe Services</span> 🔍</div>
+
     <div id="quickTicketBox" class="card hidden" style="background:#e6f7ee;border:2px solid #2ea36b"><b style="font-size:18px">🎫 <span data-i18n="yourTicket">TICKET Yawe</span>: <span id="quickTicketNum">A-042</span></b><br><span id="quickTicketService">Deposit</span> | <span id="quickPriorityLabel">Normal</span><br><span>📱 <span class="term">SMS</span> <span data-i18n="smsSent">Yoherejwe</span> ✅ | ⏳ <span data-i18n="wait">Tegereza</span>: <span class="waitTime">15</span> <span data-i18n="min">min</span></span></div>
+
+    <div class="steps">
+      <div class="step"><span>1️⃣</span><p data-i18n="step1">HITAMO</p></div>
+      <div class="step"><span>➡️</span><p><span data-i18n="step2a">FATA</span> <span class="term">TICKET</span></p></div>
+      <div class="step"><span>🪑</span><p data-i18n="step3">TEGEREZA</p></div>
+      <div class="step"><span>🔔</span><p data-i18n="step4">HAMAGARWA</p></div>
+    </div>
     <div class="big-icon-btn" onclick="showCustomer()"><span class="icon">👤🎫</span><div class="label" data-i18n="iAmCustomer">NDI UMUKIRIYA</div><div class="sub"><span data-i18n="pressHere">Kanda hano</span> | 🌐 <span class="term">WEB APP</span> | 📱 <span class="term">USSD</span> *384*123#</div></div>
     <div class="big-icon-btn" onclick="showStaffLogin()"><span class="icon">🧑‍💼🔐</span><div class="label" data-i18n="iAmStaff">NDI UMUKOZI</div><div class="sub"><span class="term">TELLER / MANAGER / IT</span> - <span data-i18n="loginWord">Login</span></div></div>
-    <div class="card" style="font-size:15px">📍 <b><span data-i18n="nowServing">Turakwakiriye</span>: <span id="homeServing">A-041</span></b> | ⏳ <span data-i18n="wait">Tegereza</span>: <b><span class="waitTime">15</span> <span data-i18n="min">min</span></b><br><div class="wait-box"><span class="live-dot">●</span> LIVE - 👥 <span data-i18n="peopleAhead">Abantu</span> <b><span class="peopleAheadNum">5</span></b> <span data-i18n="aheadOfYou">imbere yawe</span></div></div>
   </div>
 </div>
 
 <!-- CUSTOMER -->
 <div id="customerChoice" class="hidden">
-  <div class="header"><h1>☰ <span data-i18n="custHeader">Umukiriya</span></h1></div>
+  <div class="header"><span class="menu" onclick="backHome()">☰</span><h1><span data-i18n="custHeader">Umukiriya</span></h1></div>
   <div class="content" style="text-align:center">
     <h3 style="font-size:16px">👤 <span data-i18n="custTitle">Customer - Umukiriya</span></h3><br>
     <div class="cust-row">
@@ -119,11 +143,12 @@ input{width:100%;padding:12px;border:2px solid #ddd;border-radius:12px;margin-bo
   </div>
 </div>
 
-<!-- WEB APP -->
+<!-- WEB APP - FORMAT NK'IFO -->
 <div id="webApp" class="hidden">
-  <div class="header"><h1>☰ SmartQueue</h1></div>
+  <div class="header"><span class="menu" onclick="backHome()">☰</span><h1>SmartQueue</h1></div>
   <div class="content">
-    <div class="now-serving"><div style="font-size:15px">🔔 <span data-i18n="nowServingUpper">TURAKWAKIRIYE</span></div><h2 id="serving1">A-041</h2><p>⏳ <span data-i18n="wait">Tegereza</span>: <b><span class="waitTime">15</span> <span data-i18n="min">min</span></b></p><div class="wait-box"><span class="live-dot">●</span> LIVE - 👥 <b><span class="peopleAheadNum">5</span></b> <span data-i18n="aheadOfYou">imbere yawe</span> | ⏱️ <span data-i18n="perPerson">Buri muntu ~3 min</span></div></div>
+    <div class="now-serving"><div class="title" data-i18n="nowServing">Now Serving</div><h2 id="serving1">A-041</h2><p>~ <span class="waitTime">15</span> <span data-i18n="min">minutes</span></p><div class="wait-box"><span class="live-dot">●</span> LIVE - 👥 <b><span class="peopleAheadNum">5</span></b> <span data-i18n="aheadOfYou">imbere yawe</span></div></div>
+    <div class="two-btns"><button class="btn-blue" onclick="getWebTicket()">🎫 <span data-i18n="getMyTicket">Get my ticket</span></button><button class="btn-green" onclick="checkStatus()">👀 <span data-i18n="checkStatus">Check status</span></button></div>
     <div class="small-search">
       <input id="webSearch" onkeyup="filterServices('webSearch','serviceList')" onfocus="showAllOnSearch('webSearch','serviceList')" data-i18n-ph="searchPh" placeholder="🔍 Shaka Service...">
       <button onclick="clearSearch('webSearch','serviceList')">✖</button>
@@ -138,52 +163,40 @@ input{width:100%;padding:12px;border:2px solid #ddd;border-radius:12px;margin-bo
         <div class="priority-opt active-p" onclick="setPriority(this,'normal')"><span>👤</span><small data-i18n="pNormal">Normal</small></div>
       </div>
     </div>
-    <div id="webHint" class="search-hint">👆 <span data-i18n="pressSearch">Kanda Search hejuru urebe Services</span> 🔍</div>
+    <div id="webHint" class="select-title">→ <span data-i18n="selectService">Select a service</span> - <span data-i18n="pressSearch">Kanda Search urebe Services</span></div>
     <div id="serviceList" class="hidden">
-      <div style="font-weight:800;font-size:14px;margin:6px 0">⭐ <span data-i18n="importantTitle">IMPORTANT - 5</span></div>
-      <div class="service" onclick="sel(this)"><span class="ic">💵</span><div style="flex:1"><b data-i18n="sDeposit">Kubitsa</b><small data-i18n="sDepositSub">Shyiramo - Deposit</small></div><span class="arrow">→</span></div>
-      <div class="service" onclick="sel(this)"><span class="ic">💵</span><div style="flex:1"><b data-i18n="sWithdraw">Kubikuza</b><small data-i18n="sWithdrawSub">Kuramo - Withdrawal</small></div><span class="arrow">→</span></div>
-      <div class="service" onclick="sel(this)"><span class="ic">💳</span><div style="flex:1"><b data-i18n="sLoan">Inguzanyo</b><small data-i18n="sLoanSub">Baza - Loan</small></div><span class="arrow">→</span></div>
-      <div class="service" onclick="sel(this)"><span class="ic">📱</span><div style="flex:1"><b>MoMo</b><small>MoMo / Airtel Money</small></div><span class="arrow">→</span></div>
-      <div class="service" onclick="sel(this)"><span class="ic">💰</span><div style="flex:1"><b data-i18n="sBalance">Kureba Amafaranga</b><small data-i18n="sBalanceSub">Reba - Balance</small></div><span class="arrow">→</span></div>
-      <div style="background:#1e5bbf;color:white;padding:7px;border-radius:8px;text-align:center;font-weight:800;margin:10px 0 6px;font-size:13px">📋 <span data-i18n="allServicesTitle">SERVICES ZOSE - ALL</span> (32)</div>
-      <div class="cat">🏦 <span data-i18n="catAccounts">KONTI</span></div>
-      <div class="service" onclick="sel(this)"><span class="ic">👤</span><div style="flex:1"><b data-i18n="sOpen">Gufungura Konti</b><small><span data-i18n="sOpenSub">Zana</span> <span class="term">ID</span> - Open Account</small></div><span class="arrow">→</span></div>
-      <div class="service" onclick="sel(this)"><span class="ic">🧾</span><div style="flex:1"><b data-i18n="sStatement">Raporo</b><small data-i18n="sStatementSub">Fungura - Statement</small></div><span class="arrow">→</span></div>
-      <div class="service" onclick="sel(this)"><span class="ic">🪪</span><div style="flex:1"><b data-i18n="sKyc">Guhindura Amakuru</b><small><span class="term">ID</span>, Phone - Update Info</small></div><span class="arrow">→</span></div>
-      <div class="cat">💵 <span data-i18n="catCash">AMAFARANGA</span></div>
-      <div class="service" onclick="sel(this)"><span class="ic">📄</span><div style="flex:1"><b data-i18n="sCheque">Sheki</b><small data-i18n="sChequeSub">Shyira sheki - Cheque</small></div><span class="arrow">→</span></div>
-      <div class="cat">💸 <span data-i18n="catPay">KOHEREZA</span></div>
-      <div class="service" onclick="sel(this)"><span class="ic">🔁</span><div style="flex:1"><b data-i18n="sTransfer">Kohereza Amafaranga</b><small data-i18n="sTransferSub">Oherereza undi - Transfer</small></div><span class="arrow">→</span></div>
-      <div class="service" onclick="sel(this)"><span class="ic">🧾</span><div style="flex:1"><b data-i18n="sBill">Kwishyura</b><small data-i18n="sBillSub">Amashanyarazi, Amazi - Bill</small></div><span class="arrow">→</span></div>
-      <div class="service" onclick="sel(this)"><span class="ic">👥</span><div style="flex:1"><b data-i18n="sSalary">Umushahara</b><small data-i18n="sSalarySub">Ku bakoresha - Salary</small></div><span class="arrow">→</span></div>
-      <div class="cat">💳 <span data-i18n="catLoan">INGUZANYO</span></div>
-      <div class="service" onclick="sel(this)"><span class="ic">👤</span><div style="flex:1"><b data-i18n="sPersonal">Inguzanyo Yanjye</b><small data-i18n="sPersonalSub">Ku bintu byawe - Personal</small></div><span class="arrow">→</span></div>
-      <div class="service" onclick="sel(this)"><span class="ic">🏪</span><div style="flex:1"><b data-i18n="sBusiness">Inguzanyo y'Ubucuruzi</b><small data-i18n="sBusinessSub">Ku bucuruzi - Business</small></div><span class="arrow">→</span></div>
-      <div class="service" onclick="sel(this)"><span class="ic">🏠</span><div style="flex:1"><b data-i18n="sHouse">Inzu</b><small data-i18n="sHouseSub">Kugura / Kubaka - House</small></div><span class="arrow">→</span></div>
-      <div class="service" onclick="sel(this)"><span class="ic">🚗</span><div style="flex:1"><b data-i18n="sCar">Imodoka</b><small data-i18n="sCarSub">Kugura - Car</small></div><span class="arrow">→</span></div>
-      <div class="service" onclick="sel(this)"><span class="ic">✅</span><div style="flex:1"><b data-i18n="sRepay">Kwishyura Inguzanyo</b><small data-i18n="sRepaySub">Ishyura - Repay</small></div><span class="arrow">→</span></div>
-      <div class="cat">💳 <span data-i18n="catCard">IKARITA</span></div>
-      <div class="service" onclick="sel(this)"><span class="ic">💳</span><div style="flex:1"><b><span class="term">ATM</span> <span data-i18n="sAtm2">Ikarita</span></b><small data-i18n="sAtmSub">Nshya / Gusimbuza</small></div><span class="arrow">→</span></div>
-      <div class="service" onclick="sel(this)"><span class="ic">💎</span><div style="flex:1"><b><span class="term">Credit Card</span></b><small data-i18n="sCreditSub">Saba ikarita</small></div><span class="arrow">→</span></div>
-      <div class="service" onclick="sel(this)"><span class="ic">🚫</span><div style="flex:1"><b data-i18n="sLost">Ikarita Yatakaye</b><small><span data-i18n="sLostSub">Bika - Wibagiwe</span> <span class="term">PIN</span></small></div><span class="arrow">→</span></div>
-      <div class="cat">📱 <span data-i18n="catDigital">TELEFONI</span></div>
-      <div class="service" onclick="sel(this)"><span class="ic">📱</span><div style="flex:1"><b data-i18n="sMobile1">Banki kuri Telefoni</b><small data-i18n="sMobileSub">Fungura App - Mobile Banking</small></div><span class="arrow">→</span></div>
-      <div class="service" onclick="sel(this)"><span class="ic">🌐</span><div style="flex:1"><b data-i18n="sInternet1">Banki kuri Internet</b><small data-i18n="sInternetSub">Mudasobwa - Internet Banking</small></div><span class="arrow">→</span></div>
-      <div class="cat">💱 <span data-i18n="catForex">AMADEVIZE</span></div>
-      <div class="service" onclick="sel(this)"><span class="ic">💱</span><div style="flex:1"><b data-i18n="sForex1">Guhindura Amafaranga</b><small><span class="term">FOREX</span> - Dollar, Euro</small></div><span class="arrow">→</span></div>
-      <div class="service" onclick="sel(this)"><span class="ic">🌍</span><div style="flex:1"><b data-i18n="sAbroad">Kohereza Hanze</b><small><span class="term">Western Union, MoneyGram</span></small></div><span class="arrow">→</span></div>
-      <div class="cat">📈 <span data-i18n="catInvest">KUZIGAMA</span></div>
-      <div class="service" onclick="sel(this)"><span class="ic">📈</span><div style="flex:1"><b data-i18n="sFixed1">Kuzigama</b><small data-i18n="sFixedSub">Bika - Fixed Deposit</small></div><span class="arrow">→</span></div>
-      <div class="service" onclick="sel(this)"><span class="ic">🛡️</span><div style="flex:1"><b data-i18n="sIns">Ubwishingizi</b><small data-i18n="sInsSub">Ubuzima, Imodoka - Insurance</small></div><span class="arrow">→</span></div>
-      <div class="service" onclick="sel(this)"><span class="ic">👴</span><div style="flex:1"><b data-i18n="sPension">Pansiyo</b><small data-i18n="sPensionSub">Ku basaza - Pension</small></div><span class="arrow">→</span></div>
-      <div class="cat">🛎️ <span data-i18n="catHelp">UBUFASHA</span></div>
-      <div class="service" onclick="sel(this)"><span class="ic">📣</span><div style="flex:1"><b data-i18n="sComplaint">Ikibazo</b><small data-i18n="sComplaintSub">Hari ikibazo? - Complaint</small></div><span class="arrow">→</span></div>
-      <div class="service" onclick="sel(this)"><span class="ic">❓</span><div style="flex:1"><b data-i18n="sAsk">Kubaza</b><small data-i18n="sAskSub">Baza - Ask</small></div><span class="arrow">→</span></div>
-      <div class="service" onclick="sel(this)"><span class="ic">⭐</span><div style="flex:1"><b><span data-i18n="sVip1">Abafite Ubumuga</span> / <span class="term">VIP</span></b><small data-i18n="sVipSub">Abasaza, Abatwite, Abamugaye</small></div><span class="arrow">→</span></div>
+      <button class="service-btn" onclick="selBtn(this,'Deposit')">💵 <span data-i18n="sDeposit">Kubitsa</span><small data-i18n="sDepositSub">Shyiramo - Deposit</small></button>
+      <button class="service-btn" onclick="selBtn(this,'Withdrawal')">💵 <span data-i18n="sWithdraw">Kubikuza</span><small data-i18n="sWithdrawSub">Kuramo - Withdrawal</small></button>
+      <button class="service-btn" onclick="selBtn(this,'Loan')">💳 <span data-i18n="sLoan">Inguzanyo</span><small data-i18n="sLoanSub">Baza - Loan</small></button>
+      <button class="service-btn" onclick="selBtn(this,'MoMo')">📱 MoMo<small>MoMo / Airtel Money</small></button>
+      <button class="service-btn" onclick="selBtn(this,'Balance')">💰 <span data-i18n="sBalance">Kureba Amafaranga</span><small data-i18n="sBalanceSub">Reba - Balance</small></button>
+      <div class="cat">📋 <span data-i18n="allServicesTitle">SERVICES ZOSE - ALL</span> (32)</div>
+      <button class="service-btn" onclick="selBtn(this,'Open Account')">👤 <span data-i18n="sOpen">Gufungura Konti</span><small><span data-i18n="sOpenSub">Zana</span> <span class="term">ID</span></small></button>
+      <button class="service-btn" onclick="selBtn(this,'Statement')">🧾 <span data-i18n="sStatement">Raporo</span><small data-i18n="sStatementSub">Fungura - Statement</small></button>
+      <button class="service-btn" onclick="selBtn(this,'Cheque')">📄 <span data-i18n="sCheque">Sheki</span><small data-i18n="sChequeSub">Shyira sheki - Cheque</small></button>
+      <button class="service-btn" onclick="selBtn(this,'Transfer')">🔁 <span data-i18n="sTransfer">Kohereza Amafaranga</span><small data-i18n="sTransferSub">Oherereza - Transfer</small></button>
+      <button class="service-btn" onclick="selBtn(this,'Bill')">🧾 <span data-i18n="sBill">Kwishyura</span><small data-i18n="sBillSub">Amashanyarazi, Amazi - Bill</small></button>
+      <button class="service-btn" onclick="selBtn(this,'Salary')">👥 <span data-i18n="sSalary">Umushahara</span><small data-i18n="sSalarySub">Ku bakoresha - Salary</small></button>
+      <button class="service-btn" onclick="selBtn(this,'Personal Loan')">👤 <span data-i18n="sPersonal">Inguzanyo Yanjye</span><small data-i18n="sPersonalSub">Ku bintu byawe</small></button>
+      <button class="service-btn" onclick="selBtn(this,'Business Loan')">🏪 <span data-i18n="sBusiness">Inguzanyo y'Ubucuruzi</span><small data-i18n="sBusinessSub">Ku bucuruzi</small></button>
+      <button class="service-btn" onclick="selBtn(this,'House')">🏠 <span data-i18n="sHouse">Inzu</span><small data-i18n="sHouseSub">Kugura / Kubaka</small></button>
+      <button class="service-btn" onclick="selBtn(this,'Car')">🚗 <span data-i18n="sCar">Imodoka</span><small data-i18n="sCarSub">Kugura - Car</small></button>
+      <button class="service-btn" onclick="selBtn(this,'ATM Card')">💳 <span class="term">ATM</span> <span data-i18n="sAtm2">Ikarita</span><small data-i18n="sAtmSub">Nshya / Gusimbuza</small></button>
+      <button class="service-btn" onclick="selBtn(this,'Credit Card')">💎 <span class="term">Credit Card</span><small data-i18n="sCreditSub">Saba ikarita</small></button>
+      <button class="service-btn" onclick="selBtn(this,'Lost Card')">🚫 <span data-i18n="sLost">Ikarita Yatakaye</span><small><span data-i18n="sLostSub">Bika - Wibagiwe</span> <span class="term">PIN</span></small></button>
+      <button class="service-btn" onclick="selBtn(this,'Mobile Banking')">📱 <span data-i18n="sMobile1">Banki kuri Telefoni</span><small data-i18n="sMobileSub">Fungura App</small></button>
+      <button class="service-btn" onclick="selBtn(this,'Internet Banking')">🌐 <span data-i18n="sInternet1">Banki kuri Internet</span><small data-i18n="sInternetSub">Mudasobwa</small></button>
+      <button class="service-btn" onclick="selBtn(this,'Forex')">💱 <span data-i18n="sForex1">Guhindura Amafaranga</span><small><span class="term">FOREX</span> - Dollar, Euro</small></button>
+      <button class="service-btn" onclick="selBtn(this,'Send Abroad')">🌍 <span data-i18n="sAbroad">Kohereza Hanze</span><small><span class="term">Western Union, MoneyGram</span></small></button>
+      <button class="service-btn" onclick="selBtn(this,'Fixed Deposit')">📈 <span data-i18n="sFixed1">Kuzigama</span><small data-i18n="sFixedSub">Bika - Fixed</small></button>
+      <button class="service-btn" onclick="selBtn(this,'Insurance')">🛡️ <span data-i18n="sIns">Ubwishingizi</span><small data-i18n="sInsSub">Ubuzima, Imodoka</small></button>
+      <button class="service-btn" onclick="selBtn(this,'Pension')">👴 <span data-i18n="sPension">Pansiyo</span><small data-i18n="sPensionSub">Ku basaza - Pension</small></button>
+      <button class="service-btn" onclick="selBtn(this,'Complaint')">📣 <span data-i18n="sComplaint">Ikibazo</span><small data-i18n="sComplaintSub">Hari ikibazo? - Complaint</small></button>
+      <button class="service-btn" onclick="selBtn(this,'Ask')">❓ <span data-i18n="sAsk">Kubaza</span><small data-i18n="sAskSub">Baza - Ask</small></button>
+      <button class="service-btn" onclick="selBtn(this,'VIP')">⭐ <span data-i18n="sVip1">Abafite Ubumuga</span> / <span class="term">VIP</span><small data-i18n="sVipSub">Abasaza, Abatwite, Abamugaye</small></button>
       <div id="webNoResult" class="no-result hidden" data-i18n="noResult">😢 Nta service ibonetse</div>
     </div>
-    <div style="background:#fff3cd;border:2px solid #ffc107;border-radius:10px;padding:10px;text-align:center;margin:10px 0"><b>📱 <span data-i18n="writeNumber">Andika Numero yawe</span></b><br><small>Ex: 0788 123 456</small></div>
+    <div style="background:#fff3cd;border:2px solid #ffc107;border-radius:20px;padding:10px;text-align:center;margin:10px 0"><b>📱 <span data-i18n="writeNumber">Andika Numero yawe</span></b><br><small>Ex: 0788 123 456</small></div>
     <input id="custPhone" placeholder="📱 0788 123 456">
     <button class="btn btn-green" onclick="getWebTicket()">🎫 <span data-i18n="getTicket">FATA</span> <span class="term">TICKET</span> ✅</button>
     <div id="webTicket" class="card hidden" style="background:#e6f7ee"><b style="font-size:18px">🎫 <span data-i18n="yourTicket">TICKET Yawe</span>: <span id="webTicketNum">A-042</span></b><br><span id="webTicketPriority">Normal</span><br><span style="font-size:14px">📱 <span class="term">SMS</span> <span data-i18n="smsSent">Yoherejwe</span> ✅</span><br><span id="ticketWait" style="font-weight:800;color:#e74c3c"></span><br><small id="ticketPosition"></small></div>
@@ -193,11 +206,11 @@ input{width:100%;padding:12px;border:2px solid #ddd;border-radius:12px;margin-bo
 
 <!-- USSD -->
 <div id="ussdApp" class="hidden">
-  <div class="header"><h1>📱 <span class="term">USSD</span></h1></div>
+  <div class="header"><span class="menu" onclick="backHome()">☰</span><h1>📱 <span class="term" style="color:white">USSD</span></h1></div>
   <div class="content">
     <div style="text-align:center;font-weight:800;font-size:16px">⌨️ <span data-i18n="dialThis">Kanda Iyi Numero</span><br><span style="font-size:24px;color:#1e5bbf">*384*123# 📞</span></div><br>
     <div class="ussd"><div style="font-size:12px;color:#aaa">*384*123# - SmartQueue</div><div id="ussdScreen" style="margin:10px 0;line-height:1.7;font-size:13px"></div>
-    <input id="ussdInput" data-i18n-ph="ussdType" placeholder="Andika 1-9"><button style="width:100%;background:#0f0;color:#111;border:none;padding:11px;border-radius:8px;font-weight:800;cursor:pointer" onclick="ussdReply()">📤 <span data-i18n="send">OHEREZA</span></button></div>
+    <input id="ussdInput" data-i18n-ph="ussdType" placeholder="Andika 1-9"><button style="width:100%;background:#0f0;color:#111;border:none;padding:11px;border-radius:20px;font-weight:800;cursor:pointer" onclick="ussdReply()">📤 <span data-i18n="send">OHEREZA</span></button></div>
     <div class="keypad"><button onclick="press('1')">1 💵</button><button onclick="press('2')">2 💵</button><button onclick="press('3')">3 💳</button><button onclick="press('4')">4 📱</button><button onclick="press('5')">5 💰</button><button onclick="press('6')">6 💱</button><button onclick="press('7')">7 💳</button><button onclick="press('8')">8 📈</button><button onclick="press('9')">9 ⭐</button><button onclick="press('0')">0 👀</button></div>
     <button class="btn btn-dark" style="margin-top:8px" onclick="backHome()">⬅️ <span data-i18n="back">SUBIRA</span></button>
   </div>
@@ -205,7 +218,7 @@ input{width:100%;padding:12px;border:2px solid #ddd;border-radius:12px;margin-bo
 
 <!-- STAFF -->
 <div id="staffLogin" class="hidden">
-  <div class="header"><h1>☰ Staff</h1></div>
+  <div class="header"><span class="menu" onclick="backHome()">☰</span><h1>Staff</h1></div>
   <div class="content" style="text-align:center"><h3>🔐 <span data-i18n="staffLogin">Staff Login</span></h3><br>
   <div class="role-row"><div class="role active" onclick="setRole(this,'Teller')"><span>🧑‍💼</span><span class="term">TELLER</span></div><div class="role" onclick="setRole(this,'Manager')"><span>👔</span><span class="term">MANAGER</span></div><div class="role" onclick="setRole(this,'IT')"><span>💻</span><span class="term">IT</span></div></div><br>
   <input id="email" value="teller@smartqueue.com"><input id="password" type="password" value="1234">
@@ -213,11 +226,11 @@ input{width:100%;padding:12px;border:2px solid #ddd;border-radius:12px;margin-bo
   <button class="btn btn-dark" style="margin-top:10px" onclick="backHome()">← <span data-i18n="back">SUBIRA</span></button></div>
 </div>
 <div id="appScreen" class="hidden">
-  <div class="header"><h1>☰ SmartQueue</h1></div>
+  <div class="header"><span class="menu">☰</span><h1>SmartQueue</h1></div>
   <div class="topbar"><span id="userInfo">Teller</span><span style="color:red;cursor:pointer" onclick="logout()"><span class="term">LOGOUT</span> ↪</span></div>
   <div id="tellerView" class="content">
-    <div class="now-serving"><small><span data-i18n="nowServing">Turakwakiriye</span></small><h2 id="serving2">A-041</h2><p>⏳ <span data-i18n="wait">Tegereza</span>: <b><span class="waitTime">15</span> <span data-i18n="min">min</span></b> | 👥 <span class="peopleAheadNum">5</span> <span data-i18n="inQueue">mu murongo</span></p></div><br>
-    <div style="background:#fff3cd;border:2px solid #ff9800;border-radius:10px;padding:8px;margin-bottom:8px">
+    <div class="now-serving"><div class="title"><span data-i18n="nowServing">Now Serving</span></div><h2 id="serving2">A-041</h2><p>~ <span class="waitTime">15</span> <span data-i18n="min">minutes</span> | 👥 <span class="peopleAheadNum">5</span> <span data-i18n="inQueue">mu murongo</span></p></div><br>
+    <div style="background:#fff3cd;border:2px solid #ff9800;border-radius:16px;padding:8px;margin-bottom:8px">
       <div style="font-weight:800;font-size:13px;text-align:center">⚡ PRIORITY QUEUE</div>
       <div style="font-size:12px;text-align:center;margin-top:4px">⭐ Priority: <b id="priorityCount">2</b> | Normal: <b id="normalCount">5</b><br>Next: <b id="nextPriority">P-001 👴 Ugeze Muza Bukuru</b></div>
     </div>
@@ -234,10 +247,10 @@ input{width:100%;padding:12px;border:2px solid #ddd;border-radius:12px;margin-bo
 
 <script>
 const dict={
-en:{chooseLang:"CHOOSE LANGUAGE",searchPh:"🔍 Search Service...",pressSearch:"Press Search above to see Services",hitamo:"CHOOSE",noResult:"😢 No service found",step1:"CHOOSE",step2a:"GET",step3:"WAIT",step4:"CALLED",hearVoice:"HEAR VOICE",iAmCustomer:"I'M CUSTOMER",pressHere:"Press here",iAmStaff:"I'M STAFF",loginWord:"Login",nowServing:"Now Serving",wait:"Wait",min:"min",peopleAhead:"People",aheadOfYou:"ahead of you",howWant:"How do you want?",hasInternet:"You have Internet",noInternet:"No Internet",back:"BACK",nowServingUpper:"NOW SERVING",catAccounts:"ACCOUNTS",sOpen:"Open Account",sOpenSub:"Bring ID",sBalance:"Balance",sBalanceSub:"See - Balance",sStatement:"Statement",sStatementSub:"Print - Statement",sKyc:"Update Info",catCash:"CASH",sDeposit:"Deposit",sDepositSub:"Put in - Deposit",sWithdraw:"Withdrawal",sWithdrawSub:"Take out - Withdrawal",sCheque:"Cheque",sChequeSub:"Put cheque - Cheque",catPay:"PAYMENTS",sTransfer:"Transfer Money",sTransferSub:"Send - Transfer",sBill:"Bill Payment",sBillSub:"Electricity, Water - Bill",sSalary:"Salary",sSalarySub:"For business - Salary",catLoan:"LOANS",sLoan:"Loan",sLoanSub:"Ask - Loan",sPersonal:"Personal Loan",sPersonalSub:"For your things",sBusiness:"Business Loan",sBusinessSub:"For business",sHouse:"House Loan",sHouseSub:"Buy / Build - House",sCar:"Car Loan",sCarSub:"Buy - Car",sRepay:"Repay Loan",sRepaySub:"Pay - Repay",catCard:"CARDS",sAtm2:"Card",sAtmSub:"New / Replace",sCreditSub:"Ask for card",sLost:"Lost Card",sLostSub:"Block - Forgot PIN",catDigital:"DIGITAL",sMobile1:"Mobile Banking",sMobileSub:"Open App",sInternet1:"Internet Banking",sInternetSub:"Computer",catForex:"FOREX",sForex1:"Exchange Money",sAbroad:"Send Abroad",catInvest:"INVESTMENT",sFixed1:"Fixed Deposit",sFixedSub:"Save - Fixed",sIns:"Insurance",sInsSub:"Health, Car - Insurance",sPension:"Pension",sPensionSub:"For old - Pension",catHelp:"HELP",sComplaint:"Complaint",sComplaintSub:"Problem? - Complaint",sAsk:"Ask",sAskSub:"Ask - Ask",sVip1:"Priority",sVipSub:"Old, Pregnant, Disabled",writeNumber:"Write Your Number",getTicket:"GET",yourTicket:"Your TICKET",smsSent:"Sent",sitWait:"Sit and Wait",dialThis:"Dial This Number",ussdType:"Type 1-9",send:"SEND",staffLogin:"Staff Login",loginAs:"Login as",wrongLogin:"Wrong login",callNext:"CALL NEXT",callPriority:"CALL PRIORITY",customers:"Customers",inQueue:"in queue",perPerson:"Each person ~3 min",importantTitle:"IMPORTANT - 5",allServicesTitle:"ALL SERVICES",priorityTitle:"ARE YOU PRIORITY?",pOld:"Elderly 65+",pPreg:"Pregnant",pDis:"With disability",pNormal:"Normal",priorityMsg:"You get Priority - You will not wait long!",custHeader:"Customer",custTitle:"Customer",custInd:"UMUNTU",custIndSub:"For yourself",custBiz:"UMUCURUZI",custBizSub:"Shop / Company",custVis:"UMUSHYITSI",custVisSub:"Visiting",custNamePh:"👤 Your Name - ex: Jean",custPhonePh:"📱 Phone - 0788 123 456",custError:"Write Name and Phone",custContinue:"Continue as",custOr:"OR CHOOSE",ussdWelcome:"Welcome",ussdDeposit:"Deposit",ussdWithdraw:"Withdrawal",ussdLoan:"Loan",ussdBalance:"Balance",ussdForex:"Forex",ussdCard:"Card",ussdSave:"Saving",ussdStatus:"Status",ussdTypeLabel:"Type",helpMsg:"Press CUSTOMER, choose service, press GET TICKET.",voiceMsg:"Welcome to SmartQueue. Choose your service. Press get ticket."},
-rw:{chooseLang:"HITAMO URURIMI",searchPh:"🔍 Shaka Service...",pressSearch:"Kanda Search hejuru urebe Services",hitamo:"HITAMO",noResult:"😢 Nta service ibonetse",step1:"HITAMO",step2a:"FATA",step3:"TEGEREZA",step4:"HAMAGARWA",hearVoice:"UMVA IJWI",iAmCustomer:"NDI UMUKIRIYA",pressHere:"Kanda hano",iAmStaff:"NDI UMUKOZI",loginWord:"Login",nowServing:"Turakwakiriye",wait:"Tegereza",min:"min",peopleAhead:"Abantu",aheadOfYou:"imbere yawe",howWant:"Ushaka gute?",hasInternet:"Ufite Internet",noInternet:"Nta Internet",back:"SUBIRA",nowServingUpper:"TURAKWAKIRIYE",catAccounts:"KONTI",sOpen:"Gufungura Konti",sOpenSub:"Zana ID",sBalance:"Kureba Amafaranga",sBalanceSub:"Reba - Balance",sStatement:"Raporo",sStatementSub:"Fungura - Statement",sKyc:"Guhindura Amakuru",catCash:"AMAFARANGA",sDeposit:"Kubitsa",sDepositSub:"Shyiramo - Deposit",sWithdraw:"Kubikuza",sWithdrawSub:"Kuramo - Withdrawal",sCheque:"Sheki",sChequeSub:"Shyira sheki - Cheque",catPay:"KOHEREZA",sTransfer:"Kohereza Amafaranga",sTransferSub:"Oherereza - Transfer",sBill:"Kwishyura",sBillSub:"Amashanyarazi, Amazi - Bill",sSalary:"Umushahara",sSalarySub:"Ku bakoresha - Salary",catLoan:"INGUZANYO",sLoan:"Inguzanyo",sLoanSub:"Baza - Loan",sPersonal:"Inguzanyo Yanjye",sPersonalSub:"Ku bintu byawe",sBusiness:"Inguzanyo y'Ubucuruzi",sBusinessSub:"Ku bucuruzi",sHouse:"Inzu",sHouseSub:"Kugura / Kubaka - House",sCar:"Imodoka",sCarSub:"Kugura - Car",sRepay:"Kwishyura Inguzanyo",sRepaySub:"Ishyura - Repay",catCard:"IKARITA",sAtm2:"Ikarita",sAtmSub:"Nshya / Gusimbuza",sCreditSub:"Saba ikarita",sLost:"Ikarita Yatakaye",sLostSub:"Bika - Wibagiwe PIN",catDigital:"TELEFONI",sMobile1:"Banki kuri Telefoni",sMobileSub:"Fungura App",sInternet1:"Banki kuri Internet",sInternetSub:"Mudasobwa",catForex:"AMADEVIZE",sForex1:"Guhindura Amafaranga",sAbroad:"Kohereza Hanze",catInvest:"KUZIGAMA",sFixed1:"Kuzigama",sFixedSub:"Bika - Fixed",sIns:"Ubwishingizi",sInsSub:"Ubuzima, Imodoka - Insurance",sPension:"Pansiyo",sPensionSub:"Ku basaza - Pension",catHelp:"UBUFASHA",sComplaint:"Ikibazo",sComplaintSub:"Hari ikibazo? - Complaint",sAsk:"Kubaza",sAskSub:"Baza - Ask",sVip1:"Abafite Ubumuga",sVipSub:"Abasaza, Abatwite, Abamugaye",writeNumber:"Andika Numero yawe",getTicket:"FATA",yourTicket:"TICKET Yawe",smsSent:"Yoherejwe",sitWait:"Icare utegereze",dialThis:"Kanda Iyi Numero",ussdType:"Andika 1-9",send:"OHEREZA",staffLogin:"Staff Login",loginAs:"Login as",wrongLogin:"Wrong login",callNext:"HAMAGARA",callPriority:"HAMAGARA PRIORITY",customers:"Customers",inQueue:"mu murongo",perPerson:"Buri muntu ~3 min",importantTitle:"IMPORTANT - 5",allServicesTitle:"SERVICES ZOSE - ALL",priorityTitle:"URI PRIORITY?",pOld:"Ugeze Muza Bukuru",pPreg:"Utwite",pDis:"Ufite ubumuga",pNormal:"Normal",priorityMsg:"Uzahabwa Priority - Ntuzategereza cyane!",custHeader:"Umukiriya",custTitle:"Customer - Umukiriya",custInd:"UMUNTU",custIndSub:"Ku giti ke",custBiz:"UMUCURUZI",custBizSub:"Shop / Company",custVis:"UMUSHYITSI",custVisSub:"Uje gusura",custNamePh:"👤 Izina ryawe - ex: Jean",custPhonePh:"📱 Telefoni - 0788 123 456",custError:"Andika Izina na Telefoni",custContinue:"Komeza nka",custOr:"CYANGWA HITAMO",ussdWelcome:"Murakaza neza",ussdDeposit:"Kubitsa",ussdWithdraw:"Kubikuza",ussdLoan:"Inguzanyo",ussdBalance:"Kureba Amafaranga",ussdForex:"Forex",ussdCard:"Ikarita",ussdSave:"Kuzigama",ussdStatus:"Kureba",ussdTypeLabel:"Andika",helpMsg:"Kanda UMUKIRIYA, hitamo serivisi, kanda FATA TICKET.",voiceMsg:"Turakwakiriye kuri SmartQueue. Hitamo serivisi yawe. Kanda fata TICKET."},
-fr:{chooseLang:"CHOISIR LA LANGUE",searchPh:"🔍 Chercher Service...",pressSearch:"Appuyez sur Search pour voir Services",hitamo:"CHOISIR",noResult:"😢 Aucun service",step1:"CHOISIR",step2a:"PRENDRE",step3:"ATTENDRE",step4:"APPELÉ",hearVoice:"ÉCOUTER LA VOIX",iAmCustomer:"JE SUIS CLIENT",pressHere:"Appuyez ici",iAmStaff:"JE SUIS PERSONNEL",loginWord:"Login",nowServing:"En cours",wait:"Attente",min:"min",peopleAhead:"Personnes",aheadOfYou:"devant vous",howWant:"Comment voulez-vous?",hasInternet:"Vous avez Internet",noInternet:"Pas d'Internet",back:"RETOUR",nowServingUpper:"EN COURS",catAccounts:"COMPTES",sOpen:"Ouvrir Compte",sOpenSub:"Apportez ID",sBalance:"Solde",sBalanceSub:"Voir - Balance",sStatement:"Relevé",sStatementSub:"Imprimer",sKyc:"Mettre à jour",catCash:"ESPÈCES",sDeposit:"Dépôt",sDepositSub:"Mettre - Deposit",sWithdraw:"Retrait",sWithdrawSub:"Retirer - Withdrawal",sCheque:"Chèque",sChequeSub:"Mettre chèque",catPay:"PAIEMENTS",sTransfer:"Transfert",sTransferSub:"Envoyer - Transfer",sBill:"Payer Facture",sBillSub:"Électricité, Eau - Bill",sSalary:"Salaire",sSalarySub:"Pour business",catLoan:"PRÊTS",sLoan:"Prêt",sLoanSub:"Demander - Loan",sPersonal:"Prêt Personnel",sPersonalSub:"Pour vos choses",sBusiness:"Prêt Business",sBusinessSub:"Pour business",sHouse:"Prêt Maison",sHouseSub:"Acheter - House",sCar:"Prêt Voiture",sCarSub:"Acheter - Car",sRepay:"Rembourser Prêt",sRepaySub:"Payer - Repay",catCard:"CARTES",sAtm2:"Carte",sAtmSub:"Nouvelle / Remplacer",sCreditSub:"Demander carte",sLost:"Carte Perdue",sLostSub:"Bloquer - Oublié PIN",catDigital:"DIGITAL",sMobile1:"Banque Mobile",sMobileSub:"Ouvrir App",sInternet1:"Banque Internet",sInternetSub:"Ordinateur",catForex:"DEVIS",sForex1:"Changer Argent",sAbroad:"Envoyer à l'étranger",catInvest:"INVESTISSEMENT",sFixed1:"Dépôt Fixe",sFixedSub:"Épargner",sIns:"Assurance",sInsSub:"Santé, Voiture",sPension:"Pension",sPensionSub:"Pour âgés",catHelp:"AIDE",sComplaint:"Plainte",sComplaintSub:"Problème? - Complaint",sAsk:"Demander",sAskSub:"Demandez",sVip1:"Priorité",sVipSub:"Âgé, Enceinte, Handicapé",writeNumber:"Écrivez Votre Numéro",getTicket:"PRENDRE",yourTicket:"Votre TICKET",smsSent:"Envoyé",sitWait:"Asseyez-vous",dialThis:"Composez ce numéro",ussdType:"Tapez 1-9",send:"ENVOYER",staffLogin:"Connexion Personnel",loginAs:"Login as",wrongLogin:"Mauvaise connexion",callNext:"APPELER SUIVANT",callPriority:"APPELER PRIORITY",customers:"Clients",inQueue:"dans la file",perPerson:"Chaque personne ~3 min",importantTitle:"IMPORTANT - 5",allServicesTitle:"TOUS LES SERVICES",priorityTitle:"ÊTES-VOUS PRIORITY?",pOld:"Personne âgée 65+",pPreg:"Enceinte",pDis:"Avec handicap",pNormal:"Normal",priorityMsg:"Vous avez Priority!",custHeader:"Client",custTitle:"Client",custInd:"INDIVIDU",custIndSub:"Pour vous",custBiz:"UMUCURUZI",custBizSub:"Shop / Company",custVis:"UMUSHYITSI",custVisSub:"En visite",custNamePh:"👤 Votre Nom - ex: Jean",custPhonePh:"📱 Téléphone - 0788 123 456",custError:"Écrivez Nom et Téléphone",custContinue:"Continuer comme",custOr:"OU CHOISIR",ussdWelcome:"Bienvenue",ussdDeposit:"Dépôt",ussdWithdraw:"Retrait",ussdLoan:"Prêt",ussdBalance:"Solde",ussdForex:"Forex",ussdCard:"Carte",ussdSave:"Épargne",ussdStatus:"Statut",ussdTypeLabel:"Tapez",helpMsg:"Appuyez sur CLIENT.",voiceMsg:"Bienvenue sur SmartQueue. Choisissez votre service. Appuyez sur prendre ticket."},
-sw:{chooseLang:"CHAGUA LUGHA",searchPh:"🔍 Tafuta Huduma...",pressSearch:"Bonyeza Search kuona Huduma",hitamo:"CHAGUA",noResult:"😢 Hakuna huduma",step1:"CHAGUA",step2a:"PATA",step3:"SUBIRI",step4:"UITWA",hearVoice:"SIKILIZA SAUTI",iAmCustomer:"MIMI NI MTEJA",pressHere:"Bonyeza hapa",iAmStaff:"MIMI NI MFANYAKAZI",loginWord:"Login",nowServing:"Tunahudumia",wait:"Subiri",min:"dak",peopleAhead:"Watu",aheadOfYou:"mbele yako",howWant:"Unataka vipi?",hasInternet:"Una Internet",noInternet:"Hakuna Internet",back:"RUDI",nowServingUpper:"TUNAHUDUMIA",catAccounts:"AKAUNTI",sOpen:"Fungua Akaunti",sOpenSub:"Leta ID",sBalance:"Salio",sBalanceSub:"Ona - Balance",sStatement:"Taarifa",sStatementSub:"Chapisha",sKyc:"Sasisha Taarifa",catCash:"PESA",sDeposit:"Kuweka",sDepositSub:"Weka - Deposit",sWithdraw:"Kutoa",sWithdrawSub:"Toa - Withdrawal",sCheque:"Cheki",sChequeSub:"Weka cheki",catPay:"MALIPO",sTransfer:"Tuma Pesa",sTransferSub:"Tuma - Transfer",sBill:"Lipa Bili",sBillSub:"Umeme, Maji - Bill",sSalary:"Mshahara",sSalarySub:"Kwa biashara",catLoan:"MIKOPO",sLoan:"Mkopo",sLoanSub:"Uliza - Loan",sPersonal:"Mkopo Wangu",sPersonalSub:"Kwa vitu vyako",sBusiness:"Mkopo wa Biashara",sBusinessSub:"Kwa biashara",sHouse:"Mkopo wa Nyumba",sHouseSub:"Nunua - House",sCar:"Mkopo wa Gari",sCarSub:"Nunua - Car",sRepay:"Lipa Mkopo",sRepaySub:"Lipa - Repay",catCard:"KADI",sAtm2:"Kadi",sAtmSub:"Mpya / Badilisha",sCreditSub:"Omba kadi",sLost:"Kadi Imepotea",sLostSub:"Zuia - Umesahau PIN",catDigital:"KIDIGITALI",sMobile1:"Benki ya Simu",sMobileSub:"Fungua App",sInternet1:"Benki ya Internet",sInternetSub:"Kompyuta",catForex:"FEDHA ZA KIGENI",sForex1:"Badilisha Pesa",sAbroad:"Tuma Nje",catInvest:"UWEKEZAJI",sFixed1:"Weka Akiba",sFixedSub:"Weka - Fixed",sIns:"Bima",sInsSub:"Afya, Gari",sPension:"Pensheni",sPensionSub:"Kwa wazee",catHelp:"MSAADA",sComplaint:"Malalamiko",sComplaintSub:"Tatizo? - Complaint",sAsk:"Uliza",sAskSub:"Uliza",sVip1:"Kipaumbele",sVipSub:"Wazee, Mjamzito, Walemavu",writeNumber:"Andika Namba Yako",getTicket:"PATA",yourTicket:"TICKET Yako",smsSent:"Imetumwa",sitWait:"Kaa na Subiri",dialThis:"Bonyeza Namba Hii",ussdType:"Andika 1-9",send:"TUMA",staffLogin:"Login ya Wafanyakazi",loginAs:"Login as",wrongLogin:"Login mbaya",callNext:"ITA Anayefuata",callPriority:"ITA PRIORITY",customers:"Wateja",inQueue:"kwenye foleni",perPerson:"Kila mtu ~3 min",importantTitle:"MUHIMU - 5",allServicesTitle:"HUDUMA ZOTE",priorityTitle:"WEWE NI PRIORITY?",pOld:"Mzee 65+",pPreg:"Mjamzito",pDis:"Mwenye ulemavu",pNormal:"Normal",priorityMsg:"Unapata Priority!",custHeader:"Mteja",custTitle:"Mteja",custInd:"MTU BINAFSI",custIndSub:"Kwa ajili yako",custBiz:"UMUCURUZI",custBizSub:"Shop / Company",custVis:"UMUSHYITSI",custVisSub:"Umetembelea",custNamePh:"👤 Jina lako - ex: Jean",custPhonePh:"📱 Simu - 0788 123 456",custError:"Andika Jina na Simu",custContinue:"Endelea kama",custOr:"AU CHAGUA",ussdWelcome:"Karibu",ussdDeposit:"Kuweka",ussdWithdraw:"Kutoa",ussdLoan:"Mkopo",ussdBalance:"Salio",ussdForex:"Forex",ussdCard:"Kadi",ussdSave:"Akiba",ussdStatus:"Hali",ussdTypeLabel:"Andika",helpMsg:"Bonyeza MTEJA.",voiceMsg:"Karibu SmartQueue. Chagua huduma yako. Bonyeza pata tiketi."}
+en:{chooseLang:"CHOOSE LANGUAGE",searchPh:"🔍 Search Service...",pressSearch:"Kanda Search urebe Services",hitamo:"CHOOSE",noResult:"😢 No service found",step1:"CHOOSE",step2a:"GET",step3:"WAIT",step4:"CALLED",hearVoice:"HEAR VOICE",iAmCustomer:"I'M CUSTOMER",pressHere:"Press here",iAmStaff:"I'M STAFF",loginWord:"Login",nowServing:"Now Serving",wait:"Wait",min:"minutes",peopleAhead:"People",aheadOfYou:"ahead of you",howWant:"How do you want?",hasInternet:"You have Internet",noInternet:"No Internet",back:"BACK",nowServingUpper:"NOW SERVING",catAccounts:"ACCOUNTS",sOpen:"Open Account",sOpenSub:"Bring ID",sBalance:"Balance",sBalanceSub:"See - Balance",sStatement:"Statement",sStatementSub:"Print - Statement",sKyc:"Update Info",catCash:"CASH",sDeposit:"Deposit",sDepositSub:"Put in - Deposit",sWithdraw:"Withdrawal",sWithdrawSub:"Take out - Withdrawal",sCheque:"Cheque",sChequeSub:"Put cheque - Cheque",catPay:"PAYMENTS",sTransfer:"Transfer Money",sTransferSub:"Send - Transfer",sBill:"Bill Payment",sBillSub:"Electricity, Water - Bill",sSalary:"Salary",sSalarySub:"For business - Salary",catLoan:"LOANS",sLoan:"Loan",sLoanSub:"Ask - Loan",sPersonal:"Personal Loan",sPersonalSub:"For your things",sBusiness:"Business Loan",sBusinessSub:"For business",sHouse:"House Loan",sHouseSub:"Buy / Build - House",sCar:"Car Loan",sCarSub:"Buy - Car",sRepay:"Repay Loan",sRepaySub:"Pay - Repay",catCard:"CARDS",sAtm2:"Card",sAtmSub:"New / Replace",sCreditSub:"Ask for card",sLost:"Lost Card",sLostSub:"Block - Forgot PIN",catDigital:"DIGITAL",sMobile1:"Mobile Banking",sMobileSub:"Open App",sInternet1:"Internet Banking",sInternetSub:"Computer",catForex:"FOREX",sForex1:"Exchange Money",sAbroad:"Send Abroad",catInvest:"INVESTMENT",sFixed1:"Fixed Deposit",sFixedSub:"Save - Fixed",sIns:"Insurance",sInsSub:"Health, Car - Insurance",sPension:"Pension",sPensionSub:"For old - Pension",catHelp:"HELP",sComplaint:"Complaint",sComplaintSub:"Problem? - Complaint",sAsk:"Ask",sAskSub:"Ask - Ask",sVip1:"Priority",sVipSub:"Old, Pregnant, Disabled",writeNumber:"Write Your Number",getTicket:"GET",getMyTicket:"Get my ticket",checkStatus:"Check status",selectService:"Select a service",yourTicket:"Your TICKET",smsSent:"Sent",sitWait:"Sit and Wait",dialThis:"Dial This Number",ussdType:"Type 1-9",send:"SEND",staffLogin:"Staff Login",loginAs:"Login as",wrongLogin:"Wrong login",callNext:"CALL NEXT",callPriority:"CALL PRIORITY",customers:"Customers",inQueue:"in queue",perPerson:"Each person ~3 min",importantTitle:"IMPORTANT - 5",allServicesTitle:"ALL SERVICES",priorityTitle:"ARE YOU PRIORITY?",pOld:"Elderly 65+",pPreg:"Pregnant",pDis:"With disability",pNormal:"Normal",priorityMsg:"You get Priority - You will not wait long!",custHeader:"Customer",custTitle:"Customer",custInd:"UMUNTU",custIndSub:"For yourself",custBiz:"UMUCURUZI",custBizSub:"Shop / Company",custVis:"UMUSHYITSI",custVisSub:"Visiting",custNamePh:"👤 Your Name - ex: Jean",custPhonePh:"📱 Phone - 0788 123 456",custError:"Write Name and Phone",custContinue:"Continue as",custOr:"OR CHOOSE",ussdWelcome:"Welcome",ussdDeposit:"Deposit",ussdWithdraw:"Withdrawal",ussdLoan:"Loan",ussdBalance:"Balance",ussdForex:"Forex",ussdCard:"Card",ussdSave:"Saving",ussdStatus:"Status",ussdTypeLabel:"Type",helpMsg:"Press CUSTOMER, choose service, press GET TICKET.",voiceMsg:"Welcome to SmartQueue. Choose your service. Press get ticket."},
+rw:{chooseLang:"HITAMO URURIMI",searchPh:"🔍 Shaka Service...",pressSearch:"Kanda Search urebe Services",hitamo:"HITAMO",noResult:"😢 Nta service ibonetse",step1:"HITAMO",step2a:"FATA",step3:"TEGEREZA",step4:"HAMAGARWA",hearVoice:"UMVA IJWI",iAmCustomer:"NDI UMUKIRIYA",pressHere:"Kanda hano",iAmStaff:"NDI UMUKOZI",loginWord:"Login",nowServing:"Turakwakiriye",wait:"Tegereza",min:"min",peopleAhead:"Abantu",aheadOfYou:"imbere yawe",howWant:"Ushaka gute?",hasInternet:"Ufite Internet",noInternet:"Nta Internet",back:"SUBIRA",nowServingUpper:"TURAKWAKIRIYE",catAccounts:"KONTI",sOpen:"Gufungura Konti",sOpenSub:"Zana ID",sBalance:"Kureba Amafaranga",sBalanceSub:"Reba - Balance",sStatement:"Raporo",sStatementSub:"Fungura - Statement",sKyc:"Guhindura Amakuru",catCash:"AMAFARANGA",sDeposit:"Kubitsa",sDepositSub:"Shyiramo - Deposit",sWithdraw:"Kubikuza",sWithdrawSub:"Kuramo - Withdrawal",sCheque:"Sheki",sChequeSub:"Shyira sheki - Cheque",catPay:"KOHEREZA",sTransfer:"Kohereza Amafaranga",sTransferSub:"Oherereza - Transfer",sBill:"Kwishyura",sBillSub:"Amashanyarazi, Amazi - Bill",sSalary:"Umushahara",sSalarySub:"Ku bakoresha - Salary",catLoan:"INGUZANYO",sLoan:"Inguzanyo",sLoanSub:"Baza - Loan",sPersonal:"Inguzanyo Yanjye",sPersonalSub:"Ku bintu byawe",sBusiness:"Inguzanyo y'Ubucuruzi",sBusinessSub:"Ku bucuruzi",sHouse:"Inzu",sHouseSub:"Kugura / Kubaka - House",sCar:"Imodoka",sCarSub:"Kugura - Car",sRepay:"Kwishyura Inguzanyo",sRepaySub:"Ishyura - Repay",catCard:"IKARITA",sAtm2:"Ikarita",sAtmSub:"Nshya / Gusimbuza",sCreditSub:"Saba ikarita",sLost:"Ikarita Yatakaye",sLostSub:"Bika - Wibagiwe PIN",catDigital:"TELEFONI",sMobile1:"Banki kuri Telefoni",sMobileSub:"Fungura App",sInternet1:"Banki kuri Internet",sInternetSub:"Mudasobwa",catForex:"AMADEVIZE",sForex1:"Guhindura Amafaranga",sAbroad:"Kohereza Hanze",catInvest:"KUZIGAMA",sFixed1:"Kuzigama",sFixedSub:"Bika - Fixed",sIns:"Ubwishingizi",sInsSub:"Ubuzima, Imodoka - Insurance",sPension:"Pansiyo",sPensionSub:"Ku basaza - Pension",catHelp:"UBUFASHA",sComplaint:"Ikibazo",sComplaintSub:"Hari ikibazo? - Complaint",sAsk:"Kubaza",sAskSub:"Baza - Ask",sVip1:"Abafite Ubumuga",sVipSub:"Abasaza, Abatwite, Abamugaye",writeNumber:"Andika Numero yawe",getTicket:"FATA",getMyTicket:"Fata TICKET Yanjye",checkStatus:"Reba uko bihagaze",selectService:"Hitamo Service",yourTicket:"TICKET Yawe",smsSent:"Yoherejwe",sitWait:"Icare utegereze",dialThis:"Kanda Iyi Numero",ussdType:"Andika 1-9",send:"OHEREZA",staffLogin:"Staff Login",loginAs:"Login as",wrongLogin:"Wrong login",callNext:"HAMAGARA",callPriority:"HAMAGARA PRIORITY",customers:"Customers",inQueue:"mu murongo",perPerson:"Buri muntu ~3 min",importantTitle:"IMPORTANT - 5",allServicesTitle:"SERVICES ZOSE - ALL",priorityTitle:"URI PRIORITY?",pOld:"Ugeze Muza Bukuru",pPreg:"Utwite",pDis:"Ufite ubumuga",pNormal:"Normal",priorityMsg:"Uzahabwa Priority - Ntuzategereza cyane!",custHeader:"Umukiriya",custTitle:"Customer - Umukiriya",custInd:"UMUNTU",custIndSub:"Ku giti ke",custBiz:"UMUCURUZI",custBizSub:"Shop / Company",custVis:"UMUSHYITSI",custVisSub:"Uje gusura",custNamePh:"👤 Izina ryawe - ex: Jean",custPhonePh:"📱 Telefoni - 0788 123 456",custError:"Andika Izina na Telefoni",custContinue:"Komeza nka",custOr:"CYANGWA HITAMO",ussdWelcome:"Murakaza neza",ussdDeposit:"Kubitsa",ussdWithdraw:"Kubikuza",ussdLoan:"Inguzanyo",ussdBalance:"Kureba Amafaranga",ussdForex:"Forex",ussdCard:"Ikarita",ussdSave:"Kuzigama",ussdStatus:"Kureba",ussdTypeLabel:"Andika",helpMsg:"Kanda UMUKIRIYA, hitamo serivisi, kanda FATA TICKET.",voiceMsg:"Turakwakiriye kuri SmartQueue. Hitamo serivisi yawe. Kanda fata TICKET."},
+fr:{chooseLang:"CHOISIR LA LANGUE",searchPh:"🔍 Chercher Service...",pressSearch:"Appuyez sur Search pour voir Services",hitamo:"CHOISIR",noResult:"😢 Aucun service",step1:"CHOISIR",step2a:"PRENDRE",step3:"ATTENDRE",step4:"APPELÉ",hearVoice:"ÉCOUTER LA VOIX",iAmCustomer:"JE SUIS CLIENT",pressHere:"Appuyez ici",iAmStaff:"JE SUIS PERSONNEL",loginWord:"Login",nowServing:"En cours",wait:"Attente",min:"minutes",peopleAhead:"Personnes",aheadOfYou:"devant vous",howWant:"Comment voulez-vous?",hasInternet:"Vous avez Internet",noInternet:"Pas d'Internet",back:"RETOUR",nowServingUpper:"EN COURS",catAccounts:"COMPTES",sOpen:"Ouvrir Compte",sOpenSub:"Apportez ID",sBalance:"Solde",sBalanceSub:"Voir - Balance",sStatement:"Relevé",sStatementSub:"Imprimer",sKyc:"Mettre à jour",catCash:"ESPÈCES",sDeposit:"Dépôt",sDepositSub:"Mettre - Deposit",sWithdraw:"Retrait",sWithdrawSub:"Retirer - Withdrawal",sCheque:"Chèque",sChequeSub:"Mettre chèque",catPay:"PAIEMENTS",sTransfer:"Transfert",sTransferSub:"Envoyer - Transfer",sBill:"Payer Facture",sBillSub:"Électricité, Eau - Bill",sSalary:"Salaire",sSalarySub:"Pour business",catLoan:"PRÊTS",sLoan:"Prêt",sLoanSub:"Demander - Loan",sPersonal:"Prêt Personnel",sPersonalSub:"Pour vos choses",sBusiness:"Prêt Business",sBusinessSub:"Pour business",sHouse:"Prêt Maison",sHouseSub:"Acheter - House",sCar:"Prêt Voiture",sCarSub:"Acheter - Car",sRepay:"Rembourser Prêt",sRepaySub:"Payer - Repay",catCard:"CARTES",sAtm2:"Carte",sAtmSub:"Nouvelle / Remplacer",sCreditSub:"Demander carte",sLost:"Carte Perdue",sLostSub:"Bloquer - Oublié PIN",catDigital:"DIGITAL",sMobile1:"Banque Mobile",sMobileSub:"Ouvrir App",sInternet1:"Banque Internet",sInternetSub:"Ordinateur",catForex:"DEVIS",sForex1:"Changer Argent",sAbroad:"Envoyer à l'étranger",catInvest:"INVESTISSEMENT",sFixed1:"Dépôt Fixe",sFixedSub:"Épargner",sIns:"Assurance",sInsSub:"Santé, Voiture",sPension:"Pension",sPensionSub:"Pour âgés",catHelp:"AIDE",sComplaint:"Plainte",sComplaintSub:"Problème? - Complaint",sAsk:"Demander",sAskSub:"Demandez",sVip1:"Priorité",sVipSub:"Âgé, Enceinte, Handicapé",writeNumber:"Écrivez Votre Numéro",getTicket:"PRENDRE",getMyTicket:"Prendre mon ticket",checkStatus:"Vérifier le statut",selectService:"Sélectionnez un service",yourTicket:"Votre TICKET",smsSent:"Envoyé",sitWait:"Asseyez-vous",dialThis:"Composez ce numéro",ussdType:"Tapez 1-9",send:"ENVOYER",staffLogin:"Connexion Personnel",loginAs:"Login as",wrongLogin:"Mauvaise connexion",callNext:"APPELER SUIVANT",callPriority:"APPELER PRIORITY",customers:"Clients",inQueue:"dans la file",perPerson:"Chaque personne ~3 min",importantTitle:"IMPORTANT - 5",allServicesTitle:"TOUS LES SERVICES",priorityTitle:"ÊTES-VOUS PRIORITY?",pOld:"Personne âgée 65+",pPreg:"Enceinte",pDis:"Avec handicap",pNormal:"Normal",priorityMsg:"Vous avez Priority!",custHeader:"Client",custTitle:"Client",custInd:"INDIVIDU",custIndSub:"Pour vous",custBiz:"UMUCURUZI",custBizSub:"Shop / Company",custVis:"UMUSHYITSI",custVisSub:"En visite",custNamePh:"👤 Votre Nom - ex: Jean",custPhonePh:"📱 Téléphone - 0788 123 456",custError:"Écrivez Nom et Téléphone",custContinue:"Continuer comme",custOr:"OU CHOISIR",ussdWelcome:"Bienvenue",ussdDeposit:"Dépôt",ussdWithdraw:"Retrait",ussdLoan:"Prêt",ussdBalance:"Solde",ussdForex:"Forex",ussdCard:"Carte",ussdSave:"Épargne",ussdStatus:"Statut",ussdTypeLabel:"Tapez",helpMsg:"Appuyez sur CLIENT.",voiceMsg:"Bienvenue sur SmartQueue. Choisissez votre service. Appuyez sur prendre ticket."},
+sw:{chooseLang:"CHAGUA LUGHA",searchPh:"🔍 Tafuta Huduma...",pressSearch:"Bonyeza Search kuona Huduma",hitamo:"CHAGUA",noResult:"😢 Hakuna huduma",step1:"CHAGUA",step2a:"PATA",step3:"SUBIRI",step4:"UITWA",hearVoice:"SIKILIZA SAUTI",iAmCustomer:"MIMI NI MTEJA",pressHere:"Bonyeza hapa",iAmStaff:"MIMI NI MFANYAKAZI",loginWord:"Login",nowServing:"Tunahudumia",wait:"Subiri",min:"dakika",peopleAhead:"Watu",aheadOfYou:"mbele yako",howWant:"Unataka vipi?",hasInternet:"Una Internet",noInternet:"Hakuna Internet",back:"RUDI",nowServingUpper:"TUNAHUDUMIA",catAccounts:"AKAUNTI",sOpen:"Fungua Akaunti",sOpenSub:"Leta ID",sBalance:"Salio",sBalanceSub:"Ona - Balance",sStatement:"Taarifa",sStatementSub:"Chapisha",sKyc:"Sasisha Taarifa",catCash:"PESA",sDeposit:"Kuweka",sDepositSub:"Weka - Deposit",sWithdraw:"Kutoa",sWithdrawSub:"Toa - Withdrawal",sCheque:"Cheki",sChequeSub:"Weka cheki",catPay:"MALIPO",sTransfer:"Tuma Pesa",sTransferSub:"Tuma - Transfer",sBill:"Lipa Bili",sBillSub:"Umeme, Maji - Bill",sSalary:"Mshahara",sSalarySub:"Kwa biashara",catLoan:"MIKOPO",sLoan:"Mkopo",sLoanSub:"Uliza - Loan",sPersonal:"Mkopo Wangu",sPersonalSub:"Kwa vitu vyako",sBusiness:"Mkopo wa Biashara",sBusinessSub:"Kwa biashara",sHouse:"Mkopo wa Nyumba",sHouseSub:"Nunua - House",sCar:"Mkopo wa Gari",sCarSub:"Nunua - Car",sRepay:"Lipa Mkopo",sRepaySub:"Lipa - Repay",catCard:"KADI",sAtm2:"Kadi",sAtmSub:"Mpya / Badilisha",sCreditSub:"Omba kadi",sLost:"Kadi Imepotea",sLostSub:"Zuia - Umesahau PIN",catDigital:"KIDIGITALI",sMobile1:"Benki ya Simu",sMobileSub:"Fungua App",sInternet1:"Benki ya Internet",sInternetSub:"Kompyuta",catForex:"FEDHA ZA KIGENI",sForex1:"Badilisha Pesa",sAbroad:"Tuma Nje",catInvest:"UWEKEZAJI",sFixed1:"Weka Akiba",sFixedSub:"Weka - Fixed",sIns:"Bima",sInsSub:"Afya, Gari",sPension:"Pensheni",sPensionSub:"Kwa wazee",catHelp:"MSAADA",sComplaint:"Malalamiko",sComplaintSub:"Tatizo? - Complaint",sAsk:"Uliza",sAskSub:"Uliza",sVip1:"Kipaumbele",sVipSub:"Wazee, Mjamzito, Walemavu",writeNumber:"Andika Namba Yako",getTicket:"PATA",getMyTicket:"Pata tiketi yangu",checkStatus:"Angalia hali",selectService:"Chagua huduma",yourTicket:"TICKET Yako",smsSent:"Imetumwa",sitWait:"Kaa na Subiri",dialThis:"Bonyeza Namba Hii",ussdType:"Andika 1-9",send:"TUMA",staffLogin:"Login ya Wafanyakazi",loginAs:"Login as",wrongLogin:"Login mbaya",callNext:"ITA Anayefuata",callPriority:"ITA PRIORITY",customers:"Wateja",inQueue:"kwenye foleni",perPerson:"Kila mtu ~3 min",importantTitle:"MUHIMU - 5",allServicesTitle:"HUDUMA ZOTE",priorityTitle:"WEWE NI PRIORITY?",pOld:"Mzee 65+",pPreg:"Mjamzito",pDis:"Mwenye ulemavu",pNormal:"Normal",priorityMsg:"Unapata Priority!",custHeader:"Mteja",custTitle:"Mteja",custInd:"MTU BINAFSI",custIndSub:"Kwa ajili yako",custBiz:"UMUCURUZI",custBizSub:"Shop / Company",custVis:"UMUSHYITSI",custVisSub:"Umetembelea",custNamePh:"👤 Jina lako - ex: Jean",custPhonePh:"📱 Simu - 0788 123 456",custError:"Andika Jina na Simu",custContinue:"Endelea kama",custOr:"AU CHAGUA",ussdWelcome:"Karibu",ussdDeposit:"Kuweka",ussdWithdraw:"Kutoa",ussdLoan:"Mkopo",ussdBalance:"Salio",ussdForex:"Forex",ussdCard:"Kadi",ussdSave:"Akiba",ussdStatus:"Hali",ussdTypeLabel:"Andika",helpMsg:"Bonyeza MTEJA.",voiceMsg:"Karibu SmartQueue. Chagua huduma yako. Bonyeza pata tiketi."}
 };
 let currentLang='rw', currentPriority='normal', priorityNum=1, custType='Individual', role='Teller';
 const voiceLangs={rw:'rw-RW',en:'en-US',fr:'fr-FR',sw:'sw-TZ'};
@@ -273,18 +286,19 @@ function showAllOnSearch(inputId, listId){
   document.getElementById(listId).classList.remove('hidden');
   let hintId = listId==='homeList' ? 'homeHint' : 'webHint';
   let h=document.getElementById(hintId); if(h) h.classList.add('hidden');
-  document.getElementById(listId).querySelectorAll('.service').forEach(it=>it.style.display='flex');
-  document.getElementById(listId).querySelectorAll('.cat').forEach(c=>c.style.display='block');
+  let list=document.getElementById(listId);
+  list.querySelectorAll('.service-btn').forEach(it=>it.style.display='block');
+  list.querySelectorAll('.cat').forEach(c=>c.style.display='block');
 }
 function clearSearch(inputId, listId){ document.getElementById(inputId).value=''; hideServices(); }
 function filterServices(inputId, listId){
   showAllOnSearch(inputId, listId);
   let q=document.getElementById(inputId).value.toLowerCase().trim();
   let list=document.getElementById(listId);
-  let items=list.querySelectorAll('.service');
+  let items=list.querySelectorAll('.service-btn');
   let cats=list.querySelectorAll('.cat');
   let found=0;
-  items.forEach(it=>{ let show=!q || it.innerText.toLowerCase().includes(q); it.style.display=show?'flex':'none'; if(show) found++; });
+  items.forEach(it=>{ let show=!q || it.innerText.toLowerCase().includes(q); it.style.display=show?'block':'none'; if(show) found++; });
   cats.forEach(c=>{ c.style.display = q ? 'none' : 'block'; });
   let noId = listId==='homeList' ? 'homeNoResult' : 'webNoResult';
   let noEl=document.getElementById(noId);
@@ -294,7 +308,6 @@ function updateUSSDScreen(){
   let d=dict[currentLang]; let w=document.querySelector('.waitTime')?.innerText||15;
   document.getElementById('ussdScreen').innerHTML=d.ussdWelcome+'<br>'+d.nowServing+': A-041<br>'+d.wait+': '+w+' '+d.min+'<br><br>⭐ 5 + ALL:<br>1. 💵 '+d.ussdDeposit+'<br>2. 💵 '+d.ussdWithdraw+'<br>3. 💳 '+d.ussdLoan+'<br>4. 📱 MoMo<br>5. 💰 '+d.ussdBalance+'<br>6. 💱 '+d.ussdForex+'<br>7. 💳 '+d.ussdCard+'<br>8. 📈 '+d.ussdSave+'<br>9. ⭐ VIP<br>0. 👀 '+d.ussdStatus+'<br><br>'+d.ussdTypeLabel+':';
 }
-/* MICRO - HUZA INDIMI: KINY -> KINY, ENG -> ENG, FR -> FR, SWAH -> SWAH */
 function speak(){
   speechSynthesis.cancel();
   let u=new SpeechSynthesisUtterance(dict[currentLang].voiceMsg);
@@ -306,6 +319,7 @@ function speak(){
   speechSynthesis.speak(u);
 }
 function helpClick(){alert('🆘 '+dict[currentLang].helpMsg)}
+function checkStatus(){ let b=document.getElementById('statusBox'); if(b) b.classList.toggle('hidden'); else showCustomer(); }
 let selectedService='Deposit',num=41,webNum=42;
 const users={'teller@smartqueue.com':{pass:'1234',role:'Teller'},'manager@smartqueue.com':{pass:'1234',role:'Manager'},'it@smartqueue.com':{pass:'1234',role:'IT'}};
 let peopleAhead=5, avgServiceTime=3, priorityCount=2;
@@ -353,7 +367,8 @@ function quickTicket(service){
   calcWait();
   alert('🎫 TICKET: '+ticketNum+' - '+service+'\n'+getPriorityLabel()+'\n⏳ '+dict[currentLang].wait+': ~'+w+' '+dict[currentLang].min);
 }
-function sel(el){document.querySelectorAll('#serviceList .service').forEach(s=>s.classList.remove('active'));el.classList.add('active');selectedService=el.querySelector('b').innerText}
+function selBtn(el, service){ document.querySelectorAll('#serviceList .service-btn').forEach(s=>s.classList.remove('active')); el.classList.add('active'); selectedService=service; }
+function sel(el){ selectedService=el.innerText; }
 function getWebTicket(){
   let normalW=calcWait(); let w=getPriorityWait(normalW);
   let isPri = currentPriority!=='normal';
