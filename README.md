@@ -1,23 +1,22 @@
 ﻿# SmartQueue - SECD 2026 Team 6
 
-SmartQueue ni system yo gucunga umurongo (queue) muri bank / service - umukiriya afata ticket, akareba aho ageze, manager akareba raporo.
+SmartQueue is a queue management system for bank / service - a customer takes a ticket, checks their position, and the manager views reports.
 
-## Uko uyikoresha
+## How to use
 
 ```bash
 node src/server.js
 ```
-Fungura browser:
+open browser:
 ```
 http://localhost:3000
 ```
+- Home - Take Ticket
+- login - Login (OTP: 123456)
+- manager - Manager Dashboard
+- api/tickets - API - Ticket list
 
-## Pages
 
-- `/` - Home - Fata Ticket
-- `/login` - Login (OTP: 123456)
-- `/manager` - Manager Dashboard
-- `/api/tickets` - API - Liste ya tickets
 
 ## Login
 
