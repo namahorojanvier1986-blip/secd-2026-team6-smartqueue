@@ -14,4 +14,4 @@ Open: `prototype/index.html` via htmlpreview
 - Teller: Call Next, Complete Service
 
 ## Branch
-Umwalimu SACCO - Rwamagana, Kigali HQ, Musanze, Huye, Rubavu
+Umucyo SACCO Rwamagana
