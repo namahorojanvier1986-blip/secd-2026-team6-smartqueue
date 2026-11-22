@@ -96,6 +96,8 @@ CREATE TABLE IF NOT EXISTS settings (
   key    VARCHAR(50) PRIMARY KEY,
   value  TEXT NOT NULL
 );
+INSERT INTO services (code, name, name_rw, description, avg_service_minutes) VALUES
+('BANK', 'Bank of Kigali', 'Banki ya Kigali', 'Bank services', 5);
 
 -- Upgrades for databases created by an earlier version of this project
 ALTER TABLE services      ADD COLUMN IF NOT EXISTS name_rw VARCHAR(80);
