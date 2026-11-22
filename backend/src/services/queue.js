@@ -255,9 +255,10 @@ async function issueTicket({ phone, serviceId, isPriority, priorityReason, langu
       const eta = estimateMinutes(ahead, await avgServiceMinutes(c, service.id), open);
       const soon = ahead < settings.approachThreshold;
 
+      // If the wait is already 2 minutes or less, the ticket message covers it: no separate 2-minute alert
       await c.query(
-        'UPDATE tickets SET estimated_wait_minutes = $1, approaching_notified = $2 WHERE id = $3',
-        [eta, soon, ticket.id]
+        'UPDATE tickets SET estimated_wait_minutes = $1, approaching_notified = $2, two_min_notified = $3 WHERE id = $4',
+        [eta, soon, eta <= TWO_MINUTES, ticket.id]
       );
       await notify(c, ticket, 'ticket_issued', { ahead, eta, soon });
 
@@ -285,12 +286,54 @@ async function notifyApproaching(c, serviceId) {
      WHERE ahead < $2 AND NOT approaching_notified`,
     [serviceId, settings.approachThreshold]
   );
-  if (!rows.length) return;
-  const avg = await avgServiceMinutes(c, serviceId);
+  if (rows.length) {
+    const avg = await avgServiceMinutes(c, serviceId);
+    const open = await openCountersFor(c, serviceId);
+    for (const t of rows) {
+      await notify(c, t, 'turn_approaching', { ahead: t.ahead, eta: estimateMinutes(t.ahead, avg, open) });
+      await c.query('UPDATE tickets SET approaching_notified = TRUE WHERE id = $1', [t.id]);
+    }
+  }
+  await notifyTwoMinutes(c, serviceId);
+}
+
+/** Minutes before the estimated turn when the customer gets the "about 2 minutes" alert. */
+const TWO_MINUTES = 2;
+
+/**
+ * Alert each waiting customer once, when their estimated wait drops to 2 minutes or less.
+ * Only counts while at least one counter for the service is open (otherwise there is no real ETA).
+ */
+async function notifyTwoMinutes(c, serviceId) {
   const open = await openCountersFor(c, serviceId);
+  if (Number(open) === 0) return;
+  const avg = await avgServiceMinutes(c, serviceId);
+  const { rows } = await c.query(
+    `SELECT * FROM (
+        SELECT t.*, ROW_NUMBER() OVER (ORDER BY is_priority DESC, ticket_number ASC) - 1 AS ahead
+          FROM tickets t
+         WHERE queue_date = CURRENT_DATE AND service_id = $1 AND status = 'waiting'
+     ) q
+     WHERE NOT two_min_notified`,
+    [serviceId]
+  );
   for (const t of rows) {
-    await notify(c, t, 'turn_approaching', { ahead: t.ahead, eta: estimateMinutes(t.ahead, avg, open) });
-    await c.query('UPDATE tickets SET approaching_notified = TRUE WHERE id = $1', [t.id]);
+    const ahead = Number(t.ahead);
+    const eta = estimateMinutes(ahead, avg, open);
+    if (eta > TWO_MINUTES) continue;
+    await notify(c, t, 'two_minutes', { ahead, eta });
+    await c.query('UPDATE tickets SET two_min_notified = TRUE WHERE id = $1', [t.id]);
+  }
+}
+
+/** Background check (every 30 s from server.js): catches changes such as a counter opening. */
+async function checkTwoMinuteAlerts() {
+  const { rows } = await db.query(
+    `SELECT DISTINCT service_id FROM tickets
+      WHERE queue_date = CURRENT_DATE AND status = 'waiting' AND NOT two_min_notified`
+  );
+  for (const r of rows) {
+    await db.withTransaction((c) => notifyTwoMinutes(c, r.service_id));
   }
 }
 
@@ -561,6 +604,7 @@ async function displayBoard() {
 }
 
 module.exports = {
+  checkTwoMinuteAlerts,
   PRIORITY_REASONS,
   getSettings,
   issueTicket,

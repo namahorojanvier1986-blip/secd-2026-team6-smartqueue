@@ -459,3 +459,20 @@ table.table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
   .lang-pick { grid-template-columns: 1fr; }
 }
 .card .table-wrap .table th, .card .table-wrap .table td { padding-left: 10px; padding-right: 10px; }
+
+/* "About 2 minutes to your turn" banner on the customer's ticket page */
+.two-min-alert { display: flex; gap: 14px; align-items: center; margin-bottom: 14px; padding: 16px 18px; border-radius: 16px;
+  background: var(--amber-100); color: #7a4800; border: 2px solid #f5c542; font-size: 1rem; animation: pulse 2s infinite; }
+.two-min-alert > span { font-size: 1.8rem; }
+.two-min-alert b { font-size: 1.1rem; }
+
+/* "Back to home" button on every page */
+.back-bar { max-width: 1200px; width: 100%; margin: 0 auto; padding: 18px 20px 0; }
+.back-bar + .page { padding-top: 16px; }
+.back-bar:has(+ .page-narrow) { max-width: 640px; }
+.back-home { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 10px;
+  border: 1px solid var(--border); background: #fff; color: var(--text); font-weight: 600;
+  font-size: 0.92rem; text-decoration: none; }
+.back-home:hover { background: rgba(15,27,43,0.05); }
+.back-home-light { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.28); color: #fff; }
+.back-home-light:hover { background: rgba(255,255,255,0.2); }

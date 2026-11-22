@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { api } from '../api.js';
 import { playChime, useClock, usePolling } from '../hooks.js';
 import { LanguageSwitcher, useApp } from '../i18n.jsx';
+import { BackHome } from '../components/Layout.jsx';
 
 const FRESH_SECONDS = 20;
 
@@ -36,6 +37,7 @@ export default function Display() {
           <div style={{ opacity: 0.6 }}>{date(now)}</div>
         </div>
         <div className="row" style={{ marginLeft: 24 }}>
+          <BackHome light />
           <LanguageSwitcher />
           {!soundOn && (
             <button className="btn btn-sm" onClick={() => (setSoundOn(true), playChime())}>

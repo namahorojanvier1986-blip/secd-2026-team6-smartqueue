@@ -42,6 +42,13 @@ const TEMPLATES = {
         (p.ahead === 0 ? 'you are next in line' : `only ${p.ahead} customer${p.ahead === 1 ? '' : 's'} ahead of you`) +
         ` (${minutesEn(p.eta)}). Please return to the banking hall now.`,
     }),
+    two_minutes: (p) => ({
+      title: 'About 2 minutes to your turn',
+      message:
+        `Ticket ${p.number}: your turn is in about 2 minutes` +
+        (p.ahead === 0 ? ' - you are next in line' : ` (${p.ahead} customer${p.ahead === 1 ? '' : 's'} ahead of you)`) +
+        '. Please come to the counter area now.',
+    }),
     called: (p) => ({
       title: "It's your turn!",
       message: `Ticket ${p.number}: please proceed to ${p.counter} now.`,
@@ -90,6 +97,13 @@ const TEMPLATES = {
             ? 'hasigaye umukiriya 1 gusa ukubanziriza'
             : `hasigaye abakiriya ${p.ahead} gusa bakubanziriza`) +
         ` (${minutesRw(p.eta)}). Turagusaba kugaruka muri banki ubu.`,
+    }),
+    two_minutes: (p) => ({
+      title: 'Hasigaye nk\'iminota 2',
+      message:
+        `Tike ${p.number}: igihe cyawe kizagera mu minota nka 2` +
+        (p.ahead === 0 ? ' - ni wowe ukurikiyeho' : ` (${p.ahead === 1 ? 'hasigaye umukiriya 1' : `hasigaye abakiriya ${p.ahead}`} ukubanziriza)`) +
+        '. Turagusaba kuza hafi ya konti ubu.',
     }),
     called: (p) => ({
       title: 'Igihe cyawe kirageze!',

@@ -8,6 +8,7 @@ import { useApp } from '../i18n.jsx';
 const ICONS = {
   ticket_issued: '🎫',
   turn_approaching: '⏰',
+  two_minutes: '⏱️',
   called: '📣',
   recalled: '🔔',
   completed: '✓',
@@ -53,7 +54,7 @@ export default function TicketStatus() {
     if (newest.id > lastSeen.current) {
       const fresh = tk.notifications.filter((n) => n.id > lastSeen.current);
       lastSeen.current = newest.id;
-      if (fresh.some((n) => ['called', 'recalled', 'turn_approaching'].includes(n.type))) {
+      if (fresh.some((n) => ['called', 'recalled', 'turn_approaching', 'two_minutes'].includes(n.type))) {
         playChime();
         if (navigator.vibrate) navigator.vibrate([300, 150, 300]);
       }
@@ -110,6 +111,7 @@ export default function TicketStatus() {
     );
   }
 
+  const twoMinAlert = tk.status === 'waiting' && tk.notifications.some((n) => n.type === 'two_minutes');
   const peak = Math.max(firstPeak.current || 0, tk.customersAhead || 0, 1);
   const progress = tk.status === 'waiting' ? 1 - (tk.customersAhead || 0) / (peak + 1) : 1;
 
@@ -118,6 +120,16 @@ export default function TicketStatus() {
       {error && (
         <div className="alert alert-warn" style={{ marginBottom: 12 }}>
           {t('ts.connProblem')}
+        </div>
+      )}
+
+      {twoMinAlert && (
+        <div className="two-min-alert" role="alert">
+          <span aria-hidden="true">⏱️</span>
+          <div>
+            <b>{t('ts.twoMinTitle')}</b>
+            <div>{t('ts.twoMinText')}</div>
+          </div>
         </div>
       )}
 

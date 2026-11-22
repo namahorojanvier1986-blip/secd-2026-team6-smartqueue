@@ -59,6 +59,7 @@ CREATE TABLE IF NOT EXISTS tickets (
   served_by               INTEGER REFERENCES staff(id) ON DELETE SET NULL,
   estimated_wait_minutes  INTEGER,
   approaching_notified    BOOLEAN     NOT NULL DEFAULT FALSE,
+  two_min_notified        BOOLEAN     NOT NULL DEFAULT FALSE,
   recall_count            INTEGER     NOT NULL DEFAULT 0,
   language                VARCHAR(2)  NOT NULL DEFAULT 'en' CHECK (language IN ('en', 'rw')),
   created_at              TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -81,7 +82,7 @@ CREATE TABLE IF NOT EXISTS notifications (
   id          SERIAL PRIMARY KEY,
   ticket_id   INTEGER     NOT NULL REFERENCES tickets(id) ON DELETE CASCADE,
   type        VARCHAR(20) NOT NULL
-              CHECK (type IN ('ticket_issued', 'turn_approaching', 'called', 'recalled', 'completed', 'no_show', 'cancelled')),
+              CHECK (type IN ('ticket_issued', 'turn_approaching', 'two_minutes', 'called', 'recalled', 'completed', 'no_show', 'cancelled')),
   title       VARCHAR(120) NOT NULL,
   message     TEXT         NOT NULL,                 -- text in the customer's language
   data        JSONB        NOT NULL DEFAULT '{}',    -- values used to re-render it in any language
@@ -101,3 +102,8 @@ ALTER TABLE services      ADD COLUMN IF NOT EXISTS name_rw VARCHAR(80);
 ALTER TABLE services      ADD COLUMN IF NOT EXISTS description_rw TEXT;
 ALTER TABLE tickets       ADD COLUMN IF NOT EXISTS language VARCHAR(2) NOT NULL DEFAULT 'en';
 ALTER TABLE notifications ADD COLUMN IF NOT EXISTS data JSONB NOT NULL DEFAULT '{}';
+ALTER TABLE tickets       ADD COLUMN IF NOT EXISTS two_min_notified BOOLEAN NOT NULL DEFAULT FALSE;
+-- "two_minutes" notification type (alert about 2 minutes before the customer's turn)
+ALTER TABLE notifications DROP CONSTRAINT IF EXISTS notifications_type_check;
+ALTER TABLE notifications ADD CONSTRAINT notifications_type_check
+  CHECK (type IN ('ticket_issued', 'turn_approaching', 'two_minutes', 'called', 'recalled', 'completed', 'no_show', 'cancelled'));

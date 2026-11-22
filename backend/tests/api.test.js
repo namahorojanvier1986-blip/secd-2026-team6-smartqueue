@@ -208,6 +208,21 @@ test('customers are alerted when their turn approaches', async () => {
   assert.ok(!far.body.notifications.some((n) => n.type === 'turn_approaching'));
 });
 
+test('customers get an alert about 2 minutes before their turn', async () => {
+  // Cash Deposit: 4 min per customer, 1 open counter.
+  // Ticket 2 is now next in line (estimated wait 0 min) -> alerted once
+  const next = await api('GET', '/tickets/lookup?phone=0781000002&number=2');
+  assert.equal(next.body.customersAhead, 0);
+  const alerts = next.body.notifications.filter((n) => n.type === 'two_minutes');
+  assert.equal(alerts.length, 1);
+  assert.match(alerts[0].message, /about 2 minutes/);
+
+  // Ticket 3 still has about 4 minutes to wait -> no 2-minute alert yet
+  const later = await api('GET', '/tickets/lookup?phone=0781000003&number=3');
+  assert.ok(later.body.estimatedWaitMinutes > 2);
+  assert.ok(!later.body.notifications.some((n) => n.type === 'two_minutes'));
+});
+
 test('customer can cancel a waiting ticket and mark notifications read', async () => {
   const t = await api('GET', '/tickets/lookup?phone=0781000006&number=6');
   const c = await api('POST', `/tickets/${t.body.code}/cancel`);

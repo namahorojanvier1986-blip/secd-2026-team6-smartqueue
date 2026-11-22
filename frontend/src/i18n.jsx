@@ -51,6 +51,13 @@ const NOTIF = {
         (p.ahead === 0 ? 'you are next in line' : `only ${p.ahead} customer${p.ahead === 1 ? '' : 's'} ahead of you`) +
         ` (${minutesEn(p.eta)}). Please return to the banking hall now.`,
     }),
+    two_minutes: (p) => ({
+      title: 'About 2 minutes to your turn',
+      message:
+        `Ticket ${p.number}: your turn is in about 2 minutes` +
+        (p.ahead === 0 ? ' - you are next in line' : ` (${p.ahead} customer${p.ahead === 1 ? '' : 's'} ahead of you)`) +
+        '. Please come to the counter area now.',
+    }),
     called: (p) => ({ title: "It's your turn!", message: `Ticket ${p.number}: please proceed to ${p.counter} now.` }),
     recalled: (p) => ({
       title: `${p.counter} is waiting for you`,
@@ -79,6 +86,13 @@ const NOTIF = {
         (p.ahead === 0 ? 'ni wowe ukurikiyeho' : p.ahead === 1 ? 'hasigaye umukiriya 1 gusa ukubanziriza' : `hasigaye abakiriya ${p.ahead} gusa bakubanziriza`) +
         ` (${minutesRw(p.eta)}). Turagusaba kugaruka muri banki ubu.`,
     }),
+    two_minutes: (p) => ({
+      title: "Hasigaye nk'iminota 2",
+      message:
+        `Tike ${p.number}: igihe cyawe kizagera mu minota nka 2` +
+        (p.ahead === 0 ? ' - ni wowe ukurikiyeho' : ` (${p.ahead === 1 ? 'hasigaye umukiriya 1' : `hasigaye abakiriya ${p.ahead}`} ukubanziriza)`) +
+        '. Turagusaba kuza hafi ya konti ubu.',
+    }),
     called: (p) => ({ title: 'Igihe cyawe kirageze!', message: `Tike ${p.number}: turagusaba kujya kuri ${p.counter} ubu.` }),
     recalled: (p) => ({
       title: `${p.counter} iragutegereje`,
@@ -99,6 +113,7 @@ const en = {
   'brand.product': 'SmartQueue',
   'brand.sub': 'Smart queue for financial institutions',
   'nav.home': 'Home',
+  'nav.backHome': 'Back to home',
   'nav.kiosk': 'Get a ticket',
   'nav.track': 'Track my ticket',
   'nav.display': 'Display board',
@@ -227,6 +242,8 @@ const en = {
   'ts.ticket': 'Ticket',
   'ts.next': "You're next! Please be at the banking hall.",
   'ts.approaching': 'Your turn is approaching - please head back now.',
+  'ts.twoMinTitle': 'About 2 minutes to your turn',
+  'ts.twoMinText': 'Please come to the counter area now and watch the display board.',
   'ts.relax': 'Relax - we will alert you when it is almost your turn.',
   'ts.ahead': 'Ahead',
   'ts.aheadSmall': 'ahead',
@@ -299,6 +316,8 @@ const en = {
   'tel.waitingFor': 'Waiting for customer',
   'tel.arrived': '▶ Customer arrived',
   'tel.complete': '✓ Complete',
+  'tel.completeNext': '✓ Complete & call next ➜',
+  'tel.servedCalled': 'Customer served - called ticket {n}',
   'tel.recall': '🔔 Recall',
   'tel.noShow': '✕ No-show',
   'tel.started': 'Service started',
@@ -473,6 +492,7 @@ const rw = {
   'brand.product': 'SmartQueue',
   'brand.sub': "Umurongo w'ikoranabuhanga w'ibigo by'imari",
   'nav.home': 'Ahabanza',
+  'nav.backHome': 'Subira ahabanza',
   'nav.kiosk': 'Fata tike',
   'nav.track': 'Kurikirana tike',
   'nav.display': 'Ikibaho',
@@ -597,6 +617,8 @@ const rw = {
   'ts.ticket': 'Tike',
   'ts.next': 'Ni wowe ukurikiyeho! Ba uri muri banki.',
   'ts.approaching': 'Igihe cyawe kiregereje - garuka ubu.',
+  'ts.twoMinTitle': "Hasigaye nk'iminota 2",
+  'ts.twoMinText': 'Turagusaba kuza hafi ya konti ubu no kureba ku kibaho.',
   'ts.relax': 'Humura - tuzakumenyesha igihe cyawe kigiye kugera.',
   'ts.ahead': 'Bakubanziriza',
   'ts.aheadSmall': 'imbere yawe',
@@ -666,6 +688,8 @@ const rw = {
   'tel.waitingFor': 'Ategerejwe',
   'tel.arrived': '▶ Umukiriya yaje',
   'tel.complete': '✓ Byarangiye',
+  'tel.completeNext': '✓ Byarangiye & hamagara ukurikiyeho ➜',
+  'tel.servedCalled': 'Umukiriya yahawe serivisi - tike {n} yahamagawe',
   'tel.recall': '🔔 Ongera uhamagare',
   'tel.noShow': '✕ Ntiyaje',
   'tel.started': 'Serivisi yatangiye',

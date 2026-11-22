@@ -49,6 +49,16 @@ export default function Teller() {
       (r) => (r.ticket ? t('tel.calledMsg', { n: r.ticket.displayNumber }) : t('tel.emptyMsg'))
     );
 
+  // One click: finish the current customer and call the next one in line
+  const completeAndNext = (id) =>
+    run(
+      async () => {
+        await api(`/teller/tickets/${id}/complete`, { method: 'POST', auth: true });
+        return api('/teller/call-next', { method: 'POST', auth: true });
+      },
+      (r) => (r.ticket ? t('tel.servedCalled', { n: r.ticket.displayNumber }) : t('tel.served'))
+    );
+
   const act = (id, action, text) => run(() => api(`/teller/tickets/${id}/${action}`, { method: 'POST', auth: true }), text);
 
   if (loading && !data) return <Loading />;
@@ -153,6 +163,11 @@ export default function Teller() {
                   <button className="btn btn-success btn-lg" disabled={busy} onClick={() => act(current.id, 'complete', t('tel.served'))}>
                     {t('tel.complete')}
                   </button>
+                  {queue.length > 0 && (
+                    <button className="btn btn-success btn-lg" style={{ gridColumn: '1 / -1' }} disabled={busy} onClick={() => completeAndNext(current.id)}>
+                      {t('tel.completeNext')}
+                    </button>
+                  )}
                   {current.status === 'called' && (
                     <>
                       <button className="btn btn-warn btn-lg" disabled={busy} onClick={() => act(current.id, 'recall', t('tel.reminded'))}>

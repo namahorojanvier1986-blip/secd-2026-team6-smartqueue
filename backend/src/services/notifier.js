@@ -33,7 +33,7 @@ async function postWebhook(url, payload) {
  * Creates a notification for a ticket inside the current transaction.
  * @param client  pg client from db.withTransaction
  * @param ticket  ticket row (id, public_code, phone, ticket_number, service_id, counter_id, language, is_priority)
- * @param type    ticket_issued | turn_approaching | called | recalled | completed | no_show | cancelled
+ * @param type    ticket_issued | turn_approaching | two_minutes | called | recalled | completed | no_show | cancelled
  * @param extra   { ahead, eta, soon } where relevant
  */
 async function notify(client, ticket, type, extra = {}) {

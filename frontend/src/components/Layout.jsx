@@ -1,4 +1,4 @@
-import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { getSession, setSession } from '../api.js';
 import { LanguageSwitcher, useApp } from '../i18n.jsx';
 
@@ -18,9 +18,20 @@ export function Brand({ subtitle, to = '/' }) {
   );
 }
 
+/** "Back to home" button shown on every page except the home page. */
+export function BackHome({ light = false }) {
+  const { t } = useApp();
+  return (
+    <Link to="/" className={`back-home${light ? ' back-home-light' : ''}`}>
+      <span aria-hidden="true">←</span> {t('nav.backHome')}
+    </Link>
+  );
+}
+
 export default function Layout() {
   const session = getSession();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const { t } = useApp();
 
   const logout = () => {
@@ -57,6 +68,11 @@ export default function Layout() {
         <div className="flag-stripe" />
       </header>
       <main style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        {pathname !== '/' && (
+          <div className="back-bar">
+            <BackHome />
+          </div>
+        )}
         <Outlet />
       </main>
       <footer className="footer">SmartQueue · {t('footer')}</footer>

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { QRCodeSVG } from 'qrcode.react';
 import { api } from '../api.js';
 import { formatTime, useClock, usePolling } from '../hooks.js';
-import { Loading, PriorityBadge } from '../components/Layout.jsx';
+import { BackHome, Loading, PriorityBadge } from '../components/Layout.jsx';
 import { LanguageSwitcher, useApp } from '../i18n.jsx';
 
 const REASONS = [
@@ -116,6 +116,7 @@ export default function Kiosk() {
             <small>{info?.branchName ? `${info.branchName} · ${t('kiosk.sub')}` : t('kiosk.sub')}</small>
           </span>
         </Link>
+        <BackHome light />
         <div className="clock tabular">
           {now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
           <small>{date(now)}</small>
