@@ -1,513 +1,250 @@
-/**
- * Language: English (en) only.
- * - Every visible text comes from the dictionary below via t('key', { params }).
- * - Customer notifications are re-written here from their stored data.
- */
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { api } from './api.js';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rwamagana Savings Bank · SmartQueue</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
-export const LANGS = [
-  { id: 'en', label: 'English', short: 'EN' },
-];
-const LANG_KEY = 'sq_lang';
-
-/* ------------------------------------------------------------------ */
-/* Notification templates                                              */
-/* ------------------------------------------------------------------ */
-
-const minutesEn = (m) => {
-  if (m <= 0) return 'less than a minute';
-  if (m < 60) return `about ${m} minute${m === 1 ? '' : 's'}`;
-  const h = Math.floor(m / 60);
-  const r = m % 60;
-  return `about ${h} hour${h > 1 ? 's' : ''}${r ? ` ${r} min` : ''}`;
-};
-
-const NOTIF = {
-  en: {
-    ticket_issued: (p) => ({
-      title: `Ticket ${p.number} confirmed`,
-      message:
-        `Welcome to ${p.institution}. Your queue number is ${p.number} for ${p.service}${p.priority ? ' (priority service)' : ''}. ` +
-        (p.ahead === 0 ? 'You are next in line. ' : `${p.ahead} customer${p.ahead === 1 ? ' is' : 's are'} ahead of you. `) +
-        `Estimated waiting time: ${minutesEn(p.eta)}. ` +
-        (p.soon ? 'Your turn is coming up soon, please stay nearby.' : 'You may leave the banking hall - we will notify you when your turn is approaching.'),
-    }),
-    turn_approaching: (p) => ({
-      title: 'Your turn is approaching',
-      message:
-        `Ticket ${p.number}: ` +
-        (p.ahead === 0 ? 'you are next in line' : `only ${p.ahead} customer${p.ahead === 1 ? '' : 's'} ahead of you`) +
-        ` (${minutesEn(p.eta)}). Please return to the banking hall now.`,
-    }),
-    two_minutes: (p) => ({
-      title: 'About 2 minutes to your turn',
-      message:
-        `Ticket ${p.number}: your turn is in about 2 minutes` +
-        (p.ahead === 0 ? ' - you are next in line' : ` (${p.ahead} customer${p.ahead === 1 ? '' : 's'} ahead of you)`) +
-        '. Please come to the counter area now.',
-    }),
-    called: (p) => ({ title: "It's your turn!", message: `Ticket ${p.number}: please proceed to ${p.counter} now.` }),
-    recalled: (p) => ({
-      title: `${p.counter} is waiting for you`,
-      message: `Reminder - ticket ${p.number}: please come to ${p.counter} now or your ticket may be marked as missed.`,
-    }),
-    completed: (p) => ({ title: 'Thank you!', message: `Ticket ${p.number} has been served. Thank you for banking with us.` }),
-    no_show: (p) => ({
-      title: 'Ticket missed',
-      message: `Ticket ${p.number} was marked as missed because you did not arrive at ${p.counter}. Please request a new ticket.`,
-    }),
-    cancelled: (p) => ({ title: 'Ticket cancelled', message: `Ticket ${p.number} has been cancelled. You can request a new ticket at any time.` }),
-  },
-};
-
-/* ------------------------------------------------------------------ */
-/* Dictionary - English only                                           */
-/* ------------------------------------------------------------------ */
-
-const en = {
-  'lang.choose': 'Language',
-  'brand.product': 'SmartQueue',
-  'brand.sub': 'Smart queue for financial institutions',
-  'nav.home': 'Home',
-  'nav.backHome': 'Back to home',
-  'nav.kiosk': 'Get a ticket',
-  'nav.track': 'Track my ticket',
-  'nav.display': 'Display board',
-  'nav.staff': 'Staff',
-  'nav.counter': 'Counter',
-  'nav.admin': 'Dashboard',
-  'nav.signOut': 'Sign out',
-  footer: 'Less time in the queue, more time for your day',
-  loading: 'Loading…',
-  'notFound.title': 'Page not found',
-  'notFound.home': 'Go home',
-  'status.waiting': 'Waiting',
-  'status.called': 'Called',
-  'status.serving': 'Being served',
-  'status.served': 'Served',
-  'status.no_show': 'Missed',
-  'status.cancelled': 'Cancelled',
-  priority: 'Priority',
-  'reason.pregnant': 'Pregnant woman',
-  'reason.elderly': 'Elderly person',
-  'reason.disability': 'Person with disability',
-  'time.now': 'Now',
-  'time.min': '{n} min',
-  'time.hours': '{h} h {m} min',
-  'time.hoursOnly': '{h} h',
-  'err.NETWORK': 'Cannot reach the server. Check your connection.',
-  'err.INVALID_PHONE': 'Enter a valid Rwandan mobile number, e.g. 078 123 4567.',
-  'err.PRIORITY_REASON': 'Choose the reason for priority service.',
-  'err.ACTIVE_TICKET': 'This phone number already has an active ticket today.',
-  'err.SERVICE_UNAVAILABLE': 'This service is not available.',
-  'err.SERVICE_REQUIRED': 'Choose a service.',
-  'err.TICKET_NOT_FOUND': 'Ticket not found. Please check your ticket code.',
-  'err.LOOKUP_REQUIRED': 'Enter your phone number and ticket number.',
-  'err.LOOKUP_NOT_FOUND': 'No ticket found today for that phone and number.',
-  'err.CANCEL_NOT_WAITING': 'Only a waiting ticket can be cancelled.',
-  'err.BAD_LOGIN': 'Incorrect username or password.',
-  'err.SETUP_REQUIRED': 'The system has not been set up yet.',
-  'home.title1': 'Keep your place in line',
-  'home.title2': 'without standing in it.',
-  'home.lead': 'Get a number, leave the banking hall, follow the queue on your phone, and come back when it is your turn.',
-  'home.openTicket': 'Open my ticket →',
-  'home.trackTicket': 'Track my ticket →',
-  'home.yourNumber': 'Your number',
-  'home.sampleService': 'Cash Deposit',
-  'home.ahead': 'Ahead of you',
-  'home.estWait': 'Est. wait',
-  'home.where': 'Where would you like to go?',
-  'home.kioskText': 'Choose a service, enter your phone number and receive your queue number.',
-  'home.trackText': 'See your position, estimated waiting time and live alerts from anywhere.',
-  'home.displayText': 'Banking hall screen showing tickets being served and who is next.',
-  'home.staffText': 'Tellers call the next customer; managers see reports and configure the system.',
-  'home.how': 'How it works',
-  'home.step1': 'Take a number',
-  'home.step1Text': 'Enter your phone number at the kiosk. You get the next number in line, like 006, with an estimated waiting time.',
-  'home.step2': 'Go about your day',
-  'home.step2Text': 'No need to stay in the hall. Follow your place in the queue live on your phone.',
-  'home.step3': 'Come back in time',
-  'home.step3Text': 'You get an alert when your turn is approaching and when a counter calls you.',
-  'home.priorityTitle': 'Priority service',
-  'home.priorityText': 'Pregnant women, elderly people and persons with disabilities can request a priority number at the kiosk and are served ahead of the normal queue.',
-  'kiosk.sub': 'Self-service kiosk',
-  'kiosk.welcome': 'Welcome',
-  'kiosk.pickService': 'Tap the service you need today.',
-  'kiosk.enterPhone': 'Enter your phone number',
-  'kiosk.phoneWhy': 'We use it to send your queue updates.',
-  'kiosk.ready': 'Your ticket is ready',
-  'kiosk.scan': 'Scan the code to follow your place in the queue on your phone.',
-  'kiosk.loadingServices': 'Loading services…',
-  'kiosk.noServices': 'No services are available right now.',
-  'kiosk.waiting': 'Waiting',
-  'kiosk.estWait': 'Est. wait',
-  'kiosk.clear': 'Clear',
-  'kiosk.deleteDigit': 'Delete last digit',
-  'kiosk.needPriority': '★ I need priority service',
-  'kiosk.priorityHint': 'For pregnant women, elderly people and persons with disabilities. Staff may verify eligibility.',
-  'kiosk.selectedService': 'Selected service',
-  'kiosk.nWaiting': '{n} waiting',
-  'kiosk.yourTicket': 'Your ticket:',
-  'kiosk.openIt': 'open it',
-  'kiosk.issuing': 'Issuing ticket…',
-  'kiosk.getNumber': 'Get my number',
-  'kiosk.back': '← Back to services',
-  'kiosk.queueNumber': 'Your queue number',
-  'kiosk.aheadOfYou': 'Ahead of you',
-  'kiosk.expected': 'Expected around',
-  'kiosk.phone': 'Phone',
-  'kiosk.trackOnPhone': 'Track on your phone',
-  'kiosk.scanOr': 'Scan, or go to /track and enter the code',
-  'kiosk.okLeave': 'You do not need to wait in the hall.',
-  'kiosk.okNext': 'You are next in line - please stay nearby.',
-  'kiosk.leaveText': 'Feel free to run errands. Follow your ticket on your phone - you will be alerted when your turn is approaching and again when a counter calls your number.',
-  'kiosk.watchBoard': 'Watch the display board - your number will appear with the counter to go to.',
-  'kiosk.done': 'Done',
-  'kiosk.resetIn': 'This screen resets in {n}s',
-  'kiosk.phoneInvalid': 'Enter a valid Rwandan mobile number starting with 072, 073, 078 or 079.',
-  'track.title': 'Track my ticket',
-  'track.lead': 'See your position in the queue, estimated waiting time and alerts from the bank.',
-  'track.continue': 'Continue with your last ticket',
-  'track.code': 'Code {code}',
-  'track.open': 'Open',
-  'track.byCode': 'Ticket code',
-  'track.byPhone': 'Phone + number',
-  'track.codeLabel': 'Ticket code (printed under the QR code)',
-  'track.codePlaceholder': 'e.g. K7M2QX9A',
-  'track.phoneLabel': 'Phone number',
-  'track.numberLabel': 'Ticket number',
-  'track.searching': 'Searching…',
-  'track.find': 'Find my ticket',
-  'track.noTicket': 'No ticket yet?',
-  'track.getOne': 'Get one at the kiosk',
-  'ts.loading': 'Loading your ticket…',
-  'ts.tryAnother': '← Try another code',
-  'ts.connProblem': 'Connection problem - showing the last known status. Retrying…',
-  'ts.ticket': 'Ticket',
-  'ts.next': "You're next! Please be at the banking hall.",
-  'ts.approaching': 'Your turn is approaching - please head back now.',
-  'ts.twoMinTitle': 'About 2 minutes to your turn',
-  'ts.twoMinText': 'Please come to the counter area now and watch the display board.',
-  'ts.relax': 'Relax - we will alert you when it is almost your turn.',
-  'ts.ahead': 'Ahead',
-  'ts.aheadSmall': 'ahead',
-  'ts.estWait': 'Est. wait',
-  'ts.around': 'Around',
-  'ts.noCounter': 'No counter is open for this service yet - the estimate will update when service starts.',
-  'ts.called': "It's your turn! Go to {counter} now.",
-  'ts.serving': 'You are being served at {counter}.',
-  'ts.served': 'Served - thank you for banking with us!',
-  'ts.no_show': 'This ticket was marked as missed. Please take a new ticket.',
-  'ts.cancelled': 'This ticket was cancelled.',
-  'ts.alertsTitle': 'Turn on alerts',
-  'ts.alertsBlocked': 'Notifications are blocked in your browser settings. Keep this page open - it will chime when you are called.',
-  'ts.alertsText': 'Get a phone notification when your turn is approaching, even if you switch apps.',
-  'ts.enable': 'Enable alerts',
-  'ts.alertsOnTitle': 'Alerts are on',
-  'ts.alertsOnBody': 'We will notify you when your turn is approaching.',
-  'ts.notifications': 'Notifications',
-  'ts.new': '{n} new',
-  'ts.markRead': 'Mark all read',
-  'ts.status': 'Status',
-  'ts.takenAt': 'Taken at',
-  'ts.phone': 'Phone',
-  'ts.code': 'Code',
-  'ts.giveUp': 'Give up your place in the queue?',
-  'ts.keep': 'Keep my place',
-  'ts.yesCancel': 'Yes, cancel ticket',
-  'ts.cancel': 'Cancel this ticket',
-  'ts.newTicket': 'Get a new ticket',
-  'ts.autoUpdate': 'This page updates automatically every few seconds.',
-  'disp.enableSound': '🔊 Enable sound',
-  'disp.connecting': 'Connecting to the queue server…',
-  'disp.nowServing': 'Now serving',
-  'disp.empty': 'Counters will call the next customer shortly.',
-  'disp.proceed': 'Please proceed now',
-  'disp.beingServed': 'Being served',
-  'disp.next': 'Next in line',
-  'disp.noOne': 'No one waiting',
-  'disp.byService': 'Waiting by service',
-  'disp.noWait': 'no wait',
-  'disp.ticker1': "🎫 Take a number at the kiosk - you don't have to wait here.",
-  'disp.ticker2': '★ Priority service for pregnant women, elderly people and persons with disabilities.',
-  'disp.priorityShort': '★ PRIORITY',
-  'login.title': 'Staff sign in',
-  'login.sub': 'Tellers and branch managers.',
-  'login.username': 'Username',
-  'login.password': 'Password',
-  'login.signingIn': 'Signing in…',
-  'login.signIn': 'Sign in',
-  'tel.choose': 'Choose your counter',
-  'tel.open': 'Open',
-  'tel.closed': 'Closed',
-  'tel.close': 'Close counter',
-  'tel.opened': 'Counter opened - you can start calling customers',
-  'tel.closedMsg': 'Counter closed',
-  'tel.calledMsg': 'Called ticket {n} - customer notified',
-  'tel.emptyMsg': 'No customers waiting for your counter',
-  'tel.inUse': 'In use by {name}',
-  'tel.available': 'Available - tap to open',
-  'tel.current': 'Current customer',
-  'tel.phone': 'Phone',
-  'tel.calledAt': 'Called at',
-  'tel.servingFor': 'Serving for',
-  'tel.waitingFor': 'Waiting for customer',
-  'tel.arrived': '▶ Customer arrived',
-  'tel.complete': '✓ Complete',
-  'tel.completeNext': '✓ Complete & call next ➜',
-  'tel.servedCalled': 'Customer served - called ticket {n}',
-  'tel.recall': '🔔 Recall',
-  'tel.noShow': '✕ No-show',
-  'tel.started': 'Service started',
-  'tel.served': 'Customer served',
-  'tel.reminded': 'Customer reminded',
-  'tel.markedMissed': 'Marked as missed',
-  'tel.noCustomers': 'No customers waiting',
-  'tel.callNext': 'Call next customer',
-  'tel.autoAppear': 'New tickets appear automatically',
-  'tel.nextIs': 'Next: {n} · {service}',
-  'tel.servedToday': 'Served today',
-  'tel.noShows': 'No-shows',
-  'tel.avgService': 'Avg service',
-  'tel.queueTitle': 'Waiting for this counter',
-  'tel.queueEmpty': 'The queue is empty.',
-  'tel.speaks': 'Speaks {lang}',
-  'adm.title': 'Dashboard',
-  'adm.tab.overview': 'Overview',
-  'adm.tab.tickets': 'Tickets',
-  'adm.tab.services': 'Services',
-  'adm.tab.counters': 'Counters',
-  'adm.tab.staff': 'Staff',
-  'adm.tab.settings': 'Settings',
-  'adm.welcomeTitle': 'Your institution is ready',
-  'adm.welcomeText': 'Next steps: add your tellers under Staff, open the Kiosk on the tablet at the entrance, and the Display board on the TV in the banking hall.',
-  'adm.addTellers': 'Add tellers',
-  'adm.openKiosk': 'Open kiosk',
-  'adm.openDisplay': 'Open display board',
-  'adm.dismiss': 'Dismiss',
-  'adm.daily': 'Daily overview',
-  'adm.date': 'Date',
-  'adm.kpi.issued': 'Tickets issued',
-  'adm.kpi.issuedSub': '{n} priority',
-  'adm.kpi.waiting': 'Waiting now',
-  'adm.kpi.waitingSub': '{n} at counters',
-  'adm.kpi.served': 'Served',
-  'adm.kpi.servedSub': '{a} no-shows · {b} cancelled',
-  'adm.kpi.avgWait': 'Avg waiting time',
-  'adm.kpi.avgWaitSub': 'longest {n} min',
-  'adm.kpi.avgWaitNone': 'from ticket to call',
-  'adm.kpi.avgService': 'Avg service time',
-  'adm.kpi.avgServiceSub': 'per customer',
-  'adm.kpi.notifications': 'Notifications sent',
-  'adm.kpi.notificationsSub': 'via API (no SMS)',
-  'adm.perHour': 'Tickets issued per hour',
-  'adm.perHourHint': 'Shows the busiest times of day - useful for planning how many counters to open.',
-  'adm.tooltip': '{h}:00 - {n} tickets',
-  'adm.asTable': 'View as table',
-  'adm.hour': 'Hour',
-  'adm.tickets': 'Tickets',
-  'adm.byService': 'Tickets by service',
-  'adm.service': 'Service',
-  'adm.waiting': 'Waiting',
-  'adm.served': 'Served',
-  'adm.avgWait': 'Avg wait',
-  'adm.counterPerf': 'Counter performance',
-  'adm.counter': 'Counter',
-  'adm.status': 'Status',
-  'adm.avgService': 'Avg service',
-  'adm.priorityCustomers': 'Priority customers',
-  'adm.noPriority': 'No priority tickets on this day.',
-  'adm.allStatuses': 'All statuses',
-  'adm.noTickets': 'No tickets match.',
-  'adm.col.no': 'No.',
-  'adm.col.phone': 'Phone',
-  'adm.col.lang': 'Lang.',
-  'adm.col.issued': 'Issued',
-  'adm.col.called': 'Called',
-  'adm.col.servedBy': 'Served by',
-  'adm.addService': '+ Add service',
-  'adm.code': 'Code',
-  'adm.name': 'Name',
-  'adm.defaultTime': 'Default time',
-  'adm.active': 'Active',
-  'adm.hidden': 'Hidden',
-  'adm.edit': 'Edit',
-  'adm.editService': 'Edit service',
-  'adm.newService': 'New service',
-  'adm.nameEn': 'Name (English)',
-  'adm.nameRw': 'Name (Kinyarwanda)',
-  'adm.descEn': 'Description (English)',
-  'adm.descRw': 'Description (Kinyarwanda)',
-  'adm.minutes': 'Default minutes per customer',
-  'adm.minutesHint': 'Used for waiting-time estimates until enough real service times are recorded.',
-  'adm.showKiosk': 'Show this service at the kiosk',
-  'adm.saving': 'Saving…',
-  'adm.saveService': 'Save service',
-  'adm.serviceSaved': 'Service saved',
-  'adm.addCounter': '+ Add counter',
-  'adm.servicesHandled': 'Services handled',
-  'adm.staffedBy': 'Staffed by {name}',
-  'adm.unstaffed': 'Unstaffed',
-  'adm.editCounter': 'Edit counter',
-  'adm.newCounter': 'New counter',
-  'adm.counterPlaceholder': 'Counter 5',
-  'adm.counterServices': 'Services this counter handles',
-  'adm.saveCounter': 'Save counter',
-  'adm.counterSaved': 'Counter saved',
-  'adm.staffTitle': 'Staff accounts',
-  'adm.addStaff': '+ Add staff',
-  'adm.username': 'Username',
-  'adm.role': 'Role',
-  'adm.disabled': 'Disabled',
-  'adm.disable': 'Disable',
-  'adm.enable': 'Enable',
-  'adm.newStaff': 'New staff member',
-  'adm.editStaff': 'Edit {u}',
-  'adm.fullName': 'Full name',
-  'adm.password': 'Password',
-  'adm.newPassword': 'New password (leave blank to keep)',
-  'adm.roleTeller': 'Teller - operates a counter',
-  'adm.roleAdmin': 'Admin - manages the branch',
-  'adm.save': 'Save',
-  'adm.accountEnabled': 'Account enabled',
-  'adm.accountDisabled': 'Account disabled',
-  'adm.staffAdded': 'Staff member added',
-  'adm.staffUpdated': 'Staff member updated',
-  'role.teller': 'Teller',
-  'role.admin': 'Admin',
-  'adm.settingsTitle': 'Institution settings',
-  'adm.instName': 'Institution name',
-  'adm.instHint': 'Shown on the kiosk, display board and in customer notifications.',
-  'adm.branchName': 'Branch / location (optional)',
-  'adm.defaultLang': 'Default language',
-  'adm.defaultLangHint': 'Used on new devices and for customers who have not chosen a language.',
-  'adm.approach': '"Turn approaching" alert',
-  'adm.approachHint': 'Alert customers when fewer than this many people are ahead of them.',
-  'adm.policy': 'Priority service policy',
-  'adm.webhook': 'Notification webhook URL (optional)',
-  'adm.webhookHint': "Every customer notification is also POSTed here as JSON, so your mobile banking app or messaging gateway can deliver it. Leave empty to use the built-in web notifications only.",
-  'adm.saveSettings': 'Save settings',
-  'adm.settingsSaved': 'Settings saved',
-  'setup.title': 'Set up your institution',
-  'setup.lead': 'Welcome! This is the first time SmartQueue is running here. Setup takes about a minute and is done only once.',
-  'setup.step1': 'Institution',
-  'setup.step2': 'Services & counters',
-  'setup.step3': 'Manager account',
-  'setup.instName': 'Institution name',
-  'setup.instPlaceholder': 'e.g. Kigali Savings Bank',
-  'setup.branch': 'Branch / location (optional)',
-  'setup.branchPlaceholder': 'e.g. Nyarugenge Branch',
-  'setup.lang': 'Default language for customers',
-  'setup.servicesTitle': 'Which services do customers queue for?',
-  'setup.servicesHint': 'You can rename, add or remove services later in the dashboard.',
-  'setup.counters': 'How many counters does this branch have?',
-  'setup.plan': 'How the counters will be organised',
-  'setup.managerName': "Manager's full name",
-  'setup.username': 'Username',
-  'setup.password': 'Password (at least 8 characters)',
-  'setup.confirm': 'Confirm password',
-  'setup.mismatch': 'The passwords do not match.',
-  'setup.shortPassword': 'The password must be at least 8 characters.',
-  'setup.needName': 'Enter the name of your institution.',
-  'setup.needService': 'Choose at least one service.',
-  'setup.needManager': "Enter the manager's name and a username (at least 3 characters).",
-  'setup.next': 'Continue',
-  'setup.back': 'Back',
-  'setup.finish': 'Finish setup & open dashboard',
-  'setup.finishing': 'Setting up…',
-  'setup.summary': 'Summary',
-  'setup.summaryText': '{inst} · {s} services · {c} counters',
-};
-
-const DICT = { en };
-
-/* ------------------------------------------------------------------ */
-/* Context                                                             */
-/* ------------------------------------------------------------------ */
-
-const AppContext = createContext(null);
-
-export function AppProvider({ children }) {
-  const [info, setInfo] = useState(null);
-  const [infoError, setInfoError] = useState(null);
-  const [lang, setLangState] = useState(() => localStorage.getItem(LANG_KEY));
-
-  const refreshInfo = useCallback(async () => {
-    try {
-      const i = await api('/info');
-      setInfo(i);
-      setInfoError(null);
-      return i;
-    } catch (e) {
-      setInfoError(e);
-      return null;
+  <style>
+    /* ---------- Design system (colours from SmartQueue styles.css) ---------- */
+    :root {
+      --navy-900: #06223f;
+      --navy-800: #0b3d6e;
+      --navy-700: #12528f;
+      --sky-500: #00a1de;
+      --sun-400: #fad201;
+      --green-600: #1f7a4d;
+      --bg: #f3f6fa;
+      --surface: #ffffff;
+      --border: #e3e8ef;
+      --border-strong: #cdd5df;
+      --text: #0f1b2b;
+      --text-3: #7a889a;
+      --radius-lg: 22px;
+      --shadow-lg: 0 18px 40px rgba(11, 61, 110, 0.14);
+      --font: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
     }
-  }, []);
 
-  useEffect(() => {
-    refreshInfo();
-  }, [refreshInfo]);
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.5;
+    }
+    a { color: var(--navy-700); text-decoration: none; }
+    h1 { margin: 0; line-height: 1.2; letter-spacing: -0.01em; }
+    .subtle { color: var(--text-3); font-size: 0.875rem; }
+    .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
 
-  const current = lang || info?.defaultLanguage || 'en';
+    /* ---------- Top bar ---------- */
+    .topbar {
+      background: var(--navy-800);
+      color: #fff;
+      position: sticky; top: 0; z-index: 20;
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06);
+    }
+    .topbar-inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 20px;
+      height: 64px; display: flex; align-items: center; gap: 24px;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; color: #fff; font-weight: 800; font-size: 1.1rem; }
+    .brand-mark {
+      width: 34px; height: 34px; border-radius: 10px;
+      background: var(--sun-400); color: var(--navy-900);
+      display: grid; place-items: center; font-weight: 800;
+    }
+    .brand small {
+      display: block; font-weight: 500; font-size: 0.7rem; opacity: 0.75;
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .nav { display: flex; gap: 4px; margin-left: auto; flex-wrap: wrap; }
+    .nav a {
+      color: rgba(255, 255, 255, 0.8); padding: 8px 14px; border-radius: 999px;
+      font-weight: 600; font-size: 0.9rem;
+    }
+    .nav a:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
+    .nav a.active { background: rgba(255, 255, 255, 0.14); color: #fff; }
 
-  useEffect(() => {
-    document.documentElement.lang = 'en';
-  }, [current]);
+    /* Rwanda flag stripe under the header: blue, yellow, green */
+    .flag-stripe {
+      height: 4px;
+      background: linear-gradient(90deg,
+        var(--sky-500) 0 50%, var(--sun-400) 50% 75%, var(--green-600) 75% 100%);
+    }
 
-  const setLang = useCallback((l) => {
-    localStorage.setItem(LANG_KEY, l);
-    setLangState(l);
-  }, []);
+    /* EN | RW switch */
+    .lang-switch {
+      display: inline-flex; padding: 3px; border-radius: 999px; gap: 2px; flex-shrink: 0;
+      background: rgba(255, 255, 255, 0.12);
+    }
+    .lang-switch button {
+      border: 0; background: transparent; cursor: pointer; font-family: inherit;
+      font-weight: 800; border-radius: 999px; padding: 5px 11px; font-size: 0.78rem;
+      letter-spacing: 0.04em; color: rgba(255, 255, 255, 0.75);
+    }
+    .lang-switch button.on { background: var(--sun-400); color: var(--navy-900); }
 
-  const value = useMemo(() => {
-    const dict = DICT[current] || en;
-    const t = (key, params) => {
-      let s = dict[key] ?? en[key] ?? key;
-      if (params) s = s.replace(/\{(\w+)\}/g, (_, k) => (params[k] ?? `{${k}}`));
-      return s;
-    };
-    const svc = (s) => (s ? s.name : '');
-    const svcDesc = (s) => (s ? s.description : '');
-    const wait = (m) => {
-      if (m === null || m === undefined) return '-';
-      if (m <= 0) return t('time.now');
-      if (m < 60) return t('time.min', { n: m });
-      const h = Math.floor(m / 60);
-      const r = m % 60;
-      return r ? t('time.hours', { h, m: r }) : t('time.hoursOnly', { h });
-    };
-    const date = (d) => d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-    const notif = (n) => {
-      const tpl = NOTIF[current]?.[n.type];
-      if (!tpl || !n.data || !n.data.number) return { title: n.title, message: n.message };
-      return tpl({ ...n.data, service: n.data.service });
-    };
-    const error = (e) => {
-      if (!e) return '';
-      if (e.status === 0) return t('err.NETWORK');
-      const code = e.data?.errorCode;
-      return code && dict[`err.${code}`] ? dict[`err.${code}`] : e.message;
-    };
-    return { lang: current, setLang, t, svc, svcDesc, wait, date, notif, error, info, infoError, refreshInfo };
-  }, [current, setLang, info, infoError, refreshInfo]);
+    /* ---------- Page ---------- */
+    .page { max-width: 1200px; width: 100%; margin: 0 auto; padding: 32px 20px 64px; }
 
-  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
-}
+    /* ---------- Buttons ---------- */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      border: 1px solid var(--border-strong); border-radius: 12px; padding: 11px 18px;
+      font-weight: 700; font-size: 0.95rem; cursor: pointer; white-space: nowrap;
+      background: var(--surface); color: var(--text);
+      transition: transform .06s, background .15s;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn-lg { padding: 16px 26px; font-size: 1.08rem; border-radius: 14px; }
+    .btn-warn { background: var(--sun-400); color: var(--navy-900); border-color: var(--sun-400); }
+    .btn-warn:hover { background: #f0c800; }
+    .btn-ghost { background: transparent; }
 
-export function useApp() {
-  return useContext(AppContext);
-}
+    /* ---------- Hero ---------- */
+    .hero {
+      background:
+        radial-gradient(1200px 400px at 85% -20%, rgba(0, 161, 222, 0.35), transparent 60%),
+        var(--navy-800);
+      color: #fff; border-radius: var(--radius-lg); padding: 56px 48px;
+      position: relative; overflow: hidden;
+    }
+    .hero-kicker { font-weight: 700; opacity: 0.8; margin-bottom: 10px; }
+    .hero h1 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; max-width: 640px; }
+    .hero h1 span { color: var(--sun-400); }
+    .hero p { margin-top: 14px; font-size: 1.1rem; opacity: 0.85; max-width: 560px; }
+    .hero .row { margin-top: 28px; }
+    .hero .btn-ghost { color: #fff; border-color: rgba(255, 255, 255, 0.3); }
+    .hero .btn-ghost:hover { background: rgba(255, 255, 255, 0.1); }
 
-export function LanguageSwitcher({ variant = 'dark', size = 'sm' }) {
-  const { lang, setLang, t } = useApp();
-  return (
-    <div className={`lang-switch lang-${variant} lang-${size}`} role="group" aria-label={t('lang.choose')}>
-      {LANGS.map((l) => (
-        <button key={l.id} type="button" className={lang === l.id ? 'on' : ''} aria-pressed={lang === l.id} onClick={() => setLang(l.id)} title={l.label}>
-          {size === 'lg' ? l.label : l.short}
-        </button>
-      ))}
+    /* Tilted sample ticket on the right */
+    .hero-ticket {
+      position: absolute; right: 48px; top: 50%;
+      transform: translateY(-50%) rotate(4deg);
+      background: #fff; color: var(--text); border-radius: 18px;
+      padding: 22px 26px; width: 230px; box-shadow: var(--shadow-lg);
+    }
+    .hero-ticket .num { font-size: 3.4rem; font-weight: 800; color: var(--navy-800); line-height: 1; margin: 6px 0; }
+    .hero-ticket .perf { border-top: 2px dashed var(--border); margin: 14px -26px 12px; }
+    .hero-ticket .row { margin-top: 28px; justify-content: space-between; }
+    .hero-ticket .perf + .row { margin-top: 0; }
+
+    /* ---------- Small screens ---------- */
+    @media (max-width: 980px) {
+      .hero-ticket { display: none; }
+    }
+    @media (max-width: 640px) {
+      .hero { padding: 36px 24px; }
+      .topbar-inner { height: auto; padding: 10px 16px; flex-wrap: wrap; gap: 8px; }
+      .nav { margin-left: 0; }
+      .nav a { padding: 6px 10px; font-size: 0.82rem; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ================= Header ================= -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a href="#" class="brand">
+        <span class="brand-mark">Q</span>
+        <span>
+          Rwamagana Savings Bank
+          <small>Rwamagana Branch · SmartQueue</small>
+        </span>
+      </a>
+
+      <nav class="nav" aria-label="Main">
+        <a href="#" class="active" data-i18n="home">Home</a>
+        <a href="#" data-i18n="kiosk">Get ticket</a>
+        <a href="#" data-i18n="track">Track my ticket</a>
+        <a href="#" data-i18n="display">Display board</a>
+        <a href="#" data-i18n="staff">Staff</a>
+      </nav>
+
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button type="button" class="on" data-lang="en">EN</button>
+        <button type="button" data-lang="rw">RW</button>
+      </div>
     </div>
-  );
-}
+    <div class="flag-stripe"></div>
+  </header>
+
+  <!-- ================= Hero ================= -->
+  <main class="page">
+    <section class="hero">
+      <div class="hero-kicker">Rwamagana Savings Bank · Rwamagana Branch</div>
+
+      <h1>
+        <span data-i18n="title1" style="color:#fff">Keep your place in line</span>
+        <span data-i18n="title2">without standing in it.</span>
+      </h1>
+
+      <p data-i18n="lead">
+        Get a number, leave the banking hall, follow the queue on your phone, and come back when it is your turn.
+      </p>
+
+      <div class="row">
+        <a href="#" class="btn btn-warn btn-lg" data-i18n="kiosk">Get ticket</a>
+        <a href="#" class="btn btn-ghost btn-lg" data-i18n="trackBtn">Track my ticket →</a>
+      </div>
+
+      <div class="hero-ticket" aria-hidden="true">
+        <div class="subtle" data-i18n="yourNumber">Your number</div>
+        <div class="num">006</div>
+        <div class="subtle" data-i18n="service">Cash Deposit</div>
+        <div class="perf"></div>
+        <div class="row">
+          <span class="subtle" data-i18n="ahead">Ahead of you</span>
+          <b>5</b>
+        </div>
+        <div class="row">
+          <span class="subtle" data-i18n="wait">Est. wait</span>
+          <b>~12 min</b>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= English / Kinyarwanda switch ================= -->
+  <script>
+    const TEXT = {
+      en: {
+        home: 'Home', kiosk: 'Get ticket', track: 'Track my ticket', display: 'Display board', staff: 'Staff',
+        title1: 'Keep your place in line', title2: 'without standing in it.',
+        lead: 'Get a number, leave the banking hall, follow the queue on your phone, and come back when it is your turn.',
+        trackBtn: 'Track my ticket →', yourNumber: 'Your number', service: 'Cash Deposit',
+        ahead: 'Ahead of you', wait: 'Est. wait',
+      },
+      rw: {
+        home: 'Ahabanza', kiosk: 'Fata tike', track: 'Kurikirana tike', display: 'Ikibaho', staff: 'Abakozi',
+        title1: 'Gumana umwanya wawe ku murongo', title2: 'utiriwe uhagarara.',
+        lead: 'Fata nimero, usohoke muri banki, ukurikirane umurongo kuri telefoni yawe, maze ugaruke igihe cyawe kigeze.',
+        trackBtn: 'Kurikirana tike yanjye →', yourNumber: 'Nimero yawe', service: 'Kubitsa amafaranga',
+        ahead: 'Bakubanziriza', wait: 'Igihe cyo gutegereza',
+      },
+    };
+
+    function setLanguage(lang) {
+      document.documentElement.lang = lang === 'rw' ? 'rw' : 'en';
+      document.querySelectorAll('[data-i18n]').forEach((el) => {
+        el.textContent = TEXT[lang][el.dataset.i18n];
+      });
+      document.querySelectorAll('.lang-switch button').forEach((b) => {
+        b.classList.toggle('on', b.dataset.lang === lang);
+      });
+    }
+
+    document.querySelectorAll('.lang-switch button').forEach((b) => {
+      b.addEventListener('click', () => setLanguage(b.dataset.lang));
+    });
+  </script>
+</body>
+</html>
