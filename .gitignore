@@ -3,3 +3,7 @@ dist/
 .env
 *.log
 .DS_Store
+
+.idea/
+.run/
+qodana.yaml

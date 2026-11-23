@@ -1,7 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="2. Run Smart Queue (API + UI)" type="CompoundRunConfigurationType">
-    <toRun name="Backend API" type="js.build_tools.npm" />
-    <toRun name="Frontend" type="js.build_tools.npm" />
-    <method v="2" />
-  </configuration>
-</component>
