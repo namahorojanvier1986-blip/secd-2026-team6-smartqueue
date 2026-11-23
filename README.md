@@ -1,4 +1,23 @@
 # SmartQueue Rwanda - Smart Queue Management System for Financial Institutions
+## Live Demo
+- **Frontend (App):** https://smartqueue-frontend-w9t0.onrender.com
+- **Backend (API):** https://smart-queue-backend-o9f6.onrender.com
+- **Demo Login:** `admin` / `admin1234` (after running `npm run db:demo`)
+
+## AI Use
+This project used AI (Meta AI) to write code, explain errors, and organize docs.
+Full details are in [`ai-use-log.md`](ai-use-log.md).
+Every team member can explain all the code in this repo.
+
+## Environment Variables
+| Variable | Where | What it does |
+| :--- | :--- | :--- |
+| `DATABASE_URL` | `backend/.env` | PostgreSQL connection string |
+| `JWT_SECRET` | `backend/.env` | Secret for signing tokens (long random) |
+| `VITE_API_URL` | `frontend` (Render Env) | Backend URL, without `/api` at the end |
+| `PORT` | `backend` | Default `4000` |
+
+See `backend/.env.example` and `frontend/.env.example` for examples.
 
 A full-stack web system that lets bank customers take a queue number, leave the banking hall, follow their place in line from their phone, and come back when their turn approaches. Notifications go through the **API** (live web notifications on the customer's phone and an optional webhook), not SMS.
 
