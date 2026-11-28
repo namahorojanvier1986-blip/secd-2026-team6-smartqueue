@@ -269,3 +269,4 @@ test('display board and admin reports', async () => {
   assert.equal(lang.body.default_language, 'rw');
   assert.equal((await api('PUT', '/admin/settings', { institution_name: '' }, adminToken)).status, 400);
 });
+

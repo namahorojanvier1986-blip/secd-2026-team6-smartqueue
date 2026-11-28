@@ -21,3 +21,4 @@ function maskPhone(phone) {
 }
 
 module.exports = { normalizeRwandaPhone, maskPhone };
+

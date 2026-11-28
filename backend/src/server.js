@@ -25,3 +25,4 @@ start().catch((err) => {
   console.error('      Check that PostgreSQL is running and DATABASE_URL in backend/.env is correct.');
   process.exit(1);
 });
+

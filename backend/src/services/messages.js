@@ -33,14 +33,14 @@ const TEMPLATES = {
         `Estimated waiting time: ${minutesEn(p.eta)}. ` +
         (p.soon
           ? 'Your turn is coming up soon, please stay nearby.'
-          : 'You may leave the banking hall - we will notify you when your turn is approaching.'),
+          : 'You may leave the Bing hall - we will notify you when your turn is approaching.'),
     }),
     turn_approaching: (p) => ({
       title: 'Your turn is approaching',
       message:
         `Ticket ${p.number}: ` +
         (p.ahead === 0 ? 'you are next in line' : `only ${p.ahead} customer${p.ahead === 1 ? '' : 's'} ahead of you`) +
-        ` (${minutesEn(p.eta)}). Please return to the banking hall now.`,
+        ` (${minutesEn(p.eta)}). Please return to the Bing hall now.`,
     }),
     two_minutes: (p) => ({
       title: 'About 2 minutes to your turn',
@@ -59,7 +59,7 @@ const TEMPLATES = {
     }),
     completed: (p) => ({
       title: 'Thank you!',
-      message: `Ticket ${p.number} has been served. Thank you for banking with us.`,
+      message: `Ticket ${p.number} has been served. Thank you for Bing with us.`,
     }),
     no_show: (p) => ({
       title: 'Ticket missed',
@@ -96,7 +96,7 @@ const TEMPLATES = {
           : p.ahead === 1
             ? 'hasigaye umukiriya 1 gusa ukubanziriza'
             : `hasigaye abakiriya ${p.ahead} gusa bakubanziriza`) +
-        ` (${minutesRw(p.eta)}). Turagusaba kugaruka muri banki ubu.`,
+        ` (${minutesRw(p.eta)}). Turagusaba kugaruka muri Bi ubu.`,
     }),
     two_minutes: (p) => ({
       title: 'Hasigaye nk\'iminota 2',
@@ -136,3 +136,4 @@ function renderMessage(lang, type, params) {
 }
 
 module.exports = { renderMessage, LANGUAGES, minutesEn, minutesRw };
+

@@ -6,7 +6,7 @@
  *      with the values used to write it (`data`) so the ticket page can show it
  *      in English or Kinyarwanda; clients read it via GET /api/tickets/:code;
  *   2. optionally POSTed as JSON to a webhook URL configured by the institution
- *      (Admin > Settings), so a mobile banking app or messaging gateway can push
+ *      (Admin > Settings), so a mobile Bing app or messaging gateway can push
  *      it to the customer. The webhook fires only after the transaction commits.
  */
 const { renderMessage } = require('./messages');
@@ -85,3 +85,4 @@ async function notify(client, ticket, type, extra = {}) {
 }
 
 module.exports = { notify };
+

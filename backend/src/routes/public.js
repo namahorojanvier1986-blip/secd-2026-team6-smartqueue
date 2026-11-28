@@ -69,7 +69,7 @@ router.post(
   })
 );
 
-// Public display board for the banking hall screen
+// Public display board for the Bing hall screen
 router.get(
   '/display',
   asyncHandler(async (_req, res) => {
@@ -92,3 +92,4 @@ router.get(
 );
 
 module.exports = router;
+

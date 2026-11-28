@@ -15,7 +15,7 @@ const DEFAULT_SETTINGS = {
   default_language: 'en',
   setup_completed: 'false',
   approach_threshold: '3', // notify when fewer than this many customers are ahead
-  webhook_url: '', // optional: POST every notification here (e.g. the bank's mobile app backend)
+  webhook_url: '', // optional: POST every notification here (e.g. the B's mobile app backend)
   priority_policy:
     'Priority customers (pregnant women, elderly people and persons with disabilities) are served before the normal queue.',
 };
@@ -48,7 +48,7 @@ async function seedDemo() {
   const setup = require('../services/setup');
   const bcrypt = require('bcryptjs');
   await setup.completeSetup({
-    institutionName: 'Demo Bank Rwanda',
+    institutionName: 'Demo B Rwanda',
     branchName: 'Kigali Main Branch',
     managerName: 'Branch Manager',
     username: 'admin',
@@ -93,3 +93,4 @@ if (require.main === module) {
       process.exit(1);
     });
 }
+

@@ -52,3 +52,4 @@ if (fs.existsSync(dist)) {
 app.use(errorMiddleware);
 
 module.exports = app;
+

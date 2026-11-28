@@ -15,7 +15,7 @@ const DEFAULT_SERVICES = [
   { code: 'L', group: 'desk', minutes: 12, selected: true, name: 'Loans & Credit', nameRw: 'Inguzanyo', description: 'Loan applications and enquiries', descriptionRw: "Gusaba inguzanyo n'amakuru ajyanye nayo" },
   { code: 'C', group: 'desk', minutes: 7, selected: true, name: 'Customer Care', nameRw: "Serivisi z'abakiriya", description: 'Cards, statements, complaints and enquiries', descriptionRw: "Amakarita, imbonerahamwe za konti, ibibazo n'ibisobanuro" },
   { code: 'T', group: 'cash', minutes: 5, selected: false, name: 'Transfers & Payments', nameRw: 'Kohereza no kwishyura', description: 'Money transfers, bills and tax payments', descriptionRw: "Kohereza amafaranga, kwishyura fagitire n'imisoro" },
-  { code: 'M', group: 'desk', minutes: 6, selected: false, name: 'Mobile & Internet Banking', nameRw: 'Serivisi za telefoni na interineti', description: 'Register for or fix mobile and internet banking', descriptionRw: 'Kwiyandikisha cyangwa gukemura ibibazo bya serivisi za telefoni na interineti' },
+  { code: 'M', group: 'desk', minutes: 6, selected: false, name: 'Mobile & Internet Bing', nameRw: 'Serivisi za telefoni na interineti', description: 'Register for or fix mobile and internet Bing', descriptionRw: 'Kwiyandikisha cyangwa gukemura ibibazo bya serivisi za telefoni na interineti' },
   { code: 'F', group: 'cash', minutes: 5, selected: false, name: 'Foreign Exchange', nameRw: 'Kuvunja amafaranga', description: 'Buy and sell foreign currency', descriptionRw: 'Kugura no kugurisha amadovize' },
 ];
 
@@ -131,3 +131,4 @@ async function completeSetup(body) {
 }
 
 module.exports = { DEFAULT_SERVICES, isSetupComplete, completeSetup, resetCache, planCounters };
+

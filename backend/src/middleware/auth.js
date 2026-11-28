@@ -36,3 +36,4 @@ const requireRole = (...roles) => (req, _res, next) => {
 };
 
 module.exports = { signToken, requireAuth, requireRole };
+

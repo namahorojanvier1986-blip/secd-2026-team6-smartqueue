@@ -15,3 +15,4 @@ if (config.isProduction && config.jwtSecret === 'dev-only-secret-change-me') {
 }
 
 module.exports = config;
+
